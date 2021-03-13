@@ -7,7 +7,7 @@
 #include <Adafruit_SSD1306.h>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 32 // OLED display height, in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 // The pins for I2C are defined by the Wire-library. 
@@ -109,7 +109,7 @@ void setupDisplay() {
   //display.println(F("You and I in a little toy shop"));
   //display.println(F("buy a bag of balloons with the money we've got."));
   display.display();
- 
+  
 }
 
 
@@ -124,52 +124,72 @@ char buf[] = "mx = +123.567890, my = +123.567890, mz = + 123.567890          ";
 
 int d = 250;
 
+long lastIMU = 0; // keeps track of millis() timestamp when IMU was last run
+long loopCounter = 0;
+
 void loop() {
   // put your main code here, to run repeatedly:
-  loopIMU();
-  delay(d);
+  long now = millis();
+  if (elapsedSince(lastIMU) > 1000) {
+    loopIMU();
+    lastIMU = now;
+    // Serial.print("loopCounter = ");
+    // Serial.println(loopCounter);
+  }
+  // delay(d);
+  loopCounter++;
+}
+
+long elapsedSince(long when) {
+  return millis() - when;
 }
 
 void loopIMU() {
+  display.clearDisplay();
   IMU.readMagneticField(mx, my, mz);
-  // sprintf(buf, "mx = %4d, my = %4d, mz = %4d", mx, my, mz);
-  if (false) {
-    Serial.print("mx =   "); Serial.print(mx);
-    Serial.print(", my =   "); Serial.print(my);
-    Serial.print(", mz =   "); Serial.print(mz);
-    Serial.println();
-  }
-  if (false) {
-    ftoa(buf+5, mx);
-    buf[16] = ',';
-    ftoa(buf+23, my);
-    buf[34] = ',';
-    ftoa(buf+41, mz);
-    Serial.println(buf);
-  }
-  Serial.print("Mag: micro-tesla x, y, z, magnitude, ");
+  Serial.print("Mag: x, y, z, m, ");
   float magni = magnitude(mx, my, mz);
-  Serial.println(output(mx, my, mz, magni));
-  displayXYZM("Mag", mx, my, mz, magni);
+  Serial.print(output(mx, my, mz, magni));
+  char label[] = "Magnetometer";
+  displayXYZM(0, label, mx, my, mz, magni);
+
+  if (IMU.accelerationAvailable()) {
+    IMU.readAcceleration(mx, my, mz);
+    Serial.print(", Acc: ");
+    float magni = magnitude(mx, my, mz);
+    Serial.print(output(mx, my, mz, magni));
+    char label[] = "Accelerometer";
+    displayXYZM(4, label, mx, my, mz, magni);
+  }
+  Serial.println();
 }
 
+/*
 char line0[] = "012345678901234567890";
 char line1[] = "x +123.567 y +123.567";
 char line2[] = "z +123.567 m +123.567";
 char line3[] = "012345678901234567890";
+*/
 
-void displayXYZM(char* label, float x, float y, float z, float m) {
-  display.clearDisplay();
-  display.setCursor(0,0);
+// 128x64 has eight lines of 21 columns (plus null terminator).
+char lines[8][22] = {"012345678901234567890","012345678901234567890","012345678901234567890","012345678901234567890"
+                    ,"012345678901234567890","012345678901234567890","012345678901234567890","012345678901234567890"};
+
+void displayXYZM(int row, char* label, float x, float y, float z, float m) {
+  // display.clearDisplay();
+  display.setCursor(0,row * 8);
   display.println(label);
-  dtostrf(x, 8, 3, line1 + 2);
-  line1[10] = ' ';
-  dtostrf(y, 8, 3, line1 + 13);
-  display.println(line1);
-  dtostrf(z, 8, 3, line2 + 2);
-  line2[10] = ' ';
-  dtostrf(m, 8, 3, line2 + 13);
-  display.println(line2);
+  strcpy(lines[row+1], "x +123.567 y +123.567");
+  dtostrf(x, 8, 3, lines[row+1] + 2);
+  lines[row+1][10] = ' ';
+  dtostrf(y, 8, 3, lines[row+1] + 13);
+  display.println(lines[row+1]);
+  // Serial.println(lines[row+1]);
+  strcpy(lines[row+2], "z +123.567 m +123.567");
+  dtostrf(z, 8, 3, lines[row+2] + 2);
+  lines[row+2][10] = ' ';
+  dtostrf(m, 8, 3, lines[row+2] + 13);
+  display.println(lines[row+2]);
   display.display();
 }
 

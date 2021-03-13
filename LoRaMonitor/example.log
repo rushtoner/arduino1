@@ -1,0 +1,824 @@
+15:51:34.850 -> LoRa Receiver
+16:00:30.843 -> Received packet 'hello 0' with RSSI -46
+16:00:35.868 -> Received packet 'hello 1' with RSSI -53
+16:00:35.868 -> Received packet 'hello 1' with RSSI -53
+16:00:40.882 -> Received packet 'hello 2' with RSSI -26
+16:00:45.900 -> Received packet 'hello 3' with RSSI -25
+16:00:50.942 -> Received packet 'hello 4' with RSSI -25
+16:00:55.985 -> Received packet 'hello 5' with RSSI -26
+16:01:00.996 -> Received packet 'hello 6' with RSSI -49
+16:01:00.996 -> Received packet 'hello 6' with RSSI -49
+16:01:06.034 -> Received packet 'hello 7' with RSSI -54
+16:01:11.086 -> Received packet 'hello 8' with RSSI -58
+16:01:16.101 -> Received packet 'hello 9' with RSSI -61
+16:01:21.150 -> Received packet 'hello 10' with RSSI -55
+16:01:26.167 -> Received packet 'hello 11' with RSSI -57
+16:01:31.220 -> Received packet 'hello 12' with RSSI -57
+16:01:36.231 -> Received packet 'hello 13' with RSSI -59
+16:01:41.274 -> Received packet 'hello 14' with RSSI -52
+16:01:46.326 -> Received packet 'hello 15' with RSSI -55
+16:01:51.333 -> Received packet 'hello 16' with RSSI -48
+16:01:51.371 -> Received packet 'hello 16' with RSSI -48
+16:01:56.375 -> Received packet 'hello 17' with RSSI -52
+16:01:56.375 -> Received packet 'hello 17' with RSSI -52
+16:02:01.425 -> Received packet 'hello 18' with RSSI -54
+16:02:06.466 -> Received packet 'hello 19' with RSSI -49
+16:02:06.466 -> Received packet 'hello 19' with RSSI -49
+16:02:11.493 -> Received packet 'hello 20' with RSSI -52
+16:02:16.523 -> Received packet 'hello 21' with RSSI -48
+16:02:21.559 -> Received packet 'hello 22' with RSSI -52
+16:02:26.599 -> Received packet 'hello 23' with RSSI -48
+16:02:31.616 -> Received packet 'hello 24' with RSSI -48
+16:02:36.656 -> Received packet 'hello 25' with RSSI -48
+16:02:41.724 -> Received packet 'hello 26' with RSSI -47
+16:02:46.756 -> Received packet 'hello 27' with RSSI -52
+16:02:51.771 -> Received packet 'hello 28' with RSSI -49
+16:02:56.801 -> Received packet 'hello 29' with RSSI -48
+16:03:01.857 -> Received packet 'hello 30' with RSSI -48
+16:03:06.859 -> Received packet 'hello 31' with RSSI -49
+16:03:06.895 -> Received packet 'hello 31' with RSSI -49
+16:03:11.926 -> Received packet 'hello 32' with RSSI -51
+16:03:16.951 -> Received packet 'hello 33' with RSSI -52
+16:03:21.973 -> Received packet 'hello 34' with RSSI -52
+16:03:27.013 -> Received packet 'hello 35' with RSSI -50
+16:03:27.013 -> Received packet 'hello 35' with RSSI -50
+16:03:31.071 -> Received packet '$SW01,24.33,43,101290, 3,*,$SI01,ERR,*,$SL01,2,5,0.0,68,*,$PB04,2.70,77,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-51,*,' with RSSI -53
+16:03:32.054 -> Received packet 'hello 36' with RSSI -51
+16:03:33.260 -> Received packet '$SN01,100.0,0,2000-00-00,24:87:77,0,*,$PB04,2.66,127,*$STAT,-52,*,' with RSSI -53
+16:03:36.208 -> Received packet '$SW01,24.75,43,101289, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.66,105,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-52,*,' with RSSI -52
+16:03:37.085 -> Received packet 'hello 37' with RSSI -51
+16:03:37.641 -> Received packet '$SN01,100.0,0,2000-00-00,24:87:77,0,*,$PB04,2.68,103,*$STAT,-52,*,' with RSSI -53
+16:03:37.641 -> Received packet '$SN01,100.0,0,2000-00-00,24:87:77,0,*,$PB04,2.68,103,*$STAT,-52,*,' with RSSI -53
+16:03:39.606 -> Received packet '$RESTART' with RSSI -44
+16:03:40.012 -> Received packet '$RESTART' with RSSI -54
+16:03:42.134 -> Received packet 'hello 38' with RSSI -49
+16:03:47.169 -> Received packet 'hello 39' with RSSI -50
+16:03:52.181 -> Received packet 'hello 40' with RSSI -50
+16:03:53.213 -> Received packet '$STARTALMANAC' with RSSI -44
+16:03:55.563 -> Received packet '$SW01,24.84,42,101284, 3,*,$SI01,ERR,*,$SL01,2,5,0.0,64,*,$PB04,2.64,124,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-50,*,' with RSSI -54
+16:03:55.929 -> Received packet '$STARTALMANAC' with RSSI -44
+16:03:56.483 -> Received packet '$SN01,100.0,0,2000-00-00,71:64:75,0,*,$PB04,2.67,78,*$STAT,-50,*,' with RSSI -52
+16:03:56.871 -> Received packet '$STARTALMANAC' with RSSI -44
+16:03:57.232 -> Received packet 'hello 41' with RSSI -51
+16:03:58.942 -> Received packet '$SW01,24.84,42,101287, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.64,100,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-52,*,' with RSSI -53
+16:03:59.304 -> Received packet '$STARTALMANAC' with RSSI -44
+16:03:59.805 -> Received packet '$SN01,100.0,0,2000-00-00,71:64:75,0,*,$PB04,2.66,103,*$STAT,-50,*,' with RSSI -54
+16:04:00.209 -> Received packet '$STARTALMANAC' with RSSI -44
+16:04:03.437 -> Received packet '$STARTALMANAC' with RSSI -44
+16:04:04.350 -> Received packet '$SN01,100.0,0,2000-00-00,24:87:77,0,*,$PB04,2.64,119,*$STAT,-50,*,' with RSSI -55
+16:04:04.721 -> Received packet '$STARTALMANAC' with RSSI -44
+16:04:05.699 -> Received packet '$SW01,24.85,42,101282, 4,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.66,77,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-50,*,' with RSSI -54
+16:04:06.099 -> Received packet '$STARTALMANAC' with RSSI -44
+16:04:06.568 -> Received packet '$SN01,100.0,0,2036-96-183,71:64:75,0,*,$PB04,2.66,104,*$STAT,-50,*,' with RSSI -53
+16:04:06.970 -> Received packet '$STARTALMANAC' with RSSI -44
+16:04:07.299 -> Received packet 'hello 43' with RSSI -50
+16:04:09.021 -> Received packet '$SW01,24.87,42,101285, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.68,77,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-52,*,' with RSSI -51
+16:04:09.388 -> Received packet '$STARTALMANAC' with RSSI -44
+16:04:09.896 -> Received packet '$SN01,100.0,0,2000-00-00,71:64:75,0,*,$PB04,2.66,132,*$STAT,-54,*,' with RSSI -51
+16:04:10.268 -> Received packet '$STARTALMANAC' with RSSI -44
+16:04:13.508 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:13.875 -> Received packet '$SN01,100.0,0,2000-00-00,24:87:77,0,*,$PB04,2.66,75,*$STAT,-54,*,' with RSSI -53
+16:04:13.875 -> Received packet '$SN01,100.0,0,2000-00-00,24:87:77,0,*,$PB04,2.66,75,*$STAT,-54,*,' with RSSI -53
+16:04:14.238 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:14.238 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:15.214 -> Received packet '$SW01,24.88,42,101285, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.66,130,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-47,*,' with RSSI -52
+16:04:15.247 -> Received packet '$SW01,24.88,42,101285, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.66,130,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-47,*,' with RSSI -52
+16:04:15.610 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:16.084 -> Received packet '$SN01,100.0,0,2000-00-00,71:64:75,0,*,$PB04,2.66,101,*$STAT,-48,*,' with RSSI -53
+16:04:16.121 -> Received packet '$SN01,100.0,0,2000-00-00,71:64:75,0,*,$PB04,2.66,101,*$STAT,-48,*,' with RSSI -53
+16:04:16.451 -> Received packet '$STARTALMANAC' with RSSI -44
+16:04:18.547 -> Received packet '$SW01,24.89,42,101290, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.66,126,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-49,*,' with RSSI -53
+16:04:18.910 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:18.910 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:19.464 -> Received packet '$SN01,100.0,0,2000-00-00,71:64:75,0,*,$PB04,2.66,77,*$STAT,-47,*,' with RSSI -52
+16:04:19.832 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:21.898 -> Received packet '$SW01,24.89,42,101288, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.66,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-48,*,' with RSSI -52
+16:04:22.294 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:22.796 -> Received packet '$SN01,100.0,0,2000-00-00,71:64:75,0,*,$PB04,2.64,119,*$STAT,-49,*,' with RSSI -52
+16:04:23.150 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:25.231 -> Received packet '$SW01,24.89,42,101289, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.64,117,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-49,*,' with RSSI -52
+16:04:25.593 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:26.123 -> Received packet '$SN01,100.0,0,2000-00-00,71:64:75,0,*,$PB04,2.68,77,*$STAT,-48,*,' with RSSI -52
+16:04:26.123 -> Received packet '$SN01,100.0,0,2000-00-00,71:64:75,0,*,$PB04,2.68,77,*$STAT,-48,*,' with RSSI -52
+16:04:26.495 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:26.495 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:28.530 -> Received packet '$SW01,24.91,42,101288, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,60,*,$PB04,2.64,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-49,*,' with RSSI -52
+16:04:28.935 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:28.935 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:29.486 -> Received packet '$SN01,100.0,0,2000-00-00,71:64:75,0,*,$PB04,2.64,119,*$STAT,-49,*,' with RSSI -52
+16:04:29.523 -> Received packet '$SN01,100.0,0,2000-00-00,71:64:75,0,*,$PB04,2.64,119,*$STAT,-49,*,' with RSSI -52
+16:04:29.855 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:31.928 -> Received packet '$SW01,24.91,42,101290, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,60,*,$PB04,2.65,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-48,*,' with RSSI -53
+16:04:32.326 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:32.837 -> Received packet '$SN01,100.0,0,2000-00-00,71:64:75,0,*,$PB04,2.65,76,*$STAT,-50,*,' with RSSI -52
+16:04:33.205 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:33.205 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:35.251 -> Received packet '$SW01,24.90,42,101286, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.65,104,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-48,*,' with RSSI -56
+16:04:35.650 -> Received packet '$STARTALMANAC' with RSSI -44
+16:04:36.125 -> Received packet '$SN01,100.0,0,2000-00-00,71:64:75,0,*,$PB04,2.66,101,*$STAT,-49,*,' with RSSI -54
+16:04:36.516 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:38.578 -> Received packet '$SW01,24.92,42,101288, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.65,103,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-49,*,' with RSSI -53
+16:04:38.615 -> Received packet '$SW01,24.92,42,101288, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.65,103,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-49,*,' with RSSI -53
+16:04:38.946 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:39.501 -> Received packet '$SN01,100.0,0,2000-00-00,71:64:75,0,*,$PB04,2.65,104,*$STAT,-49,*,' with RSSI -54
+16:04:39.863 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:39.863 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:41.932 -> Received packet '$SW01,24.93,42,101284, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.63,127,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-49,*,' with RSSI -54
+16:04:42.333 -> Received packet '$STARTALMANAC' with RSSI -43
+16:04:42.839 -> Received packet '$SN01,100.0,0,2000-00-00,71:64:75,0,*,$PB04,2.64,103,*$STAT,-48,*,' with RSSI -55
+16:04:44.857 -> Received packet '$CONF' with RSSI -46
+16:04:45.553 -> Received packet '$SYNC' with RSSI -44
+16:04:46.386 -> Received packet '$NACK' with RSSI -57
+16:04:46.714 -> Received packet '$SYNC' with RSSI -46
+16:04:46.714 -> Received packet '$SYNC' with RSSI -46
+16:04:47.034 -> Received packet '$SYNC' with RSSI -57
+16:04:47.034 -> Received packet '$SYNC' with RSSI -57
+16:04:47.355 -> Received packet '$SYNC' with RSSI -45
+16:04:47.681 -> Received packet '$SYNC' with RSSI -57
+16:04:48.010 -> Received packet '$SYNC' with RSSI -46
+16:04:48.302 -> Received packet '$SYNC' with RSSI -57
+16:04:49.103 -> Received packet '$SW01,24.94,41,101287, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,60,*,$PB04,2.66,92,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-50,*,' with RSSI -52
+16:04:49.656 -> Received packet '$ACK' with RSSI -45
+16:04:50.171 -> Received packet '$SN01,100.0,0,2036-96-183,24:87:77,0,*,$PB04,2.65,102,*$STAT,-50,*,' with RSSI -52
+16:04:53.175 -> Received packet '$SW01,24.96,42,101290, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,60,*,$PB04,2.64,73,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-50,*,' with RSSI -54
+16:04:54.566 -> Received packet '$SN01,100.0,0,2000-00-00,24:87:77,0,*,$PB04,2.65,103,*$STAT,-50,*,' with RSSI -54
+16:04:55.104 -> Received packet '$ACK' with RSSI -45
+16:04:57.139 -> Received packet '$SW01,24.97,42,101286, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,60,*,$PB04,2.64,128,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-51,*,' with RSSI -55
+16:04:57.681 -> Received packet '$ACK' with RSSI -45
+16:04:58.190 -> Received packet '$SN01,100.0,0,2000-00-00,24:87:77,0,*,$PB04,2.62,127,*$STAT,-52,*,' with RSSI -55
+16:04:58.693 -> Received packet '$ACK' with RSSI -44
+16:05:00.819 -> Received packet '$SW01,24.97,42,101287, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,60,*,$PB04,2.65,100,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-51,*,' with RSSI -54
+16:05:01.336 -> Received packet '$ACK' with RSSI -46
+16:05:01.857 -> Received packet '$SN01,100.0,0,2000-00-00,24:87:77,0,*,$PB04,2.65,77,*$STAT,-50,*,' with RSSI -54
+16:05:02.337 -> Received packet '$ACK' with RSSI -45
+16:05:02.373 -> Received packet '$ACK' with RSSI -45
+16:05:04.424 -> Received packet '$SW01,24.98,42,101289, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,60,*,$PB04,2.66,77,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-51,*,' with RSSI -55
+16:05:04.937 -> Received packet '$ACK' with RSSI -46
+16:05:05.486 -> Received packet '$SN01,100.0,0,2000-00-00,24:87:77,0,*,$PB04,2.62,121,*$STAT,-52,*,' with RSSI -55
+16:05:08.417 -> Received packet '$SW01,24.98,42,101288, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.66,77,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-52,*,' with RSSI -54
+16:05:08.454 -> Received packet '$SW01,24.98,42,101288, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.66,77,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-52,*,' with RSSI -54
+16:05:08.955 -> Received packet '$ACK' with RSSI -46
+16:05:09.507 -> Received packet '$SN01,100.0,0,2000-00-00,24:87:77,0,*,$PB04,2.64,120,*$STAT,-51,*,' with RSSI -54
+16:05:09.545 -> Received packet '$SN01,100.0,0,2000-00-00,24:87:77,0,*,$PB04,2.64,120,*$STAT,-51,*,' with RSSI -54
+16:05:10.017 -> Received packet '$ACK' with RSSI -46
+16:05:10.054 -> Received packet '$ACK' with RSSI -46
+16:05:12.100 -> Received packet '$SW01,24.98,42,101285, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,60,*,$PB04,2.64,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-51,*,' with RSSI -54
+16:05:12.608 -> Received packet '$ACK' with RSSI -46
+16:05:13.119 -> Received packet '$SN01,100.0,0,2000-00-00,24:87:77,0,*,$PB04,2.64,132,*$STAT,-51,*,' with RSSI -56
+16:05:13.637 -> Received packet '$ACK' with RSSI -46
+16:05:15.679 -> Received packet '$SW01,25.00,42,101285, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.62,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-51,*,' with RSSI -54
+16:05:16.224 -> Received packet '$ACK' with RSSI -46
+16:05:16.777 -> Received packet '$SN01,100.0,0,2000-00-00,24:87:77,0,*,$PB04,2.66,77,*$STAT,-51,*,' with RSSI -55
+16:05:17.292 -> Received packet '$ACK' with RSSI -45
+16:05:19.352 -> Received packet '$SW01,25.00,42,101286, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.64,100,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-53,*,' with RSSI -56
+16:05:19.900 -> Received packet '$ACK' with RSSI -46
+16:05:20.458 -> Received packet '$SN01,100.0,0,2000-00-00,24:87:77,0,*,$PB04,2.64,100,*$STAT,-52,*,' with RSSI -58
+16:05:20.458 -> Received packet '$SN01,100.0,0,2000-00-00,24:87:77,0,*,$PB04,2.64,100,*$STAT,-52,*,' with RSSI -58
+16:05:20.969 -> Received packet '$ACK' with RSSI -45
+16:05:20.969 -> Received packet '$ACK' with RSSI -45
+16:05:23.014 -> Received packet '$SW01,25.02,42,101291, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,60,*,$PB04,2.64,104,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-51,*,' with RSSI -55
+16:05:23.563 -> Received packet '$ACK' with RSSI -45
+16:05:23.563 -> Received packet '$ACK' with RSSI -45
+16:05:24.062 -> Received packet '$SN01,100.0,0,2000-00-00,24:87:77,0,*,$PB04,2.64,101,*$STAT,-51,*,' with RSSI -55
+16:05:27.083 -> Received packet '$SW01,25.02,42,101288, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,60,*,$PB04,2.62,119,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-51,*,' with RSSI -59
+16:05:27.601 -> Received packet '$ACK' with RSSI -45
+16:05:28.121 -> Received packet '$SN01,100.0,0,2000-00-00,23:05:30,0,*,$PB04,2.64,132,*$STAT,-51,*,' with RSSI -58
+16:05:28.602 -> Received packet '$ACK' with RSSI -45
+16:05:30.678 -> Received packet '$SW01,25.03,42,101289, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,60,*,$PB04,2.64,123,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-50,*,' with RSSI -55
+16:05:31.228 -> Received packet '$ACK' with RSSI -46
+16:05:31.819 -> Received packet '$SN01,100.0,0,2000-00-00,23:05:34,0,*,$PB04,2.66,103,*$STAT,-53,*,' with RSSI -59
+16:05:32.298 -> Received packet '$ACK' with RSSI -45
+16:05:34.394 -> Received packet '$SW01,25.03,42,101283, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.64,103,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-51,*,' with RSSI -56
+16:05:34.936 -> Received packet '$ACK' with RSSI -45
+16:05:35.519 -> Received packet '$SN01,100.0,0,2000-00-00,23:05:38,0,*,$PB04,2.64,104,*$STAT,-52,*,' with RSSI -55
+16:05:36.019 -> Received packet '$ACK' with RSSI -47
+16:05:36.019 -> Received packet '$ACK' with RSSI -47
+16:05:38.108 -> Received packet '$SW01,25.04,42,101285, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,52,*,$PB04,2.64,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-49,*,' with RSSI -60
+16:05:38.654 -> Received packet '$ACK' with RSSI -49
+16:05:39.159 -> Received packet '$SN01,100.0,0,2036-96-183,23:05:41,0,*,$PB04,2.64,105,*$STAT,-50,*,' with RSSI -54
+16:05:39.159 -> Received packet '$SN01,100.0,0,2036-96-183,23:05:41,0,*,$PB04,2.64,105,*$STAT,-50,*,' with RSSI -54
+16:05:39.670 -> Received packet '$ACK' with RSSI -48
+16:05:41.734 -> Received packet '$SW01,25.04,42,101284, 3,*,$SI01,ERR,*,$SL01,0,0,0.0, 4,*,$PB04,2.63,76,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-53,*,' with RSSI -58
+16:05:42.278 -> Received packet '$ACK' with RSSI -48
+16:05:42.855 -> Received packet '$SN01,100.0,0,2000-00-00,23:05:45,0,*,$PB04,2.66,77,*$STAT,-75,*,' with RSSI -54
+16:05:45.852 -> Received packet '$SW01,25.07,42,101287, 3,*,$SI01,ERR,*,$SL01,0,0,0.0, 4,*,$PB04,2.62,113,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-75,*,' with RSSI -79
+16:05:46.402 -> Received packet '$ACK' with RSSI -48
+16:05:46.402 -> Received packet '$ACK' with RSSI -48
+16:05:46.903 -> Received packet '$SN01,100.0,0,2000-00-00,23:05:49,0,*,$PB04,2.66,100,*$STAT,-66,*,' with RSSI -71
+16:05:47.419 -> Received packet '$ACK' with RSSI -48
+16:05:49.512 -> Received packet '$SW01,25.04,40,101286, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,20,*,$PB04,2.64,119,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-85,*,' with RSSI -95
+16:05:49.550 -> Received packet '$SW01,25.04,40,101286, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,20,*,$PB04,2.64,119,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-85,*,' with RSSI -95
+16:05:50.031 -> Received packet '$ACK' with RSSI -48
+16:05:50.031 -> Received packet '$ACK' with RSSI -48
+16:05:50.626 -> Received packet '$SN01,100.0,0,2036-96-183,23:05:53,0,*,$PB04,2.62,102,*$STAT,-75,*,' with RSSI -92
+16:05:51.097 -> Received packet '$ACK' with RSSI -48
+16:05:53.220 -> Received packet '$SW01,25.04,40,101292, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,40,*,$PB04,2.63,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-71,*,' with RSSI -92
+16:05:53.258 -> Received packet '$SW01,25.04,40,101292, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,40,*,$PB04,2.63,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-71,*,' with RSSI -92
+16:05:53.735 -> Received packet '$ACK' with RSSI -47
+16:05:54.251 -> Received packet '$SN01,100.0,0,2036-96-183,23:05:56,0,*,$PB04,2.64,104,*$STAT,-84,*,' with RSSI -82
+16:05:54.753 -> Received packet '$ACK' with RSSI -48
+16:05:56.899 -> Received packet '$SW01,25.03,40,101285, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,196,*,$PB04,2.64,76,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-95,*,' with RSSI -87
+16:05:57.451 -> Received packet '$ACK' with RSSI -48
+16:05:57.451 -> Received packet '$ACK' with RSSI -48
+16:05:57.968 -> Received packet '$SN01,100.0,0,2000-00-00,23:06:00,0,*,$PB04,2.63,102,*$STAT,-85,*,' with RSSI -85
+16:05:58.463 -> Received packet '$ACK' with RSSI -48
+16:05:58.463 -> Received packet '$ACK' with RSSI -48
+16:06:00.540 -> Received packet '$SW01,25.04,39,101284, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.61,118,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-89,*,' with RSSI -81
+16:06:01.095 -> Received packet '$ACK' with RSSI -48
+16:06:01.649 -> Received packet '$SN01,100.0,0,2000-00-00,23:06:04,0,*,$PB04,2.61,103,*$STAT,-80,*,' with RSSI -83
+16:06:01.686 -> Received packet '$SN01,100.0,0,2000-00-00,23:06:04,0,*,$PB04,2.61,103,*$STAT,-80,*,' with RSSI -83
+16:06:04.629 -> Received packet '$SW01,25.05,39,101284, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.63,100,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-80,*,' with RSSI -81
+16:06:05.145 -> Received packet '$ACK' with RSSI -48
+16:06:05.735 -> Received packet '$SN01,100.0,0,2000-00-00,23:06:08,0,*,$PB04,2.63,75,*$STAT,-82,*,' with RSSI -81
+16:06:06.244 -> Received packet '$ACK' with RSSI -48
+16:06:08.334 -> Received packet '$SW01,25.06,39,101283, 4,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.60,132,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-81,*,' with RSSI -81
+16:06:08.334 -> Received packet '$SW01,25.06,39,101283, 4,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.60,132,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-81,*,' with RSSI -81
+16:06:08.843 -> Received packet '$ACK' with RSSI -48
+16:06:08.843 -> Received packet '$ACK' with RSSI -48
+16:06:09.430 -> Received packet '$SN01,100.0,0,2000-00-00,23:06:12,0,*,$PB04,2.64,125,*$STAT,-81,*,' with RSSI -81
+16:06:09.913 -> Received packet '$ACK' with RSSI -48
+16:06:12.023 -> Received packet '$SW01,25.07,39,101283, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.63,105,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-82,*,' with RSSI -82
+16:06:12.535 -> Received packet '$ACK' with RSSI -48
+16:06:12.535 -> Received packet '$ACK' with RSSI -48
+16:06:13.039 -> Received packet '$SN01,100.0,0,2036-96-183,23:06:15,0,*,$PB04,2.64,100,*$STAT,-81,*,' with RSSI -81
+16:06:13.552 -> Received packet '$ACK' with RSSI -48
+16:06:15.636 -> Received packet '$SW01,25.08,39,101285, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.62,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-82,*,' with RSSI -82
+16:06:16.177 -> Received packet '$ACK' with RSSI -48
+16:06:16.746 -> Received packet '$SN01,100.0,0,2000-00-00,23:06:19,0,*,$PB04,2.62,77,*$STAT,-82,*,' with RSSI -82
+16:06:16.746 -> Received packet '$SN01,100.0,0,2000-00-00,23:06:19,0,*,$PB04,2.62,77,*$STAT,-82,*,' with RSSI -82
+16:06:17.241 -> Received packet '$ACK' with RSSI -48
+16:06:17.241 -> Received packet '$ACK' with RSSI -48
+16:06:19.329 -> Received packet '$SW01,25.09,39,101284, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.62,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-81,*,' with RSSI -81
+16:06:19.863 -> Received packet '$ACK' with RSSI -48
+16:06:19.863 -> Received packet '$ACK' with RSSI -48
+16:06:20.422 -> Received packet '$SN01,100.0,0,2021-03-12,23:06:23,0,*,$PB04,2.61,100,*$STAT,-82,*,' with RSSI -81
+16:06:23.395 -> Received packet '$SW01,25.10,39,101287, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.63,103,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-82,*,' with RSSI -82
+16:06:23.944 -> Received packet '$ACK' with RSSI -48
+16:06:24.451 -> Received packet '$SN01,100.0,0,2021-03-12,23:06:26,0,*,$PB04,2.62,129,*$STAT,-81,*,' with RSSI -82
+16:06:24.960 -> Received packet '$ACK' with RSSI -48
+16:06:27.108 -> Received packet '$SW01,25.11,39,101286, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.63,127,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-82,*,' with RSSI -81
+16:06:27.649 -> Received packet '$ACK' with RSSI -48
+16:06:28.167 -> Received packet '$SN01,100.0,0,2021-03-12,23:06:30,0,*,$PB04,2.62,100,*$STAT,-81,*,' with RSSI -82
+16:06:28.677 -> Received packet '$ACK' with RSSI -47
+16:06:30.775 -> Received packet '$SW01,25.11,39,101286, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.62,100,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-82,*,' with RSSI -82
+16:06:31.289 -> Received packet '$ACK' with RSSI -48
+16:06:31.875 -> Received packet '$SN01,100.0,0,2021-03-12,23:06:34,0,*,$PB04,2.64,101,*$STAT,-82,*,' with RSSI -83
+16:06:32.383 -> Received packet '$ACK' with RSSI -48
+16:06:34.470 -> Received packet '$SW01,25.12,39,101283, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.62,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-82,*,' with RSSI -81
+16:06:35.001 -> Received packet '$ACK' with RSSI -48
+16:06:35.588 -> Received packet '$SN01,100.0,0,2021-03-12,23:06:38,0,*,$PB04,2.61,99,*$STAT,-82,*,' with RSSI -80
+16:06:36.101 -> Received packet '$ACK' with RSSI -47
+16:06:36.101 -> Received packet '$ACK' with RSSI -47
+16:06:38.202 -> Received packet '$SW01,25.13,39,101283, 4,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.62,129,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-82,*,' with RSSI -81
+16:06:38.705 -> Received packet '$ACK' with RSSI -48
+16:06:39.217 -> Received packet '$SN01,100.0,0,2021-03-12,23:06:41,0,*,$PB04,2.62,103,*$STAT,-82,*,' with RSSI -82
+16:06:42.266 -> Received packet '$SW01,25.13,39,101283, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.60,110,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-82,*,' with RSSI -82
+16:06:42.773 -> Received packet '$ACK' with RSSI -48
+16:06:43.351 -> Received packet '$SN01,100.0,0,2021-03-12,23:06:46,0,*,$PB04,2.61,118,*$STAT,-82,*,' with RSSI -81
+16:06:43.872 -> Received packet '$ACK' with RSSI -48
+16:06:45.971 -> Received packet '$SW01,25.14,38,101283, 4,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.62,122,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-83,*,' with RSSI -84
+16:06:46.477 -> Received packet '$ACK' with RSSI -49
+16:06:46.477 -> Received packet '$ACK' with RSSI -49
+16:06:46.990 -> Received packet '$SN01,100.0,0,2021-03-12,23:06:49,0,*,$PB04,2.62,101,*$STAT,-82,*,' with RSSI -89
+16:06:47.514 -> Received packet '$ACK' with RSSI -48
+16:06:47.514 -> Received packet '$ACK' with RSSI -48
+16:06:49.588 -> Received packet '$SW01,25.15,39,101281, 4,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.60,103,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-85,*,' with RSSI -80
+16:06:50.123 -> Received packet '$ACK' with RSSI -48
+16:06:50.682 -> Received packet '$SN01,100.0,0,2021-03-12,23:06:53,0,*,$PB04,2.62,110,*$STAT,-82,*,' with RSSI -84
+16:06:51.226 -> Received packet '$ACK' with RSSI -50
+16:06:51.226 -> Received packet '$ACK' with RSSI -50
+16:06:53.312 -> Received packet '$SW01,25.16,38,101283, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.61,129,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-80,*,' with RSSI -81
+16:06:53.835 -> Received packet '$ACK' with RSSI -50
+16:06:54.351 -> Received packet '$SN01,100.0,0,2021-03-12,23:06:56,0,*,$PB04,2.62,102,*$STAT,-83,*,' with RSSI -82
+16:06:54.351 -> Received packet '$SN01,100.0,0,2021-03-12,23:06:56,0,*,$PB04,2.62,102,*$STAT,-83,*,' with RSSI -82
+16:06:54.864 -> Received packet '$ACK' with RSSI -50
+16:06:57.001 -> Received packet '$SW01,25.16,38,101281, 4,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.62,100,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-81,*,' with RSSI -82
+16:06:57.876 -> Received packet '$ACK' with RSSI -49
+16:06:59.314 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:02,0,*,$PB04,2.60,104,*$STAT,-81,*,' with RSSI -81
+16:06:59.825 -> Received packet '$ACK' with RSSI -49
+16:07:01.892 -> Received packet '$SW01,25.17,38,101284, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.62,127,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-81,*,' with RSSI -81
+16:07:02.441 -> Received packet '$ACK' with RSSI -49
+16:07:02.945 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:05,0,*,$PB04,2.60,130,*$STAT,-82,*,' with RSSI -81
+16:07:02.945 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:05,0,*,$PB04,2.60,130,*$STAT,-82,*,' with RSSI -81
+16:07:05.966 -> Received packet '$SW01,25.18,38,101284, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.60,125,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-82,*,' with RSSI -81
+16:07:06.512 -> Received packet '$ACK' with RSSI -49
+16:07:07.025 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:09,0,*,$PB04,2.62,129,*$STAT,-82,*,' with RSSI -80
+16:07:07.529 -> Received packet '$ACK' with RSSI -49
+16:07:09.637 -> Received packet '$SW01,25.18,38,101282, 4,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.62,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-83,*,' with RSSI -80
+16:07:10.189 -> Received packet '$ACK' with RSSI -48
+16:07:10.731 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:13,0,*,$PB04,2.62,101,*$STAT,-82,*,' with RSSI -82
+16:07:11.261 -> Received packet '$ACK' with RSSI -49
+16:07:11.261 -> Received packet '$ACK' with RSSI -49
+16:07:13.339 -> Received packet '$SW01,25.19,38,101284, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.64,76,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-81,*,' with RSSI -81
+16:07:13.865 -> Received packet '$ACK' with RSSI -49
+16:07:13.865 -> Received packet '$ACK' with RSSI -49
+16:07:14.445 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:17,0,*,$PB04,2.60,104,*$STAT,-82,*,' with RSSI -81
+16:07:14.951 -> Received packet '$ACK' with RSSI -49
+16:07:17.029 -> Received packet '$SW01,25.20,38,101283, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.62,114,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-82,*,' with RSSI -81
+16:07:17.600 -> Received packet '$ACK' with RSSI -49
+16:07:18.100 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:20,0,*,$PB04,2.64,101,*$STAT,-82,*,' with RSSI -81
+16:07:18.615 -> Received packet '$ACK' with RSSI -49
+16:07:20.688 -> Received packet '$SW01,25.21,38,101286, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.60,125,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-81,*,' with RSSI -80
+16:07:21.218 -> Received packet '$ACK' with RSSI -49
+16:07:21.799 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:24,0,*,$PB04,2.64,77,*$STAT,-82,*,' with RSSI -77
+16:07:24.770 -> Received packet '$SW01,25.21,38,101283, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.64,77,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-82,*,' with RSSI -82
+16:07:25.274 -> Received packet '$ACK' with RSSI -49
+16:07:25.309 -> Received packet '$ACK' with RSSI -49
+16:07:25.888 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:28,0,*,$PB04,2.62,100,*$STAT,-81,*,' with RSSI -80
+16:07:26.394 -> Received packet '$ACK' with RSSI -49
+16:07:28.472 -> Received packet '$SW01,25.22,38,101284, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.61,99,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-83,*,' with RSSI -81
+16:07:28.984 -> Received packet '$ACK' with RSSI -49
+16:07:29.563 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:32,0,*,$PB04,2.61,103,*$STAT,-81,*,' with RSSI -81
+16:07:30.077 -> Received packet '$ACK' with RSSI -49
+16:07:32.186 -> Received packet '$SW01,25.22,38,101283, 4,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.60,119,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-82,*,' with RSSI -80
+16:07:32.697 -> Received packet '$ACK' with RSSI -49
+16:07:32.697 -> Received packet '$ACK' with RSSI -49
+16:07:33.207 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:35,0,*,$PB04,2.59,127,*$STAT,-82,*,' with RSSI -80
+16:07:33.244 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:35,0,*,$PB04,2.59,127,*$STAT,-82,*,' with RSSI -80
+16:07:33.716 -> Received packet '$ACK' with RSSI -50
+16:07:35.865 -> Received packet '$SW01,25.24,38,101285, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.62,100,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-83,*,' with RSSI -79
+16:07:36.412 -> Received packet '$ACK' with RSSI -50
+16:07:36.893 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:39,0,*,$PB04,2.64,77,*$STAT,-83,*,' with RSSI -81
+16:07:37.422 -> Received packet '$ACK' with RSSI -50
+16:07:37.422 -> Received packet '$ACK' with RSSI -50
+16:07:39.496 -> Received packet '$SW01,25.24,38,101286, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.62,77,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-82,*,' with RSSI -80
+16:07:39.532 -> Received packet '$SW01,25.24,38,101286, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.62,77,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-82,*,' with RSSI -80
+16:07:40.042 -> Received packet '$ACK' with RSSI -49
+16:07:40.610 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:43,0,*,$PB04,2.62,103,*$STAT,-83,*,' with RSSI -81
+16:07:43.583 -> Received packet '$SW01,25.25,38,101288, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,96,*,$PB04,2.61,77,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-83,*,' with RSSI -81
+16:07:44.124 -> Received packet '$ACK' with RSSI -50
+16:07:44.699 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:47,0,*,$PB04,2.60,118,*$STAT,-83,*,' with RSSI -80
+16:07:45.178 -> Received packet '$ACK' with RSSI -50
+16:07:47.262 -> Received packet '$SW01,25.25,38,101289, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.59,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-81,*,' with RSSI -80
+16:07:47.300 -> Received packet '$SW01,25.25,38,101289, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.59,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-81,*,' with RSSI -80
+16:07:47.805 -> Received packet '$ACK' with RSSI -50
+16:07:48.345 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:50,0,*,$PB04,2.61,101,*$STAT,-82,*,' with RSSI -81
+16:07:48.823 -> Received packet '$ACK' with RSSI -50
+16:07:50.996 -> Received packet '$SW01,25.26,38,101285, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.60,104,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-82,*,' with RSSI -80
+16:07:51.512 -> Received packet '$ACK' with RSSI -50
+16:07:52.018 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:54,0,*,$PB04,2.62,100,*$STAT,-82,*,' with RSSI -80
+16:07:52.525 -> Received packet '$ACK' with RSSI -50
+16:07:54.606 -> Received packet '$SW01,25.25,38,101283, 4,*,$SI01,ERR,*,$SL01,0,0,0.0,96,*,$PB04,2.59,100,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-82,*,' with RSSI -81
+16:07:55.149 -> Received packet '$ACK' with RSSI -49
+16:07:55.149 -> Received packet '$ACK' with RSSI -49
+16:07:55.717 -> Received packet '$SN01,100.0,0,2021-03-12,23:07:58,0,*,$PB04,2.62,97,*$STAT,-83,*,' with RSSI -80
+16:07:56.226 -> Received packet '$ACK' with RSSI -49
+16:07:58.339 -> Received packet '$SW01,25.26,38,101286, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.63,77,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-83,*,' with RSSI -81
+16:07:58.851 -> Received packet '$ACK' with RSSI -50
+16:07:59.418 -> Received packet '$SN01,100.0,0,2021-03-12,23:08:02,0,*,$PB04,2.61,126,*$STAT,-82,*,' with RSSI -81
+16:08:02.412 -> Received packet '$SW01,25.27,38,101283, 4,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.64,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-82,*,' with RSSI -82
+16:08:02.946 -> Received packet '$ACK' with RSSI -50
+16:08:03.486 -> Received packet '$SN01,100.0,0,2021-03-12,23:08:06,0,*,$PB04,2.59,104,*$STAT,-82,*,' with RSSI -81
+16:08:04.025 -> Received packet '$ACK' with RSSI -50
+16:08:06.101 -> Received packet '$SW01,25.28,38,101285, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.61,132,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-83,*,' with RSSI -84
+16:08:06.639 -> Received packet '$ACK' with RSSI -48
+16:08:07.154 -> Received packet '$SN01,100.0,0,2021-03-12,23:08:09,0,*,$PB04,2.61,77,*$STAT,-83,*,' with RSSI -82
+16:08:07.192 -> Received packet '$SN01,100.0,0,2021-03-12,23:08:09,0,*,$PB04,2.61,77,*$STAT,-83,*,' with RSSI -82
+16:08:07.662 -> Received packet '$ACK' with RSSI -48
+16:08:07.662 -> Received packet '$ACK' with RSSI -48
+16:08:09.754 -> Received packet '$SW01,25.29,38,101287, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.63,104,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-83,*,' with RSSI -81
+16:08:10.261 -> Received packet '$ACK' with RSSI -49
+16:08:10.851 -> Received packet '$SN01,100.0,0,2021-03-12,23:08:13,0,*,$PB04,2.61,100,*$STAT,-81,*,' with RSSI -80
+16:08:11.365 -> Received packet '$ACK' with RSSI -33
+16:08:13.444 -> Received packet '$SW01,25.29,38,101284, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.63,97,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -81
+16:08:14.903 -> Received packet '$SN01,100.0,0,2021-03-12,23:08:17,0,*,$PB04,2.61,101,*$STAT,-77,*,' with RSSI -81
+16:08:14.903 -> Received packet '$SN01,100.0,0,2021-03-12,23:08:17,0,*,$PB04,2.61,101,*$STAT,-77,*,' with RSSI -81
+16:08:17.924 -> Received packet '$SW01,25.28,38,101284, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.63,77,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -81
+16:08:20.254 -> Received packet '$SN01,100.0,0,2021-03-12,23:08:23,0,*,$PB04,2.61,128,*$STAT,-77,*,' with RSSI -81
+16:08:23.267 -> Received packet '$SW01,25.30,38,101281, 4,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.59,100,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:08:25.267 -> Received packet '$SN01,100.0,0,2021-03-12,23:08:28,0,*,$PB04,2.63,101,*$STAT,-77,*,' with RSSI -83
+16:08:28.284 -> Received packet '$SW01,25.29,38,101282, 4,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.60,129,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -82
+16:08:29.704 -> Received packet '$SN01,100.0,0,2021-03-12,23:08:32,0,*,$PB04,2.59,125,*$STAT,-77,*,' with RSSI -84
+16:08:32.686 -> Received packet '$SW01,25.30,38,101287, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.60,126,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -82
+16:08:34.114 -> Received packet '$SN01,100.0,0,2021-03-12,23:08:36,0,*,$PB04,2.61,101,*$STAT,-77,*,' with RSSI -84
+16:08:37.172 -> Received packet '$SW01,25.29,38,101286, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.61,103,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -82
+16:08:38.620 -> Received packet '$SN01,100.0,0,2021-03-12,23:08:41,0,*,$PB04,2.61,132,*$STAT,-77,*,' with RSSI -82
+16:08:41.597 -> Received packet '$SW01,25.31,38,101283, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.63,77,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -83
+16:08:43.288 -> Received packet '$SN01,100.0,0,2021-03-12,23:08:46,0,*,$PB04,2.63,76,*$STAT,-77,*,' with RSSI -83
+16:08:46.268 -> Received packet '$SW01,25.33,38,101289, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.61,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -82
+16:08:47.726 -> Received packet '$SN01,100.0,0,2021-03-12,23:08:50,0,*,$PB04,2.61,100,*$STAT,-77,*,' with RSSI -81
+16:08:50.694 -> Received packet '$SW01,25.33,38,101287, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.64,77,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -82
+16:08:52.327 -> Received packet '$SN01,100.0,0,2021-03-12,23:08:55,0,*,$PB04,2.63,94,*$STAT,-77,*,' with RSSI -81
+16:08:55.298 -> Received packet '$SW01,25.34,38,101287, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,96,*,$PB04,2.61,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -81
+16:08:55.335 -> Received packet '$SW01,25.34,38,101287, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,96,*,$PB04,2.61,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -81
+16:08:56.752 -> Received packet '$SN01,100.0,0,2021-03-12,23:08:59,0,*,$PB04,2.61,129,*$STAT,-77,*,' with RSSI -82
+16:08:59.741 -> Received packet '$SW01,25.34,38,101287, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.60,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -81
+16:09:01.193 -> Received packet '$SN01,100.0,0,2021-03-12,23:09:03,0,*,$PB04,2.61,128,*$STAT,-77,*,' with RSSI -83
+16:09:01.227 -> Received packet '$SN01,100.0,0,2021-03-12,23:09:03,0,*,$PB04,2.61,128,*$STAT,-77,*,' with RSSI -83
+16:09:04.240 -> Received packet '$SW01,25.34,38,101288, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.61,76,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -81
+16:09:04.278 -> Received packet '$SW01,25.34,38,101288, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.61,76,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -81
+16:09:06.466 -> Received packet '$SN01,100.0,0,2021-03-12,23:09:09,0,*,$PB04,2.59,127,*$STAT,-77,*,' with RSSI -86
+16:09:09.455 -> Received packet '$SW01,25.34,38,101289, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.60,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -92
+16:09:11.322 -> Received packet '$SN01,100.0,0,2021-03-12,23:09:14,0,*,$PB04,2.63,80,*$STAT,-77,*,' with RSSI -89
+16:09:14.307 -> Received packet '$SW01,25.32,38,101283, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.60,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -92
+16:09:14.341 -> Received packet '$SW01,25.32,38,101283, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.60,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -92
+16:09:15.768 -> Received packet '$SN01,100.0,0,2021-03-12,23:09:18,0,*,$PB04,2.61,77,*$STAT,-77,*,' with RSSI -91
+16:09:18.742 -> Received packet '$SW01,25.35,38,101287, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.60,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -89
+16:09:20.284 -> Received packet '$SN01,100.0,0,2021-03-12,23:09:23,0,*,$PB04,2.63,79,*$STAT,-77,*,' with RSSI -88
+16:09:23.291 -> Received packet '$SW01,25.35,38,101288, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.62,105,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -90
+16:09:25.434 -> Received packet '$SN01,3.8,3,2021-03-12,23:09:28,1,0.00000,0.00000, 0,0.00,0.00,*,$PB04,2.60,113,*$STAT,-77,*,' with RSSI -87
+16:09:28.492 -> Received packet '$SW01,25.36,38,101289, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.61,111,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -92
+16:09:30.108 -> Received packet '$SN01,3.8,3,2021-03-12,23:09:32,1,32.47625,-84.95087,129,0.19,508.79,*,$PB04,2.60,113,*$STAT,-77,*,' with RSSI -88
+16:09:33.290 -> Received packet '$SW01,25.36,38,101290, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.64,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -89
+16:09:35.458 -> Received packet '$SN01,3.8,3,2021-03-12,23:09:38,1,32.47626,-84.95083,128,0.07,508.79,*,$PB04,2.62,100,*$STAT,-77,*,' with RSSI -87
+16:09:35.493 -> Received packet '$SN01,3.8,3,2021-03-12,23:09:38,1,32.47626,-84.95083,128,0.07,508.79,*,$PB04,2.62,100,*$STAT,-77,*,' with RSSI -87
+16:09:38.521 -> Received packet '$SW01,25.36,38,101292, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.62,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -88
+16:09:40.169 -> Received packet '$SN01,3.8,3,2021-03-12,23:09:42,1,32.47627,-84.95081,127,0.37,508.79,*,$PB04,2.64,93,*$STAT,-77,*,' with RSSI -92
+16:09:43.346 -> Received packet '$SW01,25.36,38,101290, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.61,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -92
+16:09:44.979 -> Received packet '$SN01,3.8,3,2021-03-12,23:09:47,1,32.47628,-84.95078,127,0.00,508.79,*,$PB04,2.63,97,*$STAT,-77,*,' with RSSI -89
+16:09:48.171 -> Received packet '$SW01,25.36,38,101290, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.64,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -92
+16:09:50.475 -> Received packet '$SN01,3.8,3,2021-03-12,23:09:53,1,32.47629,-84.95078,128,0.26,508.79,*,$PB04,2.62,101,*$STAT,-77,*,' with RSSI -90
+16:09:53.563 -> Received packet '$SW01,25.37,38,101289, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,92,*,$PB04,2.63,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -90
+16:09:55.196 -> Received packet '$SN01,3.8,3,2021-03-12,23:09:57,1,32.47629,-84.95077,128,0.26,508.79,*,$PB04,2.62,97,*$STAT,-77,*,' with RSSI -89
+16:09:55.231 -> Received packet '$SN01,3.8,3,2021-03-12,23:09:57,1,32.47629,-84.95077,128,0.26,508.79,*,$PB04,2.62,97,*$STAT,-77,*,' with RSSI -89
+16:09:58.380 -> Received packet '$SW01,25.38,38,101291, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.63,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -89
+16:10:00.020 -> Received packet '$SN01,3.8,3,2021-03-12,23:10:02,1,32.47629,-84.95078,129,0.11,508.79,*,$PB04,2.61,127,*$STAT,-77,*,' with RSSI -86
+16:10:03.172 -> Received packet '$SW01,25.37,38,101288, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.63,90,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -88
+16:10:03.209 -> Received packet '$SW01,25.37,38,101288, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.63,90,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -88
+16:10:05.480 -> Received packet '$SN01,3.8,4,2021-03-12,23:10:08,1,32.47629,-84.95077,127,0.02,508.79,*,$PB04,2.63,76,*$STAT,-77,*,' with RSSI -87
+16:10:08.582 -> Received packet '$SW01,25.36,38,101287, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.64,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -88
+16:10:10.188 -> Received packet '$SN01,3.8,4,2021-03-12,23:10:12,1,32.47628,-84.95078,124,0.09,508.79,*,$PB04,2.63,105,*$STAT,-77,*,' with RSSI -86
+16:10:13.431 -> Received packet '$SW01,25.36,38,101287, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.63,92,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -87
+16:10:18.584 -> Received packet '$SW01,25.37,38,101292, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.62,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -87
+16:10:20.475 -> Received packet '$SN01,3.8,4,2021-03-12,23:10:23,1,32.47627,-84.95081,102,0.17,508.79,*,$PB04,2.64,75,*$STAT,-77,*,' with RSSI -87
+16:10:28.504 -> Received packet '$SW01,25.36,38,101290, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.61,86,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -87
+16:10:30.052 -> Received packet '$SN01,3.8,4,2021-03-12,23:10:32,1,0.00000,0.00000, 0,0.00,0.00,*,$PB04,2.63,73,*$STAT,-77,*,' with RSSI -90
+16:10:30.090 -> Received packet '$SN01,3.8,4,2021-03-12,23:10:32,1,0.00000,0.00000, 0,0.00,0.00,*,$PB04,2.63,73,*$STAT,-77,*,' with RSSI -90
+16:10:33.200 -> Received packet '$SW01,25.36,37,101289, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.60,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -87
+16:10:34.784 -> Received packet '$SN01,2.0,5,2021-03-12,23:10:37,1,0.00000,0.00000, 0,0.00,0.00,*,$PB04,2.62,85,*$STAT,-77,*,' with RSSI -89
+16:10:37.817 -> Received packet '$SW01,25.36,38,101291, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.62,76,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -90
+16:10:39.394 -> Received packet '$SN01,2.0,5,2021-03-12,23:10:41,1,0.00000,0.00000, 0,0.00,0.00,*,$PB04,2.63,74,*$STAT,-77,*,' with RSSI -91
+16:10:42.569 -> Received packet '$SW01,25.37,38,101292, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.62,104,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -87
+16:10:44.117 -> Received packet '$SN01,2.0,5,2021-03-12,23:10:46,1,0.00000,0.00000, 0,0.00,0.00,*,$PB04,2.60,111,*$STAT,-77,*,' with RSSI -90
+16:10:44.152 -> Received packet '$SN01,2.0,5,2021-03-12,23:10:46,1,0.00000,0.00000, 0,0.00,0.00,*,$PB04,2.60,111,*$STAT,-77,*,' with RSSI -90
+16:10:47.260 -> Received packet '$SW01,25.39,38,101293, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.60,91,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -88
+16:10:49.478 -> Received packet '$SN01,2.0,5,2021-03-12,23:10:52,1,0.00000,0.00000, 0,0.00,0.00,*,$PB04,2.63,105,*$STAT,-77,*,' with RSSI -91
+16:10:52.534 -> Received packet '$SW01,25.39,37,101297, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.62,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -92
+16:10:54.377 -> Received packet '$SN01,2.0,5,2021-03-12,23:10:57,1,0.00000,0.00000, 0,0.00,0.00,*,$PB04,2.62,88,*$STAT,-77,*,' with RSSI -89
+16:10:57.528 -> Received packet '$SW01,25.40,38,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.59,90,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -92
+16:10:57.528 -> Received packet '$SW01,25.40,38,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.59,90,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -92
+16:10:59.403 -> Received packet '$SN01,2.0,5,2021-03-12,23:11:02,1,0.00000,0.00000, 0,0.00,0.00,*,$PB04,2.60,86,*$STAT,-77,*,' with RSSI -90
+16:11:02.527 -> Received packet '$SW01,25.39,38,101292, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.57,124,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -90
+16:11:04.110 -> Received packet '$SN01,2.0,5,2021-03-12,23:11:06,1,0.00000,0.00000, 0,0.00,0.00,*,$PB04,2.58,123,*$STAT,-77,*,' with RSSI -88
+16:11:07.253 -> Received packet '$SW01,25.39,38,101293, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.60,103,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -88
+16:11:07.290 -> Received packet '$SW01,25.39,38,101293, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.60,103,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -88
+16:11:15.827 -> LoRa Monitor
+16:11:16.535 -> Rx: $SW01,25.40,38,101293, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,88,*,$PB04,2.59,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -83
+16:11:18.148 -> Rx: $SN01,2.0,5,2021-03-12,23:11:20,1,0.00000,0.00000, 0,0.00,0.00,*,$PB04,2.60,104,*$STAT,-77,*,' with RSSI -82
+16:11:21.287 -> Rx: $SW01,25.40,38,101291, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.62,77,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -87
+16:11:23.499 -> Rx: $SN01,2.0,5,2021-03-12,23:11:26,1,0.00000,0.00000, 0,0.00,0.00,*,$PB04,2.62,77,*$STAT,-77,*,' with RSSI -82
+16:11:26.562 -> Rx: $SW01,25.40,38,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.60,100,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -83
+16:11:28.201 -> Rx: $SN01,1.8,6,2021-03-12,23:11:30,1,32.47624,-84.95085,105,0.30,508.79,*,$PB04,2.62,88,*$STAT,-77,*,' with RSSI -84
+16:11:31.440 -> Rx: $SW01,25.40,38,101295, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.61,83,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -82
+16:11:33.518 -> Rx: $SN01,1.4,7,2021-03-12,23:11:36,1,32.47623,-84.95085,108,0.28,508.79,*,$PB04,2.60,120,*$STAT,-77,*,' with RSSI -84
+16:11:36.629 -> Rx: $SW01,25.39,38,101287, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.60,124,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -81
+16:11:38.512 -> Rx: $SN01,1.4,7,2021-03-12,23:11:41,1,32.47622,-84.95085,110,0.24,508.79,*,$PB04,2.62,76,*$STAT,-77,*,' with RSSI -84
+16:11:41.625 -> Rx: $SW01,25.39,38,101290, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.63,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -83
+16:11:43.286 -> Rx: $SN01,1.4,7,2021-03-12,23:11:45,1,32.47622,-84.95085,111,0.50,508.79,*,$PB04,2.63,99,*$STAT,-77,*,' with RSSI -85
+16:11:46.523 -> Rx: $SW01,25.39,38,101292, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.62,100,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -85
+16:11:48.160 -> Rx: $SN01,1.4,7,2021-03-12,23:11:50,1,32.47622,-84.95086,111,0.24,508.79,*,$PB04,2.63,74,*$STAT,-77,*,' with RSSI -83
+16:11:51.399 -> Rx: $SW01,25.39,38,101293, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.59,126,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -82
+16:11:53.064 -> Rx: $SN01,1.4,7,2021-03-12,23:11:55,1,32.47623,-84.95086,111,0.35,508.79,*,$PB04,2.60,76,*$STAT,-77,*,' with RSSI -85
+16:11:56.322 -> Rx: $SW01,25.39,38,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.60,131,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -84
+16:11:58.498 -> Rx: $SN01,1.4,7,2021-03-12,23:12:01,1,32.47622,-84.95087,111,0.11,508.79,*,$PB04,2.63,96,*$STAT,-77,*,' with RSSI -82
+16:12:01.624 -> Rx: $SW01,25.39,37,101287, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.63,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -84
+16:12:03.265 -> Rx: $SN01,1.4,7,2021-03-12,23:12:05,1,32.47622,-84.95087,111,0.22,508.79,*,$PB04,2.58,124,*$STAT,-77,*,' with RSSI -88
+16:12:06.497 -> Rx: $SW01,25.39,38,101290, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.61,99,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:12:08.512 -> Rx: $SN01,1.4,7,2021-03-12,23:12:11,1,32.47622,-84.95087,111,0.44,508.79,*,$PB04,2.61,74,*$STAT,-77,*,' with RSSI -79
+16:12:13.510 -> Rx: $SN01,1.4,7,2021-03-12,23:12:16,1,32.47622,-84.95087,111,0.15,508.79,*,$PB04,2.62,96,*$STAT,-77,*,' with RSSI -78
+16:12:16.633 -> Rx: $SW01,25.39,38,101291, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.61,86,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:12:18.277 -> Rx: $SN01,1.4,7,2021-03-12,23:12:20,1,32.47622,-84.95087,111,0.63,508.79,*,$PB04,2.61,74,*$STAT,-77,*,' with RSSI -80
+16:12:21.518 -> Rx: $SW01,25.38,38,101293, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.62,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:12:23.177 -> Rx: $SN01,1.4,7,2021-03-12,23:12:25,1,32.47623,-84.95087,111,0.09,508.79,*,$PB04,2.62,89,*$STAT,-77,*,' with RSSI -79
+16:12:26.419 -> Rx: $SW01,25.39,37,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.60,112,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -78
+16:12:28.093 -> Rx: $SN01,1.4,7,2021-03-12,23:12:30,1,32.47623,-84.95087,111,0.07,508.79,*,$PB04,2.62,76,*$STAT,-77,*,' with RSSI -80
+16:12:31.312 -> Rx: $SW01,25.38,37,101293, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.59,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:12:33.500 -> Rx: $SN01,1.4,7,2021-03-12,23:12:36,1,32.47623,-84.95087,111,0.13,508.79,*,$PB04,2.63,73,*$STAT,-77,*,' with RSSI -78
+16:12:36.601 -> Rx: $SW01,25.39,38,101293, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.62,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:12:38.246 -> Rx: $SN01,1.4,7,2021-03-12,23:12:40,1,32.47623,-84.95087,110,0.41,508.79,*,$PB04,2.63,104,*$STAT,-77,*,' with RSSI -78
+16:12:41.484 -> Rx: $SW01,25.39,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.63,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:12:43.535 -> Rx: $SN01,1.4,7,2021-03-12,23:12:46,1,32.47623,-84.95087,110,0.07,508.79,*,$PB04,2.60,100,*$STAT,-77,*,' with RSSI -80
+16:12:46.603 -> Rx: $SW01,25.40,38,101295, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.60,86,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:12:48.507 -> Rx: $SN01,1.4,7,2021-03-12,23:12:51,1,32.47623,-84.95086,109,0.67,508.79,*,$PB04,2.63,74,*$STAT,-77,*,' with RSSI -78
+16:12:51.604 -> Rx: $SW01,25.38,38,101295, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.60,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:12:53.286 -> Rx: $SN01,1.4,7,2021-03-12,23:12:55,1,32.47623,-84.95087,108,0.17,508.79,*,$PB04,2.59,113,*$STAT,-77,*,' with RSSI -78
+16:12:56.520 -> Rx: $SW01,25.39,38,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.62,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:12:58.154 -> Rx: $SN01,1.4,7,2021-03-12,23:13:00,1,32.47623,-84.95087,109,0.09,508.79,*,$PB04,2.63,73,*$STAT,-77,*,' with RSSI -79
+16:13:01.391 -> Rx: $SW01,25.39,38,101301, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.62,97,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:13:03.047 -> Rx: $SN01,1.4,7,2021-03-12,23:13:05,1,32.47622,-84.95088,109,0.06,508.79,*,$PB04,2.61,73,*$STAT,-77,*,' with RSSI -79
+16:13:03.083 -> Rx: $SN01,1.4,7,2021-03-12,23:13:05,1,32.47622,-84.95088,109,0.06,508.79,*,$PB04,2.61,73,*$STAT,-77,*,' with RSSI -79
+16:13:06.275 -> Rx: $SW01,25.38,38,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.62,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:13:08.426 -> Rx: $SN01,1.4,7,2021-03-12,23:13:11,1,32.47622,-84.95088,110,0.37,508.79,*,$PB04,2.62,75,*$STAT,-77,*,' with RSSI -79
+16:13:11.623 -> Rx: $SW01,25.38,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.62,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:13:13.251 -> Rx: $SN01,1.4,7,2021-03-12,23:13:15,1,32.47622,-84.95088,110,0.30,508.79,*,$PB04,2.63,102,*$STAT,-77,*,' with RSSI -79
+16:13:16.486 -> Rx: $SW01,25.39,38,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,84,*,$PB04,2.62,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:13:18.516 -> Rx: $SN01,1.4,7,2021-03-12,23:13:21,1,32.47622,-84.95089,110,0.52,508.79,*,$PB04,2.59,109,*$STAT,-77,*,' with RSSI -78
+16:13:23.531 -> Rx: $SN01,1.4,7,2021-03-12,23:13:26,1,32.47622,-84.95090,111,0.48,508.79,*,$PB04,2.62,74,*$STAT,-77,*,' with RSSI -80
+16:13:26.627 -> Rx: $SW01,25.38,37,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.62,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:13:26.627 -> Rx: $SW01,25.38,37,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.62,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:13:28.265 -> Rx: $SN01,1.4,7,2021-03-12,23:13:30,1,32.47622,-84.95090,111,0.59,508.79,*,$PB04,2.61,85,*$STAT,-77,*,' with RSSI -80
+16:13:28.303 -> Rx: $SN01,1.4,7,2021-03-12,23:13:30,1,32.47622,-84.95090,111,0.59,508.79,*,$PB04,2.61,85,*$STAT,-77,*,' with RSSI -80
+16:13:31.484 -> Rx: $SW01,25.39,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.61,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:13:31.517 -> Rx: $SW01,25.39,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.61,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:13:33.140 -> Rx: $SN01,1.4,7,2021-03-12,23:13:35,1,32.47622,-84.95089,112,0.35,508.79,*,$PB04,2.59,87,*$STAT,-77,*,' with RSSI -79
+16:13:36.375 -> Rx: $SW01,25.38,38,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.60,110,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:13:38.042 -> Rx: $SN01,1.4,7,2021-03-12,23:13:40,1,32.47622,-84.95088,112,0.33,508.79,*,$PB04,2.62,92,*$STAT,-77,*,' with RSSI -80
+16:13:38.079 -> Rx: $SN01,1.4,7,2021-03-12,23:13:40,1,32.47622,-84.95088,112,0.33,508.79,*,$PB04,2.62,92,*$STAT,-77,*,' with RSSI -80
+16:13:41.276 -> Rx: $SW01,25.38,38,101296, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.60,88,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:13:41.312 -> Rx: $SW01,25.38,38,101296, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.60,88,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:13:43.530 -> Rx: $SN01,1.4,7,2021-03-12,23:13:46,1,32.47622,-84.95087,112,0.02,508.79,*,$PB04,2.62,84,*$STAT,-77,*,' with RSSI -79
+16:13:46.622 -> Rx: $SW01,25.39,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.59,89,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -77
+16:13:48.287 -> Rx: $SN01,1.4,7,2021-03-12,23:13:50,1,32.47622,-84.95087,112,0.15,508.79,*,$PB04,2.62,95,*$STAT,-77,*,' with RSSI -80
+16:13:51.533 -> Rx: $SW01,25.37,38,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.60,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:13:53.493 -> Rx: $SN01,1.4,7,2021-03-12,23:13:56,1,32.47622,-84.95087,112,0.19,508.79,*,$PB04,2.62,73,*$STAT,-77,*,' with RSSI -79
+16:13:58.490 -> Rx: $SN01,1.4,7,2021-03-12,23:14:01,1,32.47622,-84.95087,112,0.19,508.79,*,$PB04,2.62,74,*$STAT,-77,*,' with RSSI -80
+16:14:01.595 -> Rx: $SW01,25.39,38,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.60,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:14:03.492 -> Rx: $SN01,1.4,7,2021-03-12,23:14:06,1,32.47622,-84.95087,110,0.17,508.79,*,$PB04,2.62,73,*$STAT,-77,*,' with RSSI -80
+16:14:06.612 -> Rx: $SW01,25.38,38,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.62,98,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -78
+16:14:08.266 -> Rx: $SN01,1.4,7,2021-03-12,23:14:10,1,32.47622,-84.95088,109,0.19,508.79,*,$PB04,2.60,125,*$STAT,-77,*,' with RSSI -77
+16:14:11.489 -> Rx: $SW01,25.37,38,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.62,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:14:13.144 -> Rx: $SN01,1.4,7,2021-03-12,23:14:15,1,32.47623,-84.95088,108,0.37,508.79,*,$PB04,2.61,99,*$STAT,-77,*,' with RSSI -79
+16:14:16.381 -> Rx: $SW01,25.38,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.62,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -81
+16:14:18.026 -> Rx: $SN01,1.4,7,2021-03-12,23:14:20,1,32.47623,-84.95089,106,0.46,508.79,*,$PB04,2.62,73,*$STAT,-77,*,' with RSSI -79
+16:14:21.286 -> Rx: $SW01,25.39,38,101300, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.60,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:14:23.530 -> Rx: $SN01,1.4,7,2021-03-12,23:14:26,1,32.47623,-84.95089,107,0.28,508.79,*,$PB04,2.62,73,*$STAT,-77,*,' with RSSI -79
+16:14:26.604 -> Rx: $SW01,25.37,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.60,73,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:14:28.276 -> Rx: $SN01,1.4,7,2021-03-12,23:14:30,1,32.47623,-84.95090,105,0.37,508.79,*,$PB04,2.60,74,*$STAT,-77,*,' with RSSI -78
+16:14:31.506 -> Rx: $SW01,25.37,38,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.62,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -77
+16:14:33.511 -> Rx: $SN01,1.4,7,2021-03-12,23:14:36,1,32.47623,-84.95090,104,0.67,508.79,*,$PB04,2.60,73,*$STAT,-77,*,' with RSSI -80
+16:14:36.601 -> Rx: $SW01,25.39,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.60,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -78
+16:14:38.494 -> Rx: $SN01,1.4,7,2021-03-12,23:14:41,1,32.47623,-84.95091,103,1.24,508.79,*,$PB04,2.62,98,*$STAT,-77,*,' with RSSI -78
+16:14:41.629 -> Rx: $SW01,25.39,38,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.62,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:14:46.490 -> Rx: $SW01,25.38,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.62,72,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:14:48.142 -> Rx: $SN01,1.4,7,2021-03-12,23:14:50,1,32.47622,-84.95093,102,0.70,508.79,*,$PB04,2.62,72,*$STAT,-77,*,' with RSSI -79
+16:14:51.399 -> Rx: $SW01,25.37,37,101295, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.61,87,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -78
+16:14:51.435 -> Rx: $SW01,25.37,37,101295, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.61,87,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -78
+16:14:53.054 -> Rx: $SN01,1.4,7,2021-03-12,23:14:55,1,32.47622,-84.95093,103,0.28,508.79,*,$PB04,2.62,99,*$STAT,-77,*,' with RSSI -79
+16:14:56.260 -> Rx: $SW01,25.37,38,101295, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.61,73,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:14:58.521 -> Rx: $SN01,1.4,7,2021-03-12,23:15:01,1,32.47622,-84.95092,103,0.19,508.79,*,$PB04,2.62,73,*$STAT,-77,*,' with RSSI -80
+16:15:01.621 -> Rx: $SW01,25.36,38,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.59,73,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:15:03.254 -> Rx: $SN01,1.4,7,2021-03-12,23:15:05,1,32.47622,-84.95091,103,0.13,508.79,*,$PB04,2.61,74,*$STAT,-77,*,' with RSSI -80
+16:15:06.485 -> Rx: $SW01,25.36,38,101295, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.59,76,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:15:08.413 -> Rx: $SN01,1.4,7,2021-03-12,23:15:11,1,32.47623,-84.95090,103,0.04,508.79,*,$PB04,2.62,74,*$STAT,-77,*,' with RSSI -80
+16:15:08.451 -> Rx: $SN01,1.4,7,2021-03-12,23:15:11,1,32.47623,-84.95090,103,0.04,508.79,*,$PB04,2.62,74,*$STAT,-77,*,' with RSSI -80
+16:15:11.595 -> Rx: $SW01,25.36,37,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.61,88,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:15:13.511 -> Rx: $SN01,1.4,7,2021-03-12,23:15:16,1,32.47623,-84.95090,104,0.54,508.79,*,$PB04,2.59,103,*$STAT,-77,*,' with RSSI -79
+16:15:16.599 -> Rx: $SW01,25.37,38,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.59,99,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -78
+16:15:18.264 -> Rx: $SN01,1.4,7,2021-03-12,23:15:20,1,32.47623,-84.95090,104,0.15,508.79,*,$PB04,2.62,72,*$STAT,-77,*,' with RSSI -80
+16:15:18.301 -> Rx: $SN01,1.4,7,2021-03-12,23:15:20,1,32.47623,-84.95090,104,0.15,508.79,*,$PB04,2.62,72,*$STAT,-77,*,' with RSSI -80
+16:15:21.513 -> Rx: $SW01,25.37,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.61,76,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -78
+16:15:21.550 -> Rx: $SW01,25.37,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.61,76,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -78
+16:15:23.170 -> Rx: $SN01,1.4,7,2021-03-12,23:15:25,1,32.47623,-84.95090,103,0.44,508.79,*,$PB04,2.60,74,*$STAT,-77,*,' with RSSI -79
+16:15:26.392 -> Rx: $SW01,25.38,38,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.61,103,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -78
+16:15:26.426 -> Rx: $SW01,25.38,38,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.61,103,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -78
+16:15:28.032 -> Rx: $SN01,1.4,7,2021-03-12,23:15:30,1,32.47624,-84.95090,104,0.46,508.79,*,$PB04,2.62,73,*$STAT,-77,*,' with RSSI -78
+16:15:31.276 -> Rx: $SW01,25.37,38,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.61,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -78
+16:15:33.499 -> Rx: $SN01,1.4,7,2021-03-12,23:15:36,1,32.47623,-84.95090,103,0.09,508.79,*,$PB04,2.60,88,*$STAT,-77,*,' with RSSI -79
+16:15:36.626 -> Rx: $SW01,25.37,38,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.58,85,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:15:36.664 -> Rx: $SW01,25.37,38,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.58,85,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:15:38.492 -> Rx: $SN01,1.4,7,2021-03-12,23:15:41,1,32.47623,-84.95090,104,0.59,508.79,*,$PB04,2.61,99,*$STAT,-77,*,' with RSSI -79
+16:15:41.636 -> Rx: $SW01,25.36,38,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.59,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:15:41.669 -> Rx: $SW01,25.36,38,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.59,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:15:43.516 -> Rx: $SN01,1.4,7,2021-03-12,23:15:46,1,32.47623,-84.95090,104,0.39,508.79,*,$PB04,2.61,73,*$STAT,-77,*,' with RSSI -80
+16:15:46.608 -> Rx: $SW01,25.38,38,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,80,*,$PB04,2.60,86,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:15:48.275 -> Rx: $SN01,1.4,7,2021-03-12,23:15:50,1,32.47623,-84.95091,105,0.76,508.79,*,$PB04,2.62,75,*$STAT,-77,*,' with RSSI -81
+16:15:51.537 -> Rx: $SW01,25.37,37,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.60,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:15:53.189 -> Rx: $SN01,1.4,7,2021-03-12,23:15:55,1,32.47623,-84.95091,105,0.50,508.79,*,$PB04,2.60,97,*$STAT,-77,*,' with RSSI -80
+16:15:53.227 -> Rx: $SN01,1.4,7,2021-03-12,23:15:55,1,32.47623,-84.95091,105,0.50,508.79,*,$PB04,2.60,97,*$STAT,-77,*,' with RSSI -80
+16:15:56.422 -> Rx: $SW01,25.38,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.59,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:15:56.460 -> Rx: $SW01,25.38,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.59,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:15:58.096 -> Rx: $SN01,1.4,7,2021-03-12,23:16:00,1,32.47623,-84.95093,104,0.43,508.79,*,$PB04,2.62,99,*$STAT,-77,*,' with RSSI -79
+16:16:01.329 -> Rx: $SW01,25.38,38,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.60,98,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:16:03.496 -> Rx: $SN01,1.4,7,2021-03-12,23:16:06,1,32.47623,-84.95092,105,1.54,508.79,*,$PB04,2.60,85,*$STAT,-77,*,' with RSSI -78
+16:16:06.615 -> Rx: $SW01,25.37,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.61,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:16:08.502 -> Rx: $SN01,1.4,7,2021-03-12,23:16:08,1,32.47623,-84.95094,105,0.89,508.79,*,$PB04,2.58,94,*$STAT,-77,*,' with RSSI -80
+16:16:11.598 -> Rx: $SW01,25.37,38,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.61,73,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:16:13.505 -> Rx: $SN01,1.4,7,2021-03-12,23:16:13,1,32.47623,-84.95094,104,0.78,508.79,*,$PB04,2.62,102,*$STAT,-77,*,' with RSSI -78
+16:16:16.612 -> Rx: $SW01,25.37,38,101302, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.60,87,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:16:18.258 -> Rx: $SN01,1.4,7,2021-03-12,23:16:17,1,32.47623,-84.95095,104,0.26,508.79,*,$PB04,2.60,73,*$STAT,-77,*,' with RSSI -78
+16:16:21.535 -> Rx: $SW01,25.36,38,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.61,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:16:21.535 -> Rx: $SW01,25.36,38,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.61,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:16:23.181 -> Rx: $SN01,1.4,7,2021-03-12,23:16:22,1,32.47623,-84.95095,104,0.43,508.79,*,$PB04,2.62,77,*$STAT,-77,*,' with RSSI -79
+16:16:26.404 -> Rx: $SW01,25.36,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.61,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:16:28.078 -> Rx: $SN01,1.4,7,2021-03-12,23:16:27,1,32.47623,-84.95096,104,0.30,508.79,*,$PB04,2.62,97,*$STAT,-77,*,' with RSSI -79
+16:16:31.314 -> Rx: $SW01,25.36,38,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.59,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -78
+16:16:33.497 -> Rx: $SN01,1.4,7,2021-03-12,23:16:33,1,32.47623,-84.95096,104,1.19,508.79,*,$PB04,2.61,92,*$STAT,-77,*,' with RSSI -80
+16:16:36.597 -> Rx: $SW01,25.37,38,101300, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.61,99,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -79
+16:16:38.262 -> Rx: $SN01,1.8,6,2021-03-12,23:16:37,1,32.47623,-84.95096,104,1.00,508.79,*,$PB04,2.62,73,*$STAT,-77,*,' with RSSI -79
+16:16:41.490 -> Rx: $SW01,25.38,38,101301, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.58,77,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -78
+16:16:43.490 -> Rx: $SN01,1.8,6,2021-03-12,23:16:43,1,32.47623,-84.95095,102,0.19,508.79,*,$PB04,2.61,73,*$STAT,-77,*,' with RSSI -80
+16:16:46.625 -> Rx: $SW01,25.35,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.61,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -78
+16:16:48.497 -> Rx: $SN01,1.8,7,2021-03-12,23:16:48,1,32.47624,-84.95094,102,0.72,508.79,*,$PB04,2.59,111,*$STAT,-77,*,' with RSSI -78
+16:16:51.623 -> Rx: $SW01,25.37,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.61,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:16:56.505 -> Rx: $SW01,25.36,38,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.59,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:16:56.540 -> Rx: $SW01,25.36,38,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.59,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:16:58.149 -> Rx: $SN01,1.4,7,2021-03-12,23:16:57,1,32.47625,-84.95094,99,0.39,508.79,*,$PB04,2.61,98,*$STAT,-77,*,' with RSSI -79
+16:16:58.186 -> Rx: $SN01,1.4,7,2021-03-12,23:16:57,1,32.47625,-84.95094,99,0.39,508.79,*,$PB04,2.61,98,*$STAT,-77,*,' with RSSI -79
+16:17:01.384 -> Rx: $SW01,25.37,38,101303, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.61,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-77,*,' with RSSI -80
+16:17:03.042 -> Rx: $SN01,1.4,7,2021-03-12,23:17:02,1,32.47625,-84.95095,99,0.30,508.79,*,$PB04,2.60,106,*$STAT,-134,*,' with RSSI -78
+16:17:06.298 -> Rx: $SW01,25.35,37,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.58,87,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -79
+16:17:08.514 -> Rx: $SN01,1.4,7,2021-03-12,23:17:08,1,32.47625,-84.95096,99,0.46,508.79,*,$PB04,2.61,74,*$STAT,-134,*,' with RSSI -79
+16:17:08.551 -> Rx: $SN01,1.4,7,2021-03-12,23:17:08,1,32.47625,-84.95096,99,0.46,508.79,*,$PB04,2.61,74,*$STAT,-134,*,' with RSSI -79
+16:17:11.636 -> Rx: $SW01,25.36,37,101303, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.60,122,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -80
+16:17:13.278 -> Rx: $SN01,1.4,7,2021-03-12,23:17:12,1,32.47625,-84.95095,100,0.48,508.79,*,$PB04,2.62,73,*$STAT,-134,*,' with RSSI -79
+16:17:13.315 -> Rx: $SN01,1.4,7,2021-03-12,23:17:12,1,32.47625,-84.95095,100,0.48,508.79,*,$PB04,2.62,73,*$STAT,-134,*,' with RSSI -79
+16:17:16.507 -> Rx: $SW01,25.36,38,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.60,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -80
+16:17:18.421 -> Rx: $SN01,1.4,7,2021-03-12,23:17:18,1,32.47625,-84.95094,101,0.63,508.79,*,$PB04,2.57,97,*$STAT,-134,*,' with RSSI -78
+16:17:21.631 -> Rx: $SW01,25.36,38,101303, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.60,98,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -78
+16:17:23.516 -> Rx: $SN01,1.4,7,2021-03-12,23:17:23,1,32.47625,-84.95093,100,0.50,508.79,*,$PB04,2.60,90,*$STAT,-134,*,' with RSSI -78
+16:17:26.609 -> Rx: $SW01,25.37,38,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.61,104,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -79
+16:17:28.295 -> Rx: $SN01,1.4,7,2021-03-12,23:17:27,1,32.47625,-84.95092,101,0.48,508.79,*,$PB04,2.58,93,*$STAT,-134,*,' with RSSI -78
+16:17:31.521 -> Rx: $SW01,25.35,38,101300, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.59,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -80
+16:17:33.195 -> Rx: $SN01,1.4,7,2021-03-12,23:17:32,1,32.47624,-84.95094,102,1.80,508.79,*,$PB04,2.60,86,*$STAT,-134,*,' with RSSI -80
+16:17:36.436 -> Rx: $SW01,25.36,38,101300, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.60,113,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -80
+16:17:38.083 -> Rx: $SN01,1.4,7,2021-03-12,23:17:37,1,32.47623,-84.95093,103,0.39,508.79,*,$PB04,2.59,73,*$STAT,-134,*,' with RSSI -79
+16:17:38.120 -> Rx: $SN01,1.4,7,2021-03-12,23:17:37,1,32.47623,-84.95093,103,0.39,508.79,*,$PB04,2.59,73,*$STAT,-134,*,' with RSSI -79
+16:17:41.323 -> Rx: $SW01,25.35,38,101304, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.58,98,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -80
+16:17:42.995 -> Rx: $SN01,1.4,7,2021-03-12,23:17:42,1,32.47623,-84.95093,105,0.35,508.79,*,$PB04,2.61,101,*$STAT,-134,*,' with RSSI -80
+16:17:46.234 -> Rx: $SW01,25.34,38,101301, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.59,88,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -80
+16:17:46.272 -> Rx: $SW01,25.34,38,101301, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.59,88,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -80
+16:17:48.509 -> Rx: $SN01,1.4,7,2021-03-12,23:17:48,1,32.47623,-84.95090,105,0.61,508.79,*,$PB04,2.61,73,*$STAT,-134,*,' with RSSI -80
+16:17:51.610 -> Rx: $SW01,25.34,38,101303, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.58,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -78
+16:17:51.644 -> Rx: $SW01,25.34,38,101303, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.58,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -78
+16:17:53.284 -> Rx: $SN01,1.4,7,2021-03-12,23:17:52,1,32.47623,-84.95090,105,1.22,508.79,*,$PB04,2.61,74,*$STAT,-134,*,' with RSSI -78
+16:17:56.517 -> Rx: $SW01,25.32,38,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.60,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -79
+16:17:58.517 -> Rx: $SN01,1.4,7,2021-03-12,23:17:58,1,32.47622,-84.95089,104,0.31,508.79,*,$PB04,2.60,85,*$STAT,-134,*,' with RSSI -78
+16:18:01.610 -> Rx: $SW01,25.34,38,101295, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.61,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -79
+16:18:03.524 -> Rx: $SN01,1.4,7,2021-03-12,23:18:03,1,32.47622,-84.95090,105,0.70,508.79,*,$PB04,2.60,73,*$STAT,-134,*,' with RSSI -78
+16:18:06.615 -> Rx: $SW01,25.34,38,101300, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.60,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -80
+16:18:08.272 -> Rx: $SN01,1.4,7,2021-03-12,23:18:07,1,32.47622,-84.95088,105,1.20,508.79,*,$PB04,2.58,97,*$STAT,-134,*,' with RSSI -79
+16:18:11.517 -> Rx: $SW01,25.34,38,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,76,*,$PB04,2.60,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -78
+16:18:13.168 -> Rx: $SN01,1.4,7,2021-03-12,23:18:12,1,32.47622,-84.95089,105,0.41,508.79,*,$PB04,2.60,85,*$STAT,-134,*,' with RSSI -79
+16:18:16.425 -> Rx: $SW01,25.34,38,101301, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.59,89,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -80
+16:18:18.111 -> Rx: $SN01,1.4,7,2021-03-12,23:18:17,1,32.47622,-84.95089,106,0.52,508.79,*,$PB04,2.59,78,*$STAT,-134,*,' with RSSI -80
+16:18:21.352 -> Rx: $SW01,25.34,38,101300, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.58,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -81
+16:18:21.389 -> Rx: $SW01,25.34,38,101300, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.58,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -81
+16:18:23.024 -> Rx: $SN01,1.4,7,2021-03-12,23:18:22,1,32.47622,-84.95089,105,0.50,508.79,*,$PB04,2.61,74,*$STAT,-134,*,' with RSSI -80
+16:18:26.237 -> Rx: $SW01,25.34,38,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.58,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -80
+16:18:28.504 -> Rx: $SN01,1.4,7,2021-03-12,23:18:28,1,32.47623,-84.95087,105,0.04,508.79,*,$PB04,2.61,104,*$STAT,-134,*,' with RSSI -80
+16:18:31.623 -> Rx: $SW01,25.34,38,101302, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.59,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -79
+16:18:31.661 -> Rx: $SW01,25.34,38,101302, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.59,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -79
+16:18:33.277 -> Rx: $SN01,1.4,7,2021-03-12,23:18:32,1,32.47622,-84.95087,103,0.70,508.79,*,$PB04,2.58,100,*$STAT,-134,*,' with RSSI -80
+16:18:36.556 -> Rx: $SW01,25.35,38,101307, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.60,95,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -79
+16:18:38.491 -> Rx: $SN01,1.4,7,2021-03-12,23:18:38,1,32.47621,-84.95089,100,0.98,508.79,*,$PB04,2.60,76,*$STAT,-134,*,' with RSSI -78
+16:18:41.613 -> Rx: $SW01,25.32,38,101301, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.60,95,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -80
+16:18:43.496 -> Rx: $SN01,1.4,7,2021-03-12,23:18:43,1,32.47621,-84.95090,98,0.54,508.79,*,$PB04,2.60,73,*$STAT,-134,*,' with RSSI -79
+16:18:46.638 -> Rx: $SW01,25.34,38,101302, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.60,97,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -80
+16:18:48.284 -> Rx: $SN01,1.4,7,2021-03-12,23:18:47,1,32.47622,-84.95089,97,0.50,508.79,*,$PB04,2.57,103,*$STAT,-134,*,' with RSSI -79
+16:18:51.526 -> Rx: $SW01,25.33,38,101301, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,72,*,$PB04,2.57,82,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -81
+16:18:53.194 -> Rx: $SN01,1.4,7,2021-03-12,23:18:52,1,32.47622,-84.95087,97,1.11,508.79,*,$PB04,2.58,74,*$STAT,-134,*,' with RSSI -80
+16:18:53.231 -> Rx: $SN01,1.4,7,2021-03-12,23:18:52,1,32.47622,-84.95087,97,1.11,508.79,*,$PB04,2.58,74,*$STAT,-134,*,' with RSSI -80
+16:18:56.438 -> Rx: $SW01,25.34,38,101303, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.60,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -79
+16:18:58.101 -> Rx: $SN01,1.4,7,2021-03-12,23:18:57,1,32.47623,-84.95087,97,0.31,508.79,*,$PB04,2.60,75,*$STAT,-134,*,' with RSSI -79
+16:19:01.365 -> Rx: $SW01,25.34,38,101303, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.57,100,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -79
+16:19:03.019 -> Rx: $SN01,1.4,7,2021-03-12,23:19:02,1,32.47624,-84.95086,97,0.78,508.79,*,$PB04,2.60,101,*$STAT,-134,*,' with RSSI -79
+16:19:06.253 -> Rx: $SW01,25.32,38,101300, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.60,96,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -79
+16:19:08.502 -> Rx: $SN01,1.4,7,2021-03-12,23:19:08,1,32.47626,-84.95087,98,0.76,508.79,*,$PB04,2.60,103,*$STAT,-134,*,' with RSSI -79
+16:19:11.612 -> Rx: $SW01,25.33,38,101301, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.58,76,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -77
+16:19:13.255 -> Rx: $SN01,1.4,7,2021-03-12,23:19:12,1,32.47627,-84.95085,99,0.89,508.79,*,$PB04,2.58,100,*$STAT,-134,*,' with RSSI -78
+16:19:16.523 -> Rx: $SW01,25.31,38,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.60,82,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -78
+16:19:18.502 -> Rx: $SN01,1.4,7,2021-03-12,23:19:18,1,32.47628,-84.95084,101,1.13,508.79,*,$PB04,2.59,74,*$STAT,-134,*,' with RSSI -79
+16:19:21.653 -> Rx: $SW01,25.32,38,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.60,100,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -78
+16:19:21.690 -> Rx: $SW01,25.32,38,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.60,100,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -78
+16:19:23.533 -> Rx: $SN01,1.4,7,2021-03-12,23:19:23,1,32.47627,-84.95083,101,0.67,508.79,*,$PB04,2.60,99,*$STAT,-134,*,' with RSSI -79
+16:19:26.629 -> Rx: $SW01,25.32,38,101302, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.58,80,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -78
+16:19:28.311 -> Rx: $SN01,1.4,7,2021-03-12,23:19:27,1,32.47628,-84.95083,101,0.31,508.79,*,$PB04,2.58,98,*$STAT,-134,*,' with RSSI -78
+16:19:31.604 -> Rx: $SW01,25.30,38,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.60,93,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -78
+16:19:33.264 -> Rx: $SN01,1.4,7,2021-03-12,23:19:32,1,32.47627,-84.95081,103,0.31,508.79,*,$PB04,2.60,75,*$STAT,-134,*,' with RSSI -78
+16:19:36.560 -> Rx: $SW01,25.32,38,101303, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.59,109,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -78
+16:19:38.215 -> Rx: $SN01,1.4,7,2021-03-12,23:19:37,1,32.47627,-84.95081,105,0.50,508.79,*,$PB04,2.58,74,*$STAT,-134,*,' with RSSI -79
+16:19:41.490 -> Rx: $SW01,25.31,38,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.60,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -79
+16:19:43.159 -> Rx: $SN01,1.4,7,2021-03-12,23:19:42,1,32.47626,-84.95078,106,0.59,508.79,*,$PB04,2.60,74,*$STAT,-134,*,' with RSSI -79
+16:19:46.455 -> Rx: $SW01,25.31,38,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.59,108,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -80
+16:19:46.455 -> Rx: $SW01,25.31,38,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.59,108,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -80
+16:19:48.494 -> Rx: $SN01,1.4,7,2021-03-12,23:19:48,1,32.47625,-84.95080,108,1.57,508.79,*,$PB04,2.60,79,*$STAT,-134,*,' with RSSI -80
+16:19:48.531 -> Rx: $SN01,1.4,7,2021-03-12,23:19:48,1,32.47625,-84.95080,108,1.57,508.79,*,$PB04,2.60,79,*$STAT,-134,*,' with RSSI -80
+16:19:51.642 -> Rx: $SW01,25.32,38,101300, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.60,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -82
+16:19:56.625 -> Rx: $SW01,25.30,38,101303, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.58,85,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -78
+16:19:58.489 -> Rx: $SN01,2.1,6,2021-03-12,23:19:58,1,32.47625,-84.95078,112,0.22,508.79,*,$PB04,2.60,73,*$STAT,-134,*,' with RSSI -81
+16:20:01.614 -> Rx: $SW01,25.31,38,101300, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.58,84,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -76
+16:20:03.288 -> Rx: $SN01,2.1,6,2021-03-12,23:20:02,1,32.47623,-84.95079,113,0.81,508.79,*,$PB04,2.58,98,*$STAT,-134,*,' with RSSI -80
+16:20:06.579 -> Rx: $SW01,25.31,38,101306, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,68,*,$PB04,2.59,103,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -79
+16:20:08.240 -> Rx: $SN01,2.1,6,2021-03-12,23:20:07,1,32.47623,-84.95080,114,0.57,508.79,*,$PB04,2.60,74,*$STAT,-134,*,' with RSSI -77
+16:20:08.278 -> Rx: $SN01,2.1,6,2021-03-12,23:20:07,1,32.47623,-84.95080,114,0.57,508.79,*,$PB04,2.60,74,*$STAT,-134,*,' with RSSI -77
+16:20:11.516 -> Rx: $SW01,25.31,38,101300, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.59,72,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -77
+16:20:13.191 -> Rx: $SN01,1.4,7,2021-03-12,23:20:12,1,32.47619,-84.95084,106,1.30,508.79,*,$PB04,2.57,81,*$STAT,-134,*,' with RSSI -77
+16:20:16.459 -> Rx: $SW01,25.34,38,101302, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,64,*,$PB04,2.59,82,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -78
+16:20:18.130 -> Rx: $SN01,1.4,7,2021-03-12,23:20:17,1,32.47616,-84.95088,98,1.17,508.79,*,$PB04,2.60,73,*$STAT,-134,*,' with RSSI -80
+16:20:21.403 -> Rx: $SW01,25.34,38,101304, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,52,*,$PB04,2.59,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -81
+16:20:23.513 -> Rx: $SN01,1.4,7,2021-03-12,23:20:23,1,32.47614,-84.95090,91,0.59,508.79,*,$PB04,2.60,99,*$STAT,-134,*,' with RSSI -81
+16:20:23.551 -> Rx: $SN01,1.4,7,2021-03-12,23:20:23,1,32.47614,-84.95090,91,0.59,508.79,*,$PB04,2.60,99,*$STAT,-134,*,' with RSSI -81
+16:20:26.607 -> Rx: $SW01,25.34,39,101300, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,40,*,$PB04,2.59,109,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -82
+16:20:28.251 -> Rx: $SN01,1.4,7,2021-03-12,23:20:27,1,32.47612,-84.95091,86,0.98,508.79,*,$PB04,2.60,75,*$STAT,-134,*,' with RSSI -81
+16:20:28.287 -> Rx: $SN01,1.4,7,2021-03-12,23:20:27,1,32.47612,-84.95091,86,0.98,508.79,*,$PB04,2.60,75,*$STAT,-134,*,' with RSSI -81
+16:20:31.503 -> Rx: $SW01,25.38,39,101306, 2,*,$SI01,ERR,*,$SL01,0,0,0.0,192,*,$PB04,2.58,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -92
+16:20:33.486 -> Rx: $SN01,1.4,7,2021-03-12,23:20:33,1,32.47614,-84.95092,88,1.20,508.79,*,$PB04,2.58,80,*$STAT,-134,*,' with RSSI -89
+16:20:36.614 -> Rx: $SW01,25.35,39,101301, 2,*,$SI01,ERR,*,$SL01,0,0,0.0, 4,*,$PB04,2.59,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -84
+16:20:38.494 -> Rx: $SN01,2.2,6,2021-03-12,23:20:38,1,32.47617,-84.95095,89,1.96,508.79,*,$PB04,2.60,101,*$STAT,-134,*,' with RSSI -72
+16:20:41.603 -> Rx: $SW01,25.31,40,101300, 2,*,$SI01,ERR,*,$SL01,0,0,0.0, 4,*,$PB04,2.60,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -58
+16:20:43.258 -> Rx: $SN01,2.2,6,2021-03-12,23:20:42,1,32.47616,-84.95098,88,0.93,508.79,*,$PB04,2.60,103,*$STAT,-134,*,' with RSSI -52
+16:20:46.505 -> Rx: $SW01,25.36,41,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.2,1336,*,$PB04,2.58,86,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -46
+16:20:48.176 -> Rx: $SN01,1.4,7,2021-03-12,23:20:47,1,32.47618,-84.95100,86,0.93,508.79,*,$PB04,2.59,79,*$STAT,-134,*,' with RSSI -48
+16:20:51.413 -> Rx: $SW01,25.41,41,101293, 3,*,$SI01,ERR,*,$SL01,0,0,0.2,1308,*,$PB04,2.59,80,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -43
+16:20:56.343 -> Rx: $SW01,25.44,41,101293, 3,*,$SI01,ERR,*,$SL01,0,0,0.2,1296,*,$PB04,2.57,107,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -43
+16:20:57.992 -> Rx: $SN01,1.4,7,2021-03-12,23:20:57,1,32.47626,-84.95101,85,2.69,508.79,*,$PB04,2.60,74,*$STAT,-134,*,' with RSSI -44
+16:21:01.260 -> Rx: $SW01,25.45,40,101295, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1304,*,$PB04,2.58,80,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -43
+16:21:03.518 -> Rx: $SN01,1.0,8,2021-03-12,23:21:03,1,32.47628,-84.95098,87,0.17,508.79,*,$PB04,2.59,85,*$STAT,-134,*,' with RSSI -44
+16:21:06.628 -> Rx: $SW01,25.48,41,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.2,1284,*,$PB04,2.60,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -44
+16:21:08.304 -> Rx: $SN01,1.0,8,2021-03-12,23:21:07,1,32.47628,-84.95097,88,0.26,508.79,*,$PB04,2.57,102,*$STAT,-134,*,' with RSSI -43
+16:21:11.546 -> Rx: $SW01,25.50,41,101293, 3,*,$SI01,ERR,*,$SL01,0,0,0.2,1272,*,$PB04,2.59,93,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:21:11.579 -> Rx: $SW01,25.50,41,101293, 3,*,$SI01,ERR,*,$SL01,0,0,0.2,1272,*,$PB04,2.59,93,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:21:13.516 -> Rx: $SN01,1.0,8,2021-03-12,23:21:13,1,32.47629,-84.95097,90,0.17,508.79,*,$PB04,2.59,81,*$STAT,-134,*,' with RSSI -47
+16:21:16.618 -> Rx: $SW01,25.51,41,101292, 3,*,$SI01,ERR,*,$SL01,0,0,0.2,1284,*,$PB04,2.59,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -48
+16:21:18.286 -> Rx: $SN01,1.0,8,2021-03-12,23:21:17,1,32.47629,-84.95097,91,0.15,508.79,*,$PB04,2.58,100,*$STAT,-134,*,' with RSSI -44
+16:21:21.532 -> Rx: $SW01,25.54,41,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1272,*,$PB04,2.59,87,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:21:23.186 -> Rx: $SN01,1.0,8,2021-03-12,23:21:22,1,32.47630,-84.95096,92,0.54,508.79,*,$PB04,2.58,74,*$STAT,-134,*,' with RSSI -46
+16:21:26.450 -> Rx: $SW01,25.54,41,101293, 3,*,$SI01,ERR,*,$SL01,0,0,0.2,1256,*,$PB04,2.59,99,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -44
+16:21:28.092 -> Rx: $SN01,1.0,8,2021-03-12,23:21:27,1,32.47631,-84.95096,94,0.43,508.79,*,$PB04,2.60,75,*$STAT,-134,*,' with RSSI -45
+16:21:31.357 -> Rx: $SW01,25.55,41,101295, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1244,*,$PB04,2.56,105,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -46
+16:21:33.003 -> Rx: $SN01,1.0,8,2021-03-12,23:21:32,1,32.47631,-84.95096,95,0.43,508.79,*,$PB04,2.60,100,*$STAT,-134,*,' with RSSI -44
+16:21:36.270 -> Rx: $SW01,25.57,40,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1224,*,$PB04,2.59,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:21:38.504 -> Rx: $SN01,1.0,8,2021-03-12,23:21:38,1,32.47631,-84.95097,96,0.39,508.79,*,$PB04,2.58,75,*$STAT,-134,*,' with RSSI -45
+16:21:41.598 -> Rx: $SW01,25.58,41,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1220,*,$PB04,2.59,73,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -44
+16:21:41.635 -> Rx: $SW01,25.58,41,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1220,*,$PB04,2.59,73,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -44
+16:21:43.270 -> Rx: $SN01,1.0,8,2021-03-12,23:21:42,1,32.47631,-84.95097,97,0.24,508.79,*,$PB04,2.58,104,*$STAT,-134,*,' with RSSI -45
+16:21:43.308 -> Rx: $SN01,1.0,8,2021-03-12,23:21:42,1,32.47631,-84.95097,97,0.24,508.79,*,$PB04,2.58,104,*$STAT,-134,*,' with RSSI -45
+16:21:46.513 -> Rx: $SW01,25.60,41,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1208,*,$PB04,2.59,73,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:21:46.548 -> Rx: $SW01,25.60,41,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1208,*,$PB04,2.59,73,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:21:48.401 -> Rx: $SN01,1.1,7,2021-03-12,23:21:48,1,32.47631,-84.95099,99,0.24,508.79,*,$PB04,2.58,74,*$STAT,-134,*,' with RSSI -46
+16:21:51.591 -> Rx: $SW01,25.61,40,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1220,*,$PB04,2.59,73,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:21:53.510 -> Rx: $SN01,1.1,7,2021-03-12,23:21:53,1,32.47632,-84.95100,102,0.85,508.79,*,$PB04,2.59,108,*$STAT,-134,*,' with RSSI -45
+16:21:56.631 -> Rx: $SW01,25.63,40,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1208,*,$PB04,2.59,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:21:58.308 -> Rx: $SN01,1.1,8,2021-03-12,23:21:57,1,32.47632,-84.95101,103,0.59,508.79,*,$PB04,2.57,99,*$STAT,-134,*,' with RSSI -45
+16:22:01.540 -> Rx: $SW01,25.63,40,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.2,1184,*,$PB04,2.59,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:22:03.222 -> Rx: $SN01,1.0,8,2021-03-12,23:22:02,1,32.47631,-84.95102,104,0.72,508.79,*,$PB04,2.60,102,*$STAT,-134,*,' with RSSI -45
+16:22:06.458 -> Rx: $SW01,25.64,40,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.2,1168,*,$PB04,2.59,96,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:22:08.104 -> Rx: $SN01,1.0,8,2021-03-12,23:22:07,1,32.47632,-84.95103,105,0.20,508.79,*,$PB04,2.59,97,*$STAT,-134,*,' with RSSI -45
+16:22:08.141 -> Rx: $SN01,1.0,8,2021-03-12,23:22:07,1,32.47632,-84.95103,105,0.20,508.79,*,$PB04,2.59,97,*$STAT,-134,*,' with RSSI -45
+16:22:11.349 -> Rx: $SW01,25.65,40,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.2,1160,*,$PB04,2.57,97,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:22:13.038 -> Rx: $SN01,1.0,8,2021-03-12,23:22:12,1,32.47632,-84.95104,105,0.30,508.79,*,$PB04,2.57,75,*$STAT,-134,*,' with RSSI -45
+16:22:13.038 -> Rx: $SN01,1.0,8,2021-03-12,23:22:12,1,32.47632,-84.95104,105,0.30,508.79,*,$PB04,2.57,75,*$STAT,-134,*,' with RSSI -45
+16:22:16.268 -> Rx: $SW01,25.66,40,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1152,*,$PB04,2.58,81,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:22:18.498 -> Rx: $SN01,1.0,8,2021-03-12,23:22:18,1,32.47631,-84.95103,104,0.69,508.79,*,$PB04,2.59,74,*$STAT,-134,*,' with RSSI -45
+16:22:21.611 -> Rx: $SW01,25.68,40,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1136,*,$PB04,2.58,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:22:23.289 -> Rx: $SN01,1.0,8,2021-03-12,23:22:22,1,32.47631,-84.95104,104,0.81,508.79,*,$PB04,2.58,97,*$STAT,-134,*,' with RSSI -44
+16:22:26.551 -> Rx: $SW01,25.69,40,101300, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1128,*,$PB04,2.58,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:22:28.503 -> Rx: $SN01,1.0,8,2021-03-12,23:22:28,1,32.47631,-84.95103,103,0.02,508.79,*,$PB04,2.58,80,*$STAT,-134,*,' with RSSI -45
+16:22:28.541 -> Rx: $SN01,1.0,8,2021-03-12,23:22:28,1,32.47631,-84.95103,103,0.02,508.79,*,$PB04,2.58,80,*$STAT,-134,*,' with RSSI -45
+16:22:31.623 -> Rx: $SW01,25.70,40,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1124,*,$PB04,2.59,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:22:36.554 -> Rx: $SW01,25.71,40,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1108,*,$PB04,2.58,94,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:22:38.217 -> Rx: $SN01,1.0,8,2021-03-12,23:22:37,1,32.47630,-84.95101,100,0.93,508.79,*,$PB04,2.57,81,*$STAT,-134,*,' with RSSI -45
+16:22:41.476 -> Rx: $SW01,25.72,40,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1100,*,$PB04,2.58,99,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:22:43.126 -> Rx: $SN01,1.0,8,2021-03-12,23:22:42,1,32.47630,-84.95100,100,0.52,679.59,*,$PB04,2.59,74,*$STAT,-134,*,' with RSSI -45
+16:22:46.397 -> Rx: $SW01,25.74,40,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1092,*,$PB04,2.58,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -44
+16:22:46.434 -> Rx: $SW01,25.74,40,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1092,*,$PB04,2.58,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -44
+16:22:48.519 -> Rx: $SN01,1.0,8,2021-03-12,23:22:48,1,32.47630,-84.95100,100,0.26,508.79,*,$PB04,2.58,74,*$STAT,-134,*,' with RSSI -45
+16:22:48.519 -> Rx: $SN01,1.0,8,2021-03-12,23:22:48,1,32.47630,-84.95100,100,0.26,508.79,*,$PB04,2.58,74,*$STAT,-134,*,' with RSSI -45
+16:22:51.621 -> Rx: $SW01,25.75,40,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1088,*,$PB04,2.57,98,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:22:53.291 -> Rx: $SN01,1.0,8,2021-03-12,23:22:52,1,32.47630,-84.95100,101,0.19,508.79,*,$PB04,2.57,99,*$STAT,-134,*,' with RSSI -45
+16:22:56.567 -> Rx: $SW01,25.76,40,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.2,1088,*,$PB04,2.56,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:22:58.426 -> Rx: $SN01,1.0,8,2021-03-12,23:22:58,1,32.47631,-84.95101,103,0.56,508.79,*,$PB04,2.59,74,*$STAT,-134,*,' with RSSI -45
+16:23:01.630 -> Rx: $SW01,25.78,40,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1068,*,$PB04,2.59,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -44
+16:23:03.412 -> Rx: $SN01,1.0,8,2021-03-12,23:23:03,1,32.47631,-84.95101,102,0.28,508.79,*,$PB04,2.59,97,*$STAT,-134,*,' with RSSI -45
+16:23:06.646 -> Rx: $SW01,25.79,40,101295, 3,*,$SI01,ERR,*,$SL01,0,0,0.2,1060,*,$PB04,2.59,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:23:06.682 -> Rx: $SW01,25.79,40,101295, 3,*,$SI01,ERR,*,$SL01,0,0,0.2,1060,*,$PB04,2.59,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:23:08.287 -> Rx: $SN01,1.0,8,2021-03-12,23:23:07,1,32.47632,-84.95101,101,0.06,508.79,*,$PB04,2.56,102,*$STAT,-134,*,' with RSSI -46
+16:23:11.556 -> Rx: $SW01,25.80,40,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1076,*,$PB04,2.59,72,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -44
+16:23:13.243 -> Rx: $SN01,1.0,8,2021-03-12,23:23:12,1,32.47633,-84.95101,98,0.31,508.79,*,$PB04,2.57,73,*$STAT,-134,*,' with RSSI -45
+16:23:16.468 -> Rx: $SW01,25.81,40,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1072,*,$PB04,2.59,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -44
+16:23:18.142 -> Rx: $SN01,1.0,8,2021-03-12,23:23:17,1,32.47635,-84.95101,96,0.24,508.79,*,$PB04,2.58,106,*$STAT,-134,*,' with RSSI -44
+16:23:21.387 -> Rx: $SW01,25.81,40,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1064,*,$PB04,2.59,72,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:23:23.021 -> Rx: $SN01,1.1,7,2021-03-12,23:23:22,1,32.47635,-84.95101,95,0.59,508.79,*,$PB04,2.58,105,*$STAT,-134,*,' with RSSI -45
+16:23:26.288 -> Rx: $SW01,25.83,40,101296, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1052,*,$PB04,2.58,113,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -46
+16:23:28.510 -> Rx: $SN01,1.5,8,2021-03-12,23:23:28,1,32.47635,-84.95102,96,1.46,508.79,*,$PB04,2.57,102,*$STAT,-134,*,' with RSSI -45
+16:23:33.274 -> Rx: $SN01,1.0,8,2021-03-12,23:23:32,1,32.47636,-84.95102,97,0.19,508.79,*,$PB04,2.59,74,*$STAT,-134,*,' with RSSI -45
+16:23:36.522 -> Rx: $SW01,25.86,40,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1040,*,$PB04,2.56,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:23:38.526 -> Rx: $SN01,1.0,8,2021-03-12,23:23:38,1,32.47638,-84.95102,100,3.63,508.79,*,$PB04,2.59,74,*$STAT,-134,*,' with RSSI -44
+16:23:41.643 -> Rx: $SW01,25.87,40,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1004,*,$PB04,2.59,101,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:23:43.285 -> Rx: $SN01,1.0,8,2021-03-12,23:23:42,1,32.47638,-84.95102,101,0.46,508.79,*,$PB04,2.57,103,*$STAT,-134,*,' with RSSI -45
+16:23:46.553 -> Rx: $SW01,25.87,40,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1016,*,$PB04,2.56,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:23:48.211 -> Rx: $SN01,1.0,8,2021-03-12,23:23:47,1,32.47638,-84.95100,100,0.39,508.79,*,$PB04,2.59,74,*$STAT,-134,*,' with RSSI -45
+16:23:51.494 -> Rx: $SW01,25.88,40,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1004,*,$PB04,2.59,102,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:23:53.163 -> Rx: $SN01,1.0,8,2021-03-12,23:23:52,1,32.47639,-84.95100,100,0.39,508.79,*,$PB04,2.56,78,*$STAT,-134,*,' with RSSI -45
+16:23:53.200 -> Rx: $SN01,1.0,8,2021-03-12,23:23:52,1,32.47639,-84.95100,100,0.39,508.79,*,$PB04,2.56,78,*$STAT,-134,*,' with RSSI -45
+16:23:56.438 -> Rx: $SW01,25.89,40,101298, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,996,*,$PB04,2.58,85,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:23:58.113 -> Rx: $SN01,1.0,8,2021-03-12,23:23:57,1,32.47640,-84.95101,102,0.46,508.79,*,$PB04,2.58,101,*$STAT,-134,*,' with RSSI -45
+16:24:01.362 -> Rx: $SW01,25.91,40,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1004,*,$PB04,2.56,112,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:24:01.395 -> Rx: $SW01,25.91,40,101299, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,1004,*,$PB04,2.56,112,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:24:03.041 -> Rx: $SN01,1.0,8,2021-03-12,23:24:02,1,32.47641,-84.95101,104,1.07,508.79,*,$PB04,2.57,74,*$STAT,-134,*,' with RSSI -45
+16:24:06.289 -> Rx: $SW01,25.91,40,101297, 2,*,$SI01,ERR,*,$SL01,0,0,0.2,984,*,$PB04,2.58,81,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:24:08.488 -> Rx: $SN01,1.0,8,2021-03-12,23:24:08,1,32.47640,-84.95102,106,1.07,508.79,*,$PB04,2.56,74,*$STAT,-134,*,' with RSSI -45
+16:24:11.615 -> Rx: $SW01,25.92,40,101293, 3,*,$SI01,ERR,*,$SL01,0,0,0.2,984,*,$PB04,2.55,79,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:24:13.281 -> Rx: $SN01,1.0,8,2021-03-12,23:24:12,1,32.47639,-84.95103,108,0.11,508.79,*,$PB04,2.57,96,*$STAT,-134,*,' with RSSI -45
+16:24:16.527 -> Rx: $SW01,25.91,40,101292, 3,*,$SI01,ERR,*,$SL01,0,0,0.2,968,*,$PB04,2.58,74,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:24:18.528 -> Rx: $SN01,1.0,8,2021-03-12,23:24:18,1,32.47638,-84.95103,110,0.37,508.79,*,$PB04,2.59,101,*$STAT,-134,*,' with RSSI -45
+16:24:21.637 -> Rx: $SW01,25.93,40,101294, 3,*,$SI01,ERR,*,$SL01,0,0,0.2,964,*,$PB04,2.58,82,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -46
+16:24:23.511 -> Rx: $SN01,1.0,8,2021-03-12,23:24:23,1,32.47638,-84.95104,110,0.46,508.79,*,$PB04,2.56,81,*$STAT,-134,*,' with RSSI -45
+16:24:23.545 -> Rx: $SN01,1.0,8,2021-03-12,23:24:23,1,32.47638,-84.95104,110,0.46,508.79,*,$PB04,2.56,81,*$STAT,-134,*,' with RSSI -45
+16:24:26.638 -> Rx: $SW01,25.95,40,101302, 2,*,$SI01,ERR,*,$SL01,0,0,0.1,952,*,$PB04,2.58,76,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:24:26.676 -> Rx: $SW01,25.95,40,101302, 2,*,$SI01,ERR,*,$SL01,0,0,0.1,952,*,$PB04,2.58,76,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -45
+16:24:28.293 -> Rx: $SN01,0.9,9,2021-03-12,23:24:27,1,32.47637,-84.95104,110,0.26,508.79,*,$PB04,2.57,98,*$STAT,-134,*,' with RSSI -45
+16:24:31.526 -> Rx: $SW01,25.95,39,101291, 3,*,$SI01,ERR,*,$SL01,0,0,0.1,968,*,$PB04,2.56,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -49
+16:24:33.178 -> Rx: $SN01,0.9,9,2021-03-12,23:24:32,1,32.47637,-84.95104,110,0.37,508.79,*,$PB04,2.58,73,*$STAT,-134,*,' with RSSI -43
+16:24:36.460 -> Rx: $SW01,25.95,40,101293, 3,*,$SI01,ERR,*,$SL01,0,0,0.1,968,*,$PB04,2.56,75,*,$SG33,ERR,*,$SU02,ERR,*,$STAT,-134,*,' with RSSI -44
+

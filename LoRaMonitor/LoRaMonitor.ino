@@ -24,23 +24,29 @@ int receivedPacketCount = 0;
 int lastRssi = 0;
 char lastReceivedBuf[TEXT_COLUMNS * DATA_TEXT_ROWS + 1];
 int lastReceivedCount = 0;
+boolean useSerial = false;
 
 void setup() {
   Serial.begin(9600);
-  while (!Serial);
+  // while (!Serial);
+  delay(2000);
+  if (Serial) {
+    useSerial = true;
+  }
 
-  Serial.println("LoRa Monitor");
+  serPrintln("LoRa Monitor");
   setupDisplay();
   
   if (!LoRa.begin(915E6)) {
-    Serial.println("Starting LoRa failed!");
+    serPrintln("Starting LoRa failed!");
     while (1);
   }
 }
 
 void setupDisplay() {
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
-    Serial.println(F("SSD1306 allocation failed"));
+    // serPrintln(F("SSD1306 allocation failed"));
+    serPrintln("SSD1306 allocation failed");
     for(;;); // Don't proceed, loop forever
   }
 
@@ -73,12 +79,12 @@ void loop() {
   int packetSize = LoRa.parsePacket();
   if (packetSize) {
     // received a packet
-    //Serial.print("Rx: ");
+    //serPrint("Rx: ");
 
     // read packet
     while (LoRa.available()) {
       char c = (char)LoRa.read();
-      Serial.print(c);
+      serPrint(c);
       // lastReceivedBuf[lastReceivedCount++] = '^';
       if (isPrintable(c) && lastReceivedCount < TEXT_COLUMNS * DATA_TEXT_ROWS) {
         lastReceivedBuf[lastReceivedCount++] = c;
@@ -143,4 +149,33 @@ char* elapsedMsg(long ms) {
   //}
   sprintf(elapsedBuf, "el %02d:%02d.%03d", minutes, seconds, msec);
   return elapsedBuf;
+}
+
+void serPrint(char c) {
+  if (useSerial) {
+    Serial.print(c);
+  }
+}
+
+void serPrint(int n) {
+  if (useSerial) {
+    Serial.print(n);
+  }
+}
+
+void serPrintln(int n) {
+  if (useSerial) {
+    Serial.println(n);
+  }
+}
+void serPrint(char *msg) {
+  if (useSerial) {
+    Serial.print(msg);
+  }
+}
+
+void serPrintln(char *msg) {
+  if (useSerial) {
+    Serial.println(msg);
+  }
 }

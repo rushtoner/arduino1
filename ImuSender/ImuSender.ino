@@ -21,6 +21,7 @@
 #define DISPLAY_COLS 21
 #define DISPLAY_ROWS 8
 #define LORA_FREQ 915E6
+#define SPI_CHIPSELECT_SD 4
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 // The pins for I2C are defined by the Wire-library. 
@@ -45,7 +46,7 @@ void setup() {
   goodSerial  = setupSerial();
   goodLoRa    = setupLoRa();
   goodIMU     = setupIMU();
-  // goodSD = setupSD();
+  goodSD      = setupSD();
   goodIMU = false; // don't run loop yet
 }
 
@@ -132,6 +133,26 @@ boolean setupIMU() {
 }
 
 
+boolean setupSD() {
+  boolean result = false;
+  // HERE
+  String msg = "SD: FAIL";
+  result = SD.begin(SPI_CHIPSELECT_SD);
+  if (result) {
+    msg = "SD: good";
+  }
+  if (goodSerial)
+    Serial.println(msg);
+  if (goodDisplay) {
+    display.println(msg);
+    display.display();
+  }
+  if (goodLoRa)
+    loRaPrintln(msg);
+  return result;
+}
+
+
 void ftoa(char *buf, float f) {
   if (f < 0.0) {
     buf[0] = '-';
@@ -181,8 +202,10 @@ void loop() {
       // Serial.print("loopCounter = ");
       // Serial.println(loopCounter);
     }
+    
+    displayTime(now / 1000);
+    
   }
-  // delay(d);
   loopCounter++;
 }
 
@@ -291,4 +314,24 @@ void transmit(char *label, double x, double y, double z) {
   strcpy(xmitBuf + strlen(xmitBuf), ", z=");
   dtostrf(z, 9, 4, xmitBuf + strlen(xmitBuf));
   // Serial.println(xmitBuf);
+}
+
+char lineBuf[] = "0123456789012";
+void displayTime(long sec) {
+  clearLine(7);
+  if (goodDisplay) {
+    display.setCursor(0,64-8);
+    // strcpy(lineBuf, "test");
+    display.print(F("Run time "));
+    display.println(sec);
+    display.display();
+  }
+}
+
+void clearLine(int line) {
+  for(int x = 0; x < 128; x++) {
+    for(int y = 0; y < 8; y++) {
+      display.drawPixel(x, line * 8 + y, 0);
+    }
+  }
 }

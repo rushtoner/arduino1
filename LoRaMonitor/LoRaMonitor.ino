@@ -94,11 +94,12 @@ void loop() {
     lastReceivedBuf[lastReceivedCount++] = (char)0;
 
     // print RSSI of packet
-    Serial.print("\nRSSI ");
+    Serial.print(" (RSSI ");
     
     lastRssi = LoRa.packetRssi();
     // Serial.println(LoRa.packetRssi());
-    Serial.println(lastRssi);
+    Serial.print(lastRssi);
+    Serial.println(")");
     if (false) {
       Serial.print("lastReceivedCount: ");
       Serial.println(lastReceivedCount);

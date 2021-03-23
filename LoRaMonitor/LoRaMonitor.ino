@@ -1,5 +1,7 @@
 #include <SPI.h>
 #include <LoRa.h>
+#include <Wire.h>
+#include <SD.h>
 
 /* added for display below */
 #include <Adafruit_GFX.h>
@@ -16,8 +18,17 @@
 #define DATA_TEXT_ROWS 3
 #define INTERVAL_MS 250
 #define BUF_SIZE 100
+#define SD_SPI_CHIPSELECT 4
+#define DISPLAY_WIDTH 128 // OLED display width, in pixels
+#define DISPLAY_HEIGHT 64 // OLED display height, in pixels
+#define TEXT_SIZE 1
+#define DISPLAY_COLS 21
+#define DISPLAY_ROWS 8
+#define LORA_FREQ 915E6
+
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
 char elapsedBuf[BUF_SIZE];
 long lastMillis = 0;
 int receivedPacketCount = 0;
@@ -25,6 +36,8 @@ int lastRssi = 0;
 char lastReceivedBuf[TEXT_COLUMNS * DATA_TEXT_ROWS + 1];
 int lastReceivedCount = 0;
 boolean useSerial = false;
+boolean goodSD = false;
+int loggedCount = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -41,6 +54,7 @@ void setup() {
     serPrintln("Starting LoRa failed!");
     while (1);
   }
+  goodSD      = setupSD();
 }
 
 void setupDisplay() {
@@ -92,14 +106,19 @@ void loop() {
       // Serial.print((int)c);
     }
     lastReceivedBuf[lastReceivedCount++] = (char)0;
+    lastRssi = LoRa.packetRssi();
 
     // print RSSI of packet
-    Serial.print(" (RSSI ");
-    
-    lastRssi = LoRa.packetRssi();
-    // Serial.println(LoRa.packetRssi());
-    Serial.print(lastRssi);
-    Serial.println(")");
+    if (false) {
+      Serial.print(" (RSSI ");
+      // Serial.println(LoRa.packetRssi());
+      Serial.print(lastRssi);
+      Serial.print(")");
+    }
+    Serial.println();
+    if (goodSD) {
+      logSD(lastReceivedBuf);
+    }
     if (false) {
       Serial.print("lastReceivedCount: ");
       Serial.println(lastReceivedCount);
@@ -128,8 +147,14 @@ void reportPacketCount(int n, int rssi) {
   display.println(n);
   display.print("rssi = ");
   display.println(rssi);
-  display.print("s = ");
-  display.println(millis());
+  if (false) {
+    display.print("s = ");
+    display.println(millis());
+  }
+  if (true) {
+    display.print("Logged: ");
+    display.println(loggedCount);
+  }
   display.println(elapsedMsg(millis()));
   if (n > 0) {
     display.println(lastReceivedBuf);
@@ -179,4 +204,35 @@ void serPrintln(char *msg) {
   if (useSerial) {
     Serial.println(msg);
   }
+}
+
+boolean setupSD() {
+  boolean result = false;
+  String msg = "SD: FAIL";
+  result = SD.begin(SD_SPI_CHIPSELECT);
+  if (result) {
+    msg = "SD: good";
+  }
+  Serial.println(msg);
+  return result;
+}
+
+boolean logSD(const char *dataString) {
+  boolean result = false;
+  // open the file. note that only one file can be open at a time,
+  // so you have to close this one before opening another.
+  File dataFile = SD.open("lora.log", FILE_WRITE);
+  // if the file is available, write to it:
+  if (dataFile) {
+    dataFile.println(dataString);
+    dataFile.close();
+    // print to the serial port too:
+    // Serial.println(dataString);
+    result = true;
+    loggedCount++;
+  } else {
+    // if the file isn't open, pop up an error:
+    Serial.println("error opening lora.log");
+  }
+  return result;
 }

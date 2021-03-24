@@ -141,9 +141,10 @@ void reportPacketCount(int n, int rssi) {
   display.clearDisplay();
   display.setCursor(0,0);
   if (DISPLAY_TEXT_SIZE == 1) {
-    display.println(F("LoRa Monitor"));
+    display.print(F("File: "));
+    display.println(loraLogFileName);
   } else {
-    display.println(F("LoRa Moni"));  
+    display.println(loraLogFileName);  
   }
   display.print("n = ");
   display.println(n);

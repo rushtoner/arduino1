@@ -38,11 +38,12 @@ int lastReceivedCount = 0;
 boolean useSerial = false;
 boolean goodSD = false;
 int loggedCount = 0;
+char loraLogFileName[50];
 
 void setup() {
   Serial.begin(9600);
   // while (!Serial);
-  delay(2000);
+  delay(2000); // pause to allow uploading good code over bad code
   if (Serial) {
     useSerial = true;
   }
@@ -54,7 +55,8 @@ void setup() {
     serPrintln("Starting LoRa failed!");
     while (1);
   }
-  goodSD      = setupSD();
+  goodSD = setupSD();
+  logSD("Starting.");
 }
 
 void setupDisplay() {
@@ -200,7 +202,7 @@ void serPrint(char *msg) {
   }
 }
 
-void serPrintln(char *msg) {
+void serPrintln(const char *msg) {
   if (useSerial) {
     Serial.println(msg);
   }
@@ -212,6 +214,7 @@ boolean setupSD() {
   result = SD.begin(SD_SPI_CHIPSELECT);
   if (result) {
     msg = "SD: good";
+    getNextFileName();
   }
   Serial.println(msg);
   return result;
@@ -221,7 +224,7 @@ boolean logSD(const char *dataString) {
   boolean result = false;
   // open the file. note that only one file can be open at a time,
   // so you have to close this one before opening another.
-  File dataFile = SD.open("lora.log", FILE_WRITE);
+  File dataFile = SD.open(loraLogFileName, FILE_WRITE);
   // if the file is available, write to it:
   if (dataFile) {
     dataFile.println(dataString);
@@ -235,4 +238,57 @@ boolean logSD(const char *dataString) {
     Serial.println("error opening lora.log");
   }
   return result;
+}
+
+/**
+ * Look at the SD card for files like LORA-1.LOG, LORA-2.LOG, etc, and choose the next numbered file name.
+ */
+void getNextFileName() {
+  // Serial.println("getNextFileName()");
+  File root = SD.open("/");
+  // Serial.print("root = ");
+  // Serial.println(root);
+  boolean found = false;
+  boolean exhausted = false;
+  int n = 0;
+  int nextIndex = 0; // LORA-index.LOG
+  do {
+    File entry = root.openNextFile();
+    if (false) {
+      Serial.print("n = ");
+      Serial.print(n);
+      Serial.print(", entry = ");
+      Serial.println(entry);
+    }
+    if (entry) {
+      // Serial.print("entry name = ");
+      String name = entry.name();
+      // Serial.println(name);
+      entry.close();
+      if (name.startsWith("LORA-")) {
+        // Serial.println("starts with");
+        String tmp = name.substring(5, name.indexOf(".LOG"));
+        // Serial.print("tmp = \"");
+        // Serial.print(tmp);
+        // Serial.println("\"");
+        int index = tmp.toInt();
+        if (index >= nextIndex) {
+          nextIndex = index + 1;
+          //Serial.print("new nextIndex = ");
+          //Serial.println(nextIndex);
+        }
+      } else {
+        //Serial.println("does not start with");
+      }
+    } else {
+      // Serial.println("no more files");
+      exhausted = true;
+    }
+    n++;
+  } while (!found && !exhausted);
+  root.close();
+  sprintf(loraLogFileName, "LORA-%d.LOG", nextIndex);
+  Serial.print("loraLogFileName = ");
+  Serial.println(loraLogFileName);
+  // Serial.println("done");
 }

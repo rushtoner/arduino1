@@ -25,6 +25,8 @@
 #define DISPLAY_COLS 21
 #define DISPLAY_ROWS 8
 #define LORA_FREQ 915E6
+#define RAW_RECEIVED_BUF_SIZE 256
+#define TMP_BUF_LEN 256
 
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
@@ -35,6 +37,12 @@ int receivedPacketCount = 0;
 int lastRssi = 0;
 char lastReceivedBuf[TEXT_COLUMNS * DATA_TEXT_ROWS + 1];
 int lastReceivedCount = 0;
+
+char rawReceivedBuf[RAW_RECEIVED_BUF_SIZE];
+int rawReceivedCount = 0;
+
+char tmpBuf[TMP_BUF_LEN];
+
 boolean useSerial = false;
 boolean goodSD = false;
 int loggedCount = 0;
@@ -106,8 +114,19 @@ void loop() {
         lastReceivedBuf[lastReceivedCount++] = c;
       }
       // Serial.print((int)c);
+      if (rawReceivedCount < RAW_RECEIVED_BUF_SIZE - 1) {
+        if (isPrintable(c)) {
+          rawReceivedBuf[rawReceivedCount++] = c;
+          rawReceivedBuf[rawReceivedCount] = (char)0;
+        } else {
+          sprintf(tmpBuf, "[0x%02x]", (int)c);
+          strcat(rawReceivedBuf, tmpBuf);
+          rawReceivedCount += strlen(tmpBuf);
+        }
+      }
     }
     lastReceivedBuf[lastReceivedCount++] = (char)0;
+    rawReceivedBuf[rawReceivedCount++] = (char)0;
     lastRssi = LoRa.packetRssi();
 
     // print RSSI of packet
@@ -119,7 +138,15 @@ void loop() {
     }
     Serial.println();
     if (goodSD) {
-      logSD(lastReceivedBuf);
+      Serial.print("rawReceivedBuf = \"");
+      Serial.print(rawReceivedBuf);
+      Serial.println("\"");
+      Serial.print("raw is ");
+      Serial.print(strlen(rawReceivedBuf));
+      Serial.println(" chars long.");
+      Serial.print("rawReceivedCount = ");
+      Serial.println(rawReceivedCount);
+      logSD(rawReceivedBuf);
     }
     if (false) {
       Serial.print("lastReceivedCount: ");
@@ -129,6 +156,7 @@ void loop() {
     }
     reportPacketCount(++receivedPacketCount, lastRssi);
     lastReceivedCount = 0; // reset for next time
+    rawReceivedCount = 0; // reset for next time
   }
   if (millis() > lastMillis + INTERVAL_MS) {
     reportPacketCount(receivedPacketCount, lastRssi);

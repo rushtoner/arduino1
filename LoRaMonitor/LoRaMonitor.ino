@@ -288,7 +288,7 @@ void getNextFileName() {
     n++;
   } while (!found && !exhausted);
   root.close();
-  sprintf(loraLogFileName, "LORA-%d.LOG", nextIndex);
+  sprintf(loraLogFileName, "LORA-%03d.LOG", nextIndex); // file name max size: 8.3 I think
   Serial.print("loraLogFileName = ");
   Serial.println(loraLogFileName);
   // Serial.println("done");

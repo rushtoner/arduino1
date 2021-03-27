@@ -1,0 +1,572 @@
+{
+  "type":"FeatureCollection"
+  ,"features":[
+    {
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95130,32.47630]
+      }
+      ,"properties":{ "description":"08:29:30.028 $SN01,4.0,3,2021-03-13,15:29:32,1,32.47630,-84.95130,128,0.33,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95127,32.47629]
+    }
+      ,"properties":{ "description":"08:29:37.911 $SN01,4.5,4,2021-03-13,15:29:40,1,32.47629,-84.95127,126,0.17,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95129,32.47629]
+    }
+      ,"properties":{ "description":"08:29:41.909 $SN01,4.5,4,2021-03-13,15:29:44,1,32.47629,-84.95129,128,0.13,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95132,32.47628]
+    }
+      ,"properties":{ "description":"08:29:45.902 $SN01,4.5,4,2021-03-13,15:29:48,1,32.47628,-84.95132,132,0.24,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95118,32.47629]
+    }
+      ,"properties":{ "description":"08:29:49.922 $SN01,1.7,5,2021-03-13,15:29:52,1,32.47629,-84.95118,124,0.80,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95110,32.47629]
+    }
+      ,"properties":{ "description":"08:29:53.917 $SN01,1.7,5,2021-03-13,15:29:56,1,32.47629,-84.95110,118,0.57,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95109,32.47629]
+    }
+      ,"properties":{ "description":"08:29:57.951 $SN01,1.3,6,2021-03-13,15:30:00,1,32.47629,-84.95109,117,0.50,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95109,32.47629]
+    }
+      ,"properties":{ "description":"08:30:01.961 $SN01,1.3,6,2021-03-13,15:30:04,1,32.47629,-84.95109,118,0.31,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95110,32.47629]
+      }
+      ,"properties":{ "description":"08:30:06.006 $SN01,1.3,6,2021-03-13,15:30:08,1,32.47629,-84.95110,117,0.30,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95110,32.47629]
+      }
+      ,"properties":{ "description":"08:30:06.046 $SN01,1.3,6,2021-03-13,15:30:08,1,32.47629,-84.95110,117,0.30,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95110,32.47628]
+      }
+      ,"properties":{ "description":"08:30:10.055 $SN01,1.3,6,2021-03-13,15:30:12,1,32.47628,-84.95110,118,0.74,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95110,32.47628]
+      }
+      ,"properties":{ "description":"08:30:14.086 $SN01,1.3,6,2021-03-13,15:30:16,1,32.47628,-84.95110,118,0.09,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95110,32.47628]
+      }
+      ,"properties":{ "description":"08:30:18.124 $SN01,1.3,6,2021-03-13,15:30:20,1,32.47628,-84.95110,118,0.19,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95110,32.47629]
+      }
+      ,"properties":{ "description":"08:30:22.171 $SN01,1.3,6,2021-03-13,15:30:24,1,32.47629,-84.95110,118,0.65,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95110,32.47628]
+      }
+      ,"properties":{ "description":"08:30:26.248 $SN01,1.3,6,2021-03-13,15:30:28,1,32.47628,-84.95110,117,0.11,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95109,32.47630]
+      }
+      ,"properties":{ "description":"08:30:30.304 $SN01,1.3,6,2021-03-13,15:30:32,1,32.47630,-84.95109,116,1.48,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95109,32.47631]
+      }
+      ,"properties":{ "description":"08:30:34.316 $SN01,1.3,6,2021-03-13,15:30:36,1,32.47631,-84.95109,115,1.48,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95108,32.47633]
+      }
+      ,"properties":{ "description":"08:30:38.871 $SN01,1.3,6,2021-03-13,15:30:41,1,32.47633,-84.95108,112,0.37,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95108,32.47634]
+      }
+      ,"properties":{ "description":"08:30:42.957 $SN01,1.3,6,2021-03-13,15:30:45,1,32.47634,-84.95108,111,1.24,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95108,32.47634]
+      }
+      ,"properties":{ "description":"08:30:42.991 $SN01,1.3,6,2021-03-13,15:30:45,1,32.47634,-84.95108,111,1.24,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95109,32.47636]
+      }
+      ,"properties":{ "description":"08:30:51.371 $SN01,1.3,6,2021-03-13,15:30:53,1,32.47636,-84.95109,112,0.37,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95109,32.47636]
+      }
+      ,"properties":{ "description":"08:30:55.454 $SN01,1.3,6,2021-03-13,15:30:57,1,32.47636,-84.95109,113,0.85,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95110,32.47636]
+      }
+      ,"properties":{ "description":"08:30:59.801 $SN01,1.3,6,2021-03-13,15:31:02,1,32.47636,-84.95110,113,0.20,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95110,32.47636]
+      }
+      ,"properties":{ "description":"08:31:03.870 $SN01,1.3,6,2021-03-13,15:31:06,1,32.47636,-84.95110,114,0.74,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95111,32.47636]
+      }
+      ,"properties":{ "description":"08:31:07.905 $SN01,1.3,6,2021-03-13,15:31:07,1,32.47636,-84.95111,114,0.85,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95108,32.47638]
+      }
+      ,"properties":{ "description":"08:31:12.488 $SN01,1.3,6,2021-03-13,15:31:12,1,32.47638,-84.95108,114,2.74,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95101,32.47639]
+      }
+      ,"properties":{ "description":"08:31:16.371 $SN01,1.3,5,2021-03-13,15:31:15,1,32.47639,-84.95101,114,8.06,69.28,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95091,32.47642]
+      }
+      ,"properties":{ "description":"08:31:20.439 $SN01,1.3,5,2021-03-13,15:31:19,1,32.47642,-84.95091,113,8.82,76.78,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95080,32.47646]
+      }
+      ,"properties":{ "description":"08:31:24.809 $SN01,1.3,6,2021-03-13,15:31:24,1,32.47646,-84.95080,114,8.45,71.78,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95080,32.47646]
+      }
+      ,"properties":{ "description":"08:31:24.843 $SN01,1.3,6,2021-03-13,15:31:24,1,32.47646,-84.95080,114,8.45,71.78,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95069,32.47646]
+      }
+      ,"properties":{ "description":"08:31:28.866 $SN01,1.3,6,2021-03-13,15:31:28,1,32.47646,-84.95069,113,8.89,95.24,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95064,32.47633]
+      }
+      ,"properties":{ "description":"08:31:32.956 $SN01,1.3,6,2021-03-13,15:31:32,1,32.47633,-84.95064,114,16.96,157.89,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95055,32.47612]
+      }
+      ,"properties":{ "description":"08:31:37.306 $SN01,1.3,6,2021-03-13,15:31:36,1,32.47612,-84.95055,112,22.80,162.59,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95047,32.47587]
+      }
+      ,"properties":{ "description":"08:31:41.398 $SN01,1.3,6,2021-03-13,15:31:40,1,32.47587,-84.95047,111,25.52,168.71,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95040,32.47568]
+      }
+      ,"properties":{ "description":"08:31:45.458 $SN01,1.3,6,2021-03-13,15:31:44,1,32.47568,-84.95040,110,15.78,164.88,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95035,32.47562]
+      }
+      ,"properties":{ "description":"08:31:49.974 $SN01,1.3,6,2021-03-13,15:31:49,1,32.47562,-84.95035,109,5.63,124.93,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95033,32.47576]
+      }
+      ,"properties":{ "description":"10:59:37.669 $SN01,0.8,10,2021-03-13,17:59:37,1,32.47576,-84.95033,104,22.21,312.85,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95044,32.47599]
+      }
+      ,"properties":{ "description":"10:59:42.111 $SN01,0.8,11,2021-03-13,17:59:41,1,32.47599,-84.95044,108,28.47,340.52,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95054,32.47625]
+      }
+      ,"properties":{ "description":"10:59:46.234 $SN01,0.8,11,2021-03-13,17:59:45,1,32.47625,-84.95054,109,24.74,343.23,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95054,32.47625]
+      }
+      ,"properties":{ "description":"10:59:46.274 $SN01,0.8,11,2021-03-13,17:59:45,1,32.47625,-84.95054,109,24.74,343.23,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95062,32.47644]
+      }
+      ,"properties":{ "description":"10:59:50.415 $SN01,0.8,11,2021-03-13,17:59:49,1,32.47644,-84.95062,110,15.98,328.63,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95062,32.47644]
+      }
+      ,"properties":{ "description":"10:59:50.448 $SN01,0.8,11,2021-03-13,17:59:49,1,32.47644,-84.95062,110,15.98,328.63,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95079,32.47643]
+      }
+      ,"properties":{ "description":"10:59:54.798 $SN01,0.9,10,2021-03-13,17:59:54,1,32.47643,-84.95079,108,9.69,254.07,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95090,32.47641]
+      }
+      ,"properties":{ "description":"10:59:58.972 $SN01,0.8,11,2021-03-13,17:59:58,1,32.47641,-84.95090,110,8.80,253.82,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95101,32.47639]
+      }
+      ,"properties":{ "description":"11:00:03.087 $SN01,0.9,10,2021-03-13,18:00:02,1,32.47639,-84.95101,112,9.54,252.89,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95107,32.47637]
+      }
+      ,"properties":{ "description":"11:00:07.508 $SN01,1.0,9,2021-03-13,18:00:06,1,32.47637,-84.95107,113,4.32,240.28,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95108,32.47635]
+      }
+      ,"properties":{ "description":"11:00:11.791 $SN01,0.8,10,2021-03-13,18:00:11,1,32.47635,-84.95108,114,2.57,209.16,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95107,32.47635]
+      }
+      ,"properties":{ "description":"11:00:15.912 $SN01,1.0,9,2021-03-13,18:00:15,1,32.47635,-84.95107,116,3.20,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95108,32.47633]
+      }
+      ,"properties":{ "description":"11:00:20.513 $SN01,0.8,10,2021-03-13,18:00:20,1,32.47633,-84.95108,115,2.56,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95110,32.47631]
+      }
+      ,"properties":{ "description":"11:00:24.479 $SN01,0.9,10,2021-03-13,18:00:23,1,32.47631,-84.95110,116,2.82,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95110,32.47630]
+      }
+      ,"properties":{ "description":"11:00:28.786 $SN01,1.0,10,2021-03-13,18:00:28,1,32.47630,-84.95110,115,0.87,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95113,32.47629]
+      }
+      ,"properties":{ "description":"11:00:33.194 $SN01,0.8,10,2021-03-13,18:00:32,1,32.47629,-84.95113,115,3.87,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95116,32.47633]
+      }
+      ,"properties":{ "description":"11:00:37.307 $SN01,0.9,9,2021-03-13,18:00:36,1,32.47633,-84.95116,112,3.76,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95112,32.47634]
+      }
+      ,"properties":{ "description":"11:00:41.481 $SN01,1.0,10,2021-03-13,18:00:40,1,32.47634,-84.95112,109,1.39,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95109,32.47633]
+      }
+      ,"properties":{ "description":"11:00:45.857 $SN01,1.8,9,2021-03-13,18:00:45,1,32.47633,-84.95109,108,1.91,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95109,32.47633]
+      }
+      ,"properties":{ "description":"11:00:45.890 $SN01,1.8,9,2021-03-13,18:00:45,1,32.47633,-84.95109,108,1.91,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95110,32.47633]
+      }
+      ,"properties":{ "description":"11:00:49.989 $SN01,1.1,8,2021-03-13,18:00:49,1,32.47633,-84.95110,107,2.41,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95111,32.47635]
+      }
+      ,"properties":{ "description":"11:00:54.120 $SN01,1.3,8,2021-03-13,18:00:53,1,32.47635,-84.95111,109,2.15,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95110,32.47633]
+    }
+      ,"properties":{ "description":"11:00:58.781 $SN01,1.0,10,2021-03-13,18:00:58,1,32.47633,-84.95110,108,1.35,508.79,*" } }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95110,32.47633]
+      }
+      ,"properties":{ "description":"11:00:58.781 $SN01,1.0,10,2021-03-13,18:00:58,1,32.47633,-84.95110,108,1.35,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95110,32.47636]
+      }
+      ,"properties":{ "description":"11:01:02.889 $SN01,1.1,9,2021-03-13,18:01:02,1,32.47636,-84.95110,110,2.83,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95107,32.47637]
+      }
+      ,"properties":{ "description":"11:01:07.024 $SN01,1.1,9,2021-03-13,18:01:06,1,32.47637,-84.95107,112,1.98,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95109,32.47640]
+      }
+      ,"properties":{ "description":"11:01:11.206 $SN01,0.8,10,2021-03-13,18:01:10,1,32.47640,-84.95109,112,2.69,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95103,32.47641]
+      }
+      ,"properties":{ "description":"11:01:15.594 $SN01,0.9,9,2021-03-13,18:01:14,1,32.47641,-84.95103,109,3.32,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95099,32.47643]
+      }
+      ,"properties":{ "description":"11:01:19.896 $SN01,0.9,9,2021-03-13,18:01:19,1,32.47643,-84.95099,107,2.09,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95100,32.47644]
+      }
+      ,"properties":{ "description":"11:01:24.011 $SN01,0.9,10,2021-03-13,18:01:23,1,32.47644,-84.95100,106,2.87,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95100,32.47644]
+      }
+      ,"properties":{ "description":"11:01:24.011 $SN01,0.9,10,2021-03-13,18:01:23,1,32.47644,-84.95100,106,2.87,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95102,32.47643]
+      }
+      ,"properties":{ "description":"11:01:28.383 $SN01,1.0,9,2021-03-13,18:01:27,1,32.47643,-84.95102,107,1.94,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95103,32.47641]
+      }
+      ,"properties":{ "description":"11:01:32.674 $SN01,0.9,9,2021-03-13,18:01:32,1,32.47641,-84.95103,108,0.96,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95106,32.47638]
+      }
+      ,"properties":{ "description":"11:01:36.823 $SN01,0.9,10,2021-03-13,18:01:36,1,32.47638,-84.95106,110,3.61,508.79,*" }
+    }
+    ,{
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95108,32.47639]
+      }
+      ,"properties":{ "description":"11:01:41.201 $SN01,1.0,9,2021-03-13,18:01:40,1,32.47639,-84.95108,113,1.91,508.79,*" }
+    }
+  ]
+}

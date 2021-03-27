@@ -1,0 +1,13 @@
+{
+  "type":"FeatureCollection"
+  ,"features":[
+    {
+    "type":"Feature"
+    ,"geometry":{
+      "type":"Point"
+      ,"coordinates":[-84.95130,32.47630]
+    }
+      ,"properties":{ "description":"08:29:30.028 $SN01,4.0,3,2021-03-13,15:29:32,1,32.47630,-84.95130,128,0.33,508.79,*" }
+    }
+  ]
+}

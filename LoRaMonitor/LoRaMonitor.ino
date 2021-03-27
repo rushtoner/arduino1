@@ -3,7 +3,7 @@
 #include <Wire.h>
 #include <SD.h>
 
-/* added for display below */
+// Adafruit GFX and SSD1303 for the 128x32 or 128x64 OLED displays
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
@@ -65,6 +65,7 @@ void setup() {
   }
   goodSD = setupSD();
   logSD("Starting.");
+  setupLED();
 }
 
 void setupDisplay() {
@@ -98,7 +99,13 @@ void setupDisplay() {
 }
 
 
+void setupLED() {
+  pinMode(LED_BUILTIN, OUTPUT);
+}
+
+
 void loop() {
+  loopLED();
   // try to parse packet
   int packetSize = LoRa.parsePacket();
   if (packetSize) {
@@ -320,4 +327,23 @@ void getNextFileName() {
   Serial.print("loraLogFileName = ");
   Serial.println(loraLogFileName);
   // Serial.println("done");
+}
+
+#define BLINK_INTERVAL 200
+
+void loopLED() {
+  long ms = millis() % 2000;
+  if (ms < BLINK_INTERVAL) {
+    digitalWrite(LED_BUILTIN, HIGH);
+  } else if (ms < 2 * BLINK_INTERVAL) {
+    digitalWrite(LED_BUILTIN, LOW);
+  } else if (ms < 3 * BLINK_INTERVAL) {
+    digitalWrite(LED_BUILTIN, HIGH);
+  } else if (ms < 4 * BLINK_INTERVAL) {
+    digitalWrite(LED_BUILTIN, LOW);
+  } else if (ms < 5 * BLINK_INTERVAL) {
+    digitalWrite(LED_BUILTIN, HIGH);
+  } else {
+    digitalWrite(LED_BUILTIN, LOW);
+  }
 }

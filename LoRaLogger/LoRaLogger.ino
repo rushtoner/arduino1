@@ -17,7 +17,7 @@
 #define TEXT_COLUMNS 21
 #define DATA_TEXT_ROWS 3
 #define DISPLAY_UPDATE_INTERVAL_MS 250
-#define BUF_SIZE 100
+#define ELAPSED_BUF_LEN 100
 #define SD_SPI_CHIPSELECT 4
 #define DISPLAY_WIDTH 128 // OLED display width, in pixels
 #define DISPLAY_HEIGHT 64 // OLED display height, in pixels
@@ -25,8 +25,7 @@
 #define DISPLAY_COLS 21
 #define DISPLAY_ROWS 8
 #define LORA_FREQ 915E6
-#define RAW_BUF_SIZE 256
-#define TMP_BUF_LEN 256
+#define TMP_BUF_LEN 512
 #define LORA_LOG_FILE_NAME_LEN 20
 #define SERIAL_BUF_LEN 1024
 #define BLINK_INTERVAL 200
@@ -41,9 +40,10 @@
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-char elapsedBuf[BUF_SIZE];
+char elapsedBuf[ELAPSED_BUF_LEN];
 long lastMillis = 0;
 
+int canary = 42; // checking to see if this is getting clobbered by something else;
 int receivedPacketCount = 0;
 int loggedPacketCount = 0;
 int lastRssi = 0;
@@ -53,7 +53,7 @@ char printableBuf[PRINTABLE_BUF_LEN];
 int printableBufCount = 0;
 
 // rawBuf is chars received over LoRa that are printable (or hexified into printable)
-char rawBuf[RAW_BUF_SIZE];
+char rawBuf[RAW_BUF_LEN];
 int rawBufCount = 0;
 
 char tmpBuf[TMP_BUF_LEN];
@@ -83,19 +83,23 @@ void setup() {
 }
 
 void setupRuler() {
-  int j = 0;
-  for(j = 0; j < PRINTABLE_BUF_LEN - 1; j++) {
-    ruler[j] = '0' + j % 10;
+  if (PRINT_RULER) {
+    int j = 0;
+    for(j = 0; j < PRINTABLE_BUF_LEN - 2; j++) {
+      ruler[j] = '0' + j % 10;
+    }
+    ruler[j++] = '<';
+    ruler[j] = (char)0;
+    printlnStr("Ruler:");
+    printlnStr(ruler);
   }
-  ruler[j] = (char)0;
 }
 
 
 boolean setupDisplay() {
   boolean good = false;
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
-    // serPrintln(F("SSD1306 allocation failed"));
-    serPrintln("SSD1306 allocation failed");
+    Serial.println("SSD1306 allocation failed");
   } else {
     good = true;
     // Show initial display buffer contents on the screen --
@@ -135,7 +139,7 @@ boolean setupLoRa() {
   boolean result = false;
   strcpy(printableBuf, "nothing yet");
   if (!LoRa.begin(915E6)) {
-    serPrintln("Starting LoRa failed!");
+    printlnStr("Starting LoRa failed!");
     result = false;
   } else {
     result = true;
@@ -153,16 +157,20 @@ void loop() {
   loopLED();  // do the distinctive blink pattern
   if (loopLoRa()) {
     // we got a new packet
-    logSD(rawBuf);
+    logSD(rawBuf);  // rawBuf holds printable text, but unprintables replaced by [hex codes]
     if (goodSerial) {
-      // Serial.println(rawBuf);
-      if (PRINT_RULER) {
-        Serial.println(ruler);
-      }
-      Serial.println(printableBuf);
+      printRuler();
+      // Serial.println(printableBuf);
       Serial.println(rawBuf);
     }
     updateDisplay();
+    if (receivedPacketCount > 1000000) {
+      printlnInt("Got crazy receivedPacketCount = ", receivedPacketCount);
+      printlnStr2("tmpBuf = ", tmpBuf);
+      printlnInt("rawBufCount = ", rawBufCount);
+      printlnStr2("rawBuf = ", rawBuf);
+      goodSerial = false; // stop serial logging
+    }
   } else {
     // we didn't get a new packet
     if (millis() > lastMillis + DISPLAY_UPDATE_INTERVAL_MS) {
@@ -178,46 +186,87 @@ boolean loopLoRa() {
   int packetSize = LoRa.parsePacket();
   if (packetSize) {
     // received a packet
-    //serPrint("Rx: ");
-
     printableBufCount = 0; // reset to start of buffers
     rawBufCount = 0;
-    if (false) {
-      strcpy(printableBuf, "test: ");
-      printableBufCount = strlen(printableBuf);
-    }
     // read packet
+    int count = 0;
     while (LoRa.available()) {
       int d = LoRa.read();
       // char c = (char)(d & 0x7F);
       char c = (char)d;
-      
-      // Stuff it into the printable buffer (omits non-printables)
-      if (isPrintable(c) && printableBufCount < PRINTABLE_BUF_LEN - 1) {
-        printableBuf[printableBufCount++] = c;
+
+      // printCurrentState(d, c, count);
+
+      if (true) {
+        // Stuff it into the printable buffer (omits non-printables)
+        if (isPrintable(c) && printableBufCount < PRINTABLE_BUF_LEN - 1) {
+          printableBuf[printableBufCount++] = c;
+        }
       }
 
+      // printBuf("rawBuf before: ", rawBuf, rawBufCount, RAW_BUF_LEN);
       // Stuff it into the raw buffer (hexifies non-printables)
-      if (isPrintable(c) && rawBufCount < RAW_BUF_LEN - 1) {
-        rawBuf[rawBufCount++] = c;
-      } else if (rawBufCount < RAW_BUF_LEN - 6 - 1) {
-        // hexify it, which takes 6 chars "[0xFF]"
-        sprintf(tmpBuf, "[0x%02x]", (int)c);
-        rawBuf[rawBufCount] = (char)0; // null-terminate it for strcat
-        strcat(rawBuf, tmpBuf); // this takes care of the null terminator for us
-        rawBufCount += strlen(tmpBuf);
+      if (isPrintable(c)) {
+        if (false) {
+          printInt("rawBufCount = ", rawBufCount);
+          printInt(", RAW_BUF_LEN = ", RAW_BUF_LEN);
+        }
+        if (rawBufCount < RAW_BUF_LEN - 1) {
+          // printlnInt(", appending ", d);
+          rawBuf[rawBufCount++] = c;
+          rawBuf[rawBufCount] = (char)0; // null terminate it
+        } else {
+          // printlnInt(", omitting printable ", d);
+        }
+      } else {
+        if (rawBufCount < RAW_BUF_LEN - (6 + 1)) {
+          // hexify it, which takes 6 chars "[0xFF]" plus 1 for the null terminator
+          sprintf(tmpBuf, "[0x%02x]", (int)c);
+          rawBuf[rawBufCount] = (char)0; // null-terminate it for strcat
+          strcat(rawBuf, tmpBuf); // this takes care of the null terminator for us
+          rawBufCount += strlen(tmpBuf);
+        } else {
+          // Serial.print("Omitting non-printable ");
+          // Serial.println(d);
+        }
       }
+      // printBuf("rawBuf after:  ", rawBuf, rawBufCount, RAW_BUF_LEN);
+      if (false) {
+        Serial.print("rawBufCount = ");
+        Serial.println(rawBufCount);
+        Serial.print("rawBuf:");
+        Serial.println(rawBuf);
+      }
+      count++;
+      // printlnInt("-- end, count = ", count);
     }
+    /*
     if (printableBufCount < PRINTABLE_BUF_LEN - 1) {
       printableBuf[printableBufCount++] = '*';
     }
+    */
     printableBuf[printableBufCount++] = (char)0; // null-terminate it
-    rawBuf[rawBufCount++] = (char)0; // null-terminate it
+    // rawBuf[rawBufCount++] = (char)0; // null-terminate it
     lastRssi = LoRa.packetRssi();
     receivedPacketCount++;
     result = true;
   }
   return result;
+}
+
+
+void printCurrentState(int d, char c, int count) {
+  Serial.print("start: d = ");
+  Serial.print(d);
+  Serial.print(", c = '");
+  Serial.print(c);
+  Serial.print("', count = ");
+  Serial.print(count);
+  Serial.print(", rawBufCount = ");
+  Serial.print(rawBufCount);
+  Serial.println();
+  Serial.println(ruler);
+  Serial.println(rawBuf);
 }
 
 
@@ -240,7 +289,8 @@ void updateDisplay() {
       // Tried using "%,d" in order to get results like "1,234" but it didn't work
       sprintf(tmpBuf, "Received: %d", receivedPacketCount);
       display.println(tmpBuf);
-      sprintf(tmpBuf, "Logged:   %d", loggedPacketCount);
+      // sprintf(tmpBuf, "Logged:   %d", loggedPacketCount);
+      sprintf(tmpBuf, "Logged:   %d, c %d", loggedPacketCount, canary);
       display.println(tmpBuf);
     } else {
       display.print("Received: ");
@@ -252,7 +302,7 @@ void updateDisplay() {
     if (printableBufCount <= DISPLAY_BUF_LEN) {
       display.print(printableBuf);
     } else {
-      strncpy(tmpBuf, printableBuf, DISPLAY_BUF_LEN);
+      strncpy(tmpBuf, printableBuf, min(min(DISPLAY_BUF_LEN,PRINTABLE_BUF_LEN),TMP_BUF_LEN));
       display.print(tmpBuf);
     }
     display.display();
@@ -272,7 +322,7 @@ char* elapsedMsg(long ms) {
   return elapsedBuf;
 }
 
-
+/*
 void serPrint(char c) {
   if (goodSerial) {
     Serial.print(c);
@@ -301,20 +351,20 @@ void serPrintln(const char *msg) {
     Serial.println(msg);
   }
 }
-
+*/
 
 boolean setupSD() {
   boolean good = false;
-  String msg = "SD: FAIL";
+  char msg[20] = "SD: ";
   if (SD.begin(SD_SPI_CHIPSELECT)) {
     good = true;
-    msg = "SD: good";
+    strcat(msg, "good");
     getNextFileName();
     logSD("Starting.");
+  } else {
+    strcat(msg, "FAIL");
   }
-  if (goodSerial) {
-    Serial.println(msg);
-  }
+  printlnStr(msg);
   return good;
 }
 
@@ -327,6 +377,8 @@ void logSD(const char *dataString) {
     // if the file is available, write to it:
     if (dataFile) {
       dataFile.println(dataString);
+      dataFile.print("receivedPacketCount = ");
+      dataFile.println(receivedPacketCount);
       dataFile.close();
       loggedPacketCount++;
     } else {
@@ -345,53 +397,31 @@ void logSD(const char *dataString) {
  * Look at the SD card for files like LORA-1.LOG, LORA-2.LOG, etc, and choose the next numbered file name.
  */
 void getNextFileName() {
-  // Serial.println("getNextFileName()");
   File root = SD.open("/");
-  // Serial.print("root = ");
-  // Serial.println(root);
   boolean found = false;
   boolean exhausted = false;
   int n = 0;
   int nextIndex = 0; // LORA-index.LOG
   do {
     File entry = root.openNextFile();
-    if (false) {
-      Serial.print("n = ");
-      Serial.print(n);
-      Serial.print(", entry = ");
-      Serial.println(entry);
-    }
     if (entry) {
-      // Serial.print("entry name = ");
       String name = entry.name();
-      // Serial.println(name);
       entry.close();
       if (name.startsWith("LORA-")) {
-        // Serial.println("starts with");
         String tmp = name.substring(5, name.indexOf(".LOG"));
-        // Serial.print("tmp = \"");
-        // Serial.print(tmp);
-        // Serial.println("\"");
         int index = tmp.toInt();
         if (index >= nextIndex) {
           nextIndex = index + 1;
-          //Serial.print("new nextIndex = ");
-          //Serial.println(nextIndex);
         }
-      } else {
-        //Serial.println("does not start with");
       }
     } else {
-      // Serial.println("no more files");
       exhausted = true;
     }
     n++;
   } while (!found && !exhausted);
   root.close();
   sprintf(loraLogFileName, "LORA-%03d.LOG", nextIndex); // file name max size: 8.3 I think
-  Serial.print("loraLogFileName = ");
-  Serial.println(loraLogFileName);
-  // Serial.println("done");
+  printlnStr2("loraLogFileName = ", loraLogFileName);
 }
 
 
@@ -410,5 +440,56 @@ void loopLED() {
     digitalWrite(LED_BUILTIN, HIGH);
   } else {
     digitalWrite(LED_BUILTIN, LOW);
+  }
+}
+
+
+void printInt(const char *str, int j) {
+  if (goodSerial) {
+    Serial.print(str);
+    Serial.print(j);
+  }
+}
+
+
+void printlnInt(const char *str, int j) {
+  if (goodSerial) {
+    Serial.print(str);
+    Serial.println(j);
+  }
+}
+
+
+void printlnStr(const char *a) {
+  if (goodSerial) {
+    Serial.println(a);
+  }
+}
+
+
+void printlnStr2(const char *a, const char* b) {
+  if (goodSerial) {
+    Serial.print(a);
+    Serial.println(b);
+  }
+}
+
+
+void printBuf(const char* label, const char* buf, int bufCount, int bufSize) {
+  if (goodSerial) {
+    Serial.print(label);
+    Serial.print("bufCount = ");
+    Serial.print(bufCount);
+    Serial.print(", bufSize = ");
+    Serial.print(bufSize);
+    Serial.println(", ruler and buf =");
+    Serial.println(ruler);
+    Serial.println(buf);
+  }
+}
+
+void printRuler() {
+  if (PRINT_RULER && goodSerial) {
+    Serial.println(ruler);
   }
 }

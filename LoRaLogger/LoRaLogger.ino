@@ -257,8 +257,8 @@ char* elapsedMsg(long ms) {
   ms -= minutes * MS_PER_MINUTE;
   int seconds = ms / 1000;
   ms -= seconds * 1000;
-  sprintf(elapsedBuf, "Elapsed %d:%02d:%02d.%1d", hours, minutes, seconds, msec/100);
-  
+  sprintf(elapsedBuf, "Elapsed %d:%02d:%02d.%1d", hours, minutes, seconds, ms/100);
+  /*
   int msec = ms % 1000;
   int seconds = (ms - msec)/1000;
   int minutes = seconds / 60;
@@ -269,6 +269,7 @@ char* elapsedMsg(long ms) {
   //  elapsedBuf = (char*)malloc(BUF_SIZE);
   //}
   sprintf(elapsedBuf, "Elapsed %d:%02d.%1d", minutes, seconds, msec/100);
+  */
   return elapsedBuf;
 }
 

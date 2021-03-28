@@ -34,6 +34,7 @@
 #define RAW_BUF_LEN 512
 // DISPLAY_BUF_LEN is how many chars of display space is left for printing a received packet
 #define DISPLAY_BUF_LEN (3 * 21)
+#define PRINT_RULER false
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
@@ -150,7 +151,9 @@ void loop() {
     logSD(rawBuf);
     if (goodSerial) {
       // Serial.println(rawBuf);
-      Serial.println(ruler);
+      if (PRINT_RULER) {
+        Serial.println(ruler);
+      }
       Serial.println(printableBuf);
       Serial.println(rawBuf);
     }
@@ -244,8 +247,18 @@ void updateDisplay() {
   lastMillis = millis();
 }
 
+#define MS_PER_MINUTE (1000 * 60)
+#define MS_PER_HOUR (MS_PER_MINUTE * 60)
 
 char* elapsedMsg(long ms) {
+  int hours = ms / MS_PER_HOUR;
+  ms -= hours * MS_PER_HOUR;
+  int minutes = ms / MS_PER_MINUTE;
+  ms -= minutes * MS_PER_MINUTE;
+  int seconds = ms / 1000;
+  ms -= seconds * 1000;
+  sprintf(elapsedBuf, "Elapsed %d:%02d:%02d.%1d", hours, minutes, seconds, msec/100);
+  
   int msec = ms % 1000;
   int seconds = (ms - msec)/1000;
   int minutes = seconds / 60;

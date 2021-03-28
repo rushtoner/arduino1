@@ -35,6 +35,9 @@
 // DISPLAY_BUF_LEN is how many chars of display space is left for printing a received packet
 #define DISPLAY_BUF_LEN (3 * 21)
 #define PRINT_RULER false
+#define MS_PER_MINUTE (1000 * 60)
+#define MS_PER_HOUR (MS_PER_MINUTE * 60)
+
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
@@ -42,6 +45,7 @@ char elapsedBuf[BUF_SIZE];
 long lastMillis = 0;
 
 int receivedPacketCount = 0;
+int loggedPacketCount = 0;
 int lastRssi = 0;
 
 // printableBuf is chars received over LoRa that are printable
@@ -57,14 +61,15 @@ char tmpBuf[TMP_BUF_LEN];
 char serialBuf[SERIAL_BUF_LEN];
 int serialBufCount = 0;
 
+char loraLogFileName[LORA_LOG_FILE_NAME_LEN];
+char ruler[PRINTABLE_BUF_LEN];
+
+
 // Set up a "good" flag for each subsystem, to keep track of which ones initialized okay.
 boolean goodSerial  = false;
 boolean goodSD      = false;
 boolean goodDisplay = false;
 boolean goodLoRa    = false;
-int loggedPacketCount = 0;
-char loraLogFileName[LORA_LOG_FILE_NAME_LEN];
-char ruler[PRINTABLE_BUF_LEN];
 
 
 void setup() {
@@ -231,10 +236,18 @@ void updateDisplay() {
     }
     display.print("RSSI: ");
     display.println(lastRssi);
-    display.print("Received: ");
-    display.println(receivedPacketCount);
-    display.print("Logged:   ");
-    display.println(loggedPacketCount);
+    if (true) {
+      // Tried using "%,d" in order to get results like "1,234" but it didn't work
+      sprintf(tmpBuf, "Received: %d", receivedPacketCount);
+      display.println(tmpBuf);
+      sprintf(tmpBuf, "Logged:   %d", loggedPacketCount);
+      display.println(tmpBuf);
+    } else {
+      display.print("Received: ");
+      display.println(receivedPacketCount);
+      display.print("Logged:   ");
+      display.println(loggedPacketCount);
+    }
     display.println(elapsedMsg(millis()));
     if (printableBufCount <= DISPLAY_BUF_LEN) {
       display.print(printableBuf);
@@ -247,8 +260,6 @@ void updateDisplay() {
   lastMillis = millis();
 }
 
-#define MS_PER_MINUTE (1000 * 60)
-#define MS_PER_HOUR (MS_PER_MINUTE * 60)
 
 char* elapsedMsg(long ms) {
   int hours = ms / MS_PER_HOUR;
@@ -258,18 +269,6 @@ char* elapsedMsg(long ms) {
   int seconds = ms / 1000;
   ms -= seconds * 1000;
   sprintf(elapsedBuf, "Elapsed %d:%02d:%02d.%1d", hours, minutes, seconds, ms/100);
-  /*
-  int msec = ms % 1000;
-  int seconds = (ms - msec)/1000;
-  int minutes = seconds / 60;
-  seconds -= minutes * 60;
-  // seconds = seconds % 60;
-  // minutes = ((ms / 1000) - seconds) / 60;
-  //if (!elapsedBuf) {
-  //  elapsedBuf = (char*)malloc(BUF_SIZE);
-  //}
-  sprintf(elapsedBuf, "Elapsed %d:%02d.%1d", minutes, seconds, msec/100);
-  */
   return elapsedBuf;
 }
 

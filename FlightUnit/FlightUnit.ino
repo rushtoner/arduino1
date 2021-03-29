@@ -44,6 +44,10 @@
 // In practice, about 31 samples/sec is the best throughput I've seen (even when asking for 40), 
 // and that's when writing to the SD card is disabled and serial monitor output is minimized.
 // With SD writing every sample independently, about 25 is max throughput
+// 20 samples per second seems solid, with other stuff going on (within reason)
+// With LOG_TO_SD true, 30 samples/sec is a disaster
+// 25 samp/sec looks sustainable with other stuff (LOG_TO_SD true) going on (within reason)
+// Nah, 20 minutes test at 25 had 5 bad sample lengths, thruput of 24 msg/sec
 #define SAMPLES_PER_SECOND 20
 #define LOG_TO_SD true
 #define LOG_FILE_NAME_LEN 20

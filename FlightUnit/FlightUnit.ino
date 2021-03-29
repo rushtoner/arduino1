@@ -38,10 +38,19 @@
 // How big the Serial1 receive buffer is
 #define RECEIVE_BUF_LEN 1000
 #define SERIAL_INIT_TIMEOUT_MS 10000
-#define CONTINUOUS_SECS (12 * 60 * 60)
+#define CONTINUOUS_SECS (20 * 60)
+
+// In theory 34.3 samples/second is max for 280 bits at 9600 bps
+// In practice, about 31 samples/sec is the best throughput I've seen (even when asking for 40), 
+// and that's when writing to the SD card is disabled and serial monitor output is minimized.
+// With SD writing every sample independently, about 25 is max throughput
+#define SAMPLES_PER_SECOND 20
+#define LOG_TO_SD true
 #define LOG_FILE_NAME_LEN 20
 #define LOG_BUF_LEN 256
 #define TMP_BUF_LEN 256
+#define PRINT_BUF_LEN 256
+
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
@@ -55,8 +64,9 @@ int state = 0;
 int lastState = -1;
 
 char tmpBuf[TMP_BUF_LEN];
+char receiveBuf[RECEIVE_BUF_LEN]; // for assembling HMR data from serial port
+char printBuf[PRINT_BUF_LEN];     // for sprintf() then Serial.println() output
 
-char receiveBuf[RECEIVE_BUF_LEN];
 int receiveBufNextChar = 0;  // character position of next char to go in
 char lastReceiveBuf[RECEIVE_BUF_LEN]; // copy here for printing "later"
 char logFileName[LOG_FILE_NAME_LEN];
@@ -80,7 +90,7 @@ int maxz = 0;
 boolean waitingForOk = false;
 long waitUntilMs = 0L;
 int receiveCount = 0;
-int samplesPerSecond = 20;
+
 long timerStart = 0;
 long timerStop = 0;
 long lastMillis = 0;
@@ -90,6 +100,9 @@ boolean goodSerial = false;
 boolean goodDisplay = false;
 boolean goodHMR = false;
 boolean goodSD = false;
+
+int goodSampleLength = 0;
+int badSampleLength = 0;
 
 void setup() {
   goodSerial = setupSerial();
@@ -187,7 +200,9 @@ boolean setupSD() {
     good = true;
     strcat(msg, "good");
     getNextFileName();
-    logHeader();
+    if (LOG_TO_SD) {
+      logHeader();
+    }
   } else {
     strcat(msg, "FAIL");
   }
@@ -197,7 +212,7 @@ boolean setupSD() {
 
 
 void logSD(const char *dataString) {
-  if (goodSD) {
+  if (LOG_TO_SD && goodSD) {
     // open the file. note that only one file can be open at a time,
     // so you have to close this one before opening another.
     File dataFile = SD.open(logFileName, FILE_WRITE);
@@ -243,8 +258,11 @@ void loop() {
   }
   loopLED();
   loopHMR();
-  if (millis() - lastMillis > 100) {
+  if (millis() - lastMillis > 200) {
+    //long start = millis();
     updateDisplay();
+    //long elapsed = millis() - start;
+    //Serial.print("display time ms: "); Serial.println(elapsed);
   }
 }
 
@@ -268,6 +286,7 @@ void loopLED() {
 void loopHMR() {
   int data = HMR.read();
   long a, b, elapsed;
+  int messagesPerSec;
   if (data > 0) {
     if (data == 13 || receiveBufNextChar >= RECEIVE_BUF_LEN - 1) {
       processReceiveBuf();
@@ -278,11 +297,9 @@ void loopHMR() {
   switch(state) {
     case 0: // wait 3 seconds before starting
       if (millis() > 3000) {
-        // int samplesPerSecond = 20;
-        Serial.print("Setting polling rate to ");
-        Serial.println(samplesPerSecond);
-        sprintf(tmpBuf, "*99R=%d\r", samplesPerSecond);
-        Serial.println(tmpBuf);
+        printlnInt("Setting polling rate to ", SAMPLES_PER_SECOND);
+        sprintf(tmpBuf, "*99R=%d\r", SAMPLES_PER_SECOND);
+        printlnStr(tmpBuf);
         // HMR.write("*99R=40\r");
         HMR.write(tmpBuf);
         state++;
@@ -314,23 +331,33 @@ void loopHMR() {
       Serial.write("Stopped.\n");
       state++;
       break;
-    case 5: // send test
-      /*
-      if (true) {
-        a = millis();
-        Serial.println("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890");
-        delay(10);
-        b = millis();
-        elapsed = (int)(b - a);
-        Serial.print("send time ");
-        Serial.print(elapsed);
-        Serial.println(" ms");
-      }
+    case 5: // we've stopped the HMR, print results
+      Serial.println("five");
+      elapsed = (timerStop - timerStart);
+      messagesPerSec = receiveCount * 1000 / elapsed;
+      sprintf(printBuf, "received %d messages in %d ms or %d msg/sec, samplesPerSec = %d"
+        , receiveCount, elapsed, messagesPerSec, SAMPLES_PER_SECOND);
+      Serial.println(printBuf);
+      sprintf(printBuf, "goodSampleLength = %d, badSampleLength = %d, total = %d, CONTINUOUS_SECS = %d"
+        , goodSampleLength, badSampleLength, (goodSampleLength + badSampleLength), CONTINUOUS_SECS);
+      Serial.println(printBuf);
+
+      Serial.print("LOG_TO_SD = ");
+      Serial.println(LOG_TO_SD);
+      // delay(500);
+      // sprintf(buf, "That's %d messages per second", messagesPerSec);
+      // Serial.println(buf);
+      //Serial.println("Done.");
       state++;
-      */
       break;
-    case 6: // do nothing
+    case 6: // report then do nothing
+      Serial.println("Done.");
+      state++;
       break;
+    case 7: // do nothing
+      break;
+  }
+  if (state == 5) {
   }
 }
 
@@ -354,27 +381,50 @@ void waitForResponse() {
 void processReceiveBuf() {
   receiveBuf[receiveBufNextChar++] = (char)0; // null terminate the string
   strcpy(lastReceiveBuf, receiveBuf); // make a copy that will persist even when reading in new data
-  if (false) {
-    Serial.println("             \"012345678901234567890123456789\"");
-    Serial.print("receiveBuf = \"");
-    Serial.print(receiveBuf);
-    Serial.println("\"");
+  if (receiveBuf[0] == 'O' && receiveBuf[1] == 'K' && receiveBuf[2] == (char)0) {
+    // it's an "OK", ignore it for stats
+  } else {
+    if (strlen(receiveBuf) == 27) {
+      goodSampleLength++;
+      if (goodSampleLength % 100 == 0) {
+        // printlnInt("goodSampleLength = ", goodSampleLength);
+        sprintf(printBuf, "goodSampleLength = %d, badSampleLength = %d, total = %d, CONTINUOUS_SECS = %d"
+          , goodSampleLength, badSampleLength, (goodSampleLength + badSampleLength), CONTINUOUS_SECS);
+        Serial.println(printBuf);
+      }
+    } else {
+      badSampleLength++;
+      Serial.print("badLen = ");
+      Serial.print(badSampleLength);
+      Serial.print(", receiveBuf = \"");
+      Serial.print(receiveBuf);
+      Serial.println("\"");
+    }
+    //sprintf(printBuf, "receiveBuf = \"%s\"", receiveBuf);
+    //Serial.print(printBuf);
+    //                                                  "012345678901234567890123456"
+    //                                                   -32,000  -32,000  -32,000
+    //                                                   1234567  1234567  1234567
+    // receiveBuf expected to look something like this: "- 4,030    2,778    3,589  "
+    // But I've also seen "- 4,030   3,590  " (after "- 4,030    2,778    3,590  ")
+    // and "- 4,030 ,030    2,776    3,589  " (after "- 4,030    2,777    3,589  ")
+    strncpy(xbuf, receiveBuf, 7);
+    x = parseBuf(xbuf);
+    strncpy(ybuf, receiveBuf + 9, 7);  
+    y = parseBuf(ybuf);
+    strncpy(zbuf, receiveBuf + 18, 7);  
+    z = parseBuf(zbuf);
+    if (false) {
+      sprintf(printBuf, "receiveBuf = \"%s\", xbuf = \"%s\", x = %6d, ybuf = \"%s\", y = %8d, zbuf = \"%s\", z = %6d, good = %d, bad = %d"
+        , receiveBuf, xbuf, x, ybuf, y, zbuf, z, goodSampleLength, badSampleLength);
+      Serial.println(printBuf);
+    }
+    if (LOG_TO_SD) {
+      // taking this out to see how it impacts performance
+      logData(millis(), x, y, z, loggedPacketCount);
+    }
   }
-  strncpy(xbuf, receiveBuf, 7);
-  x = parseBuf(xbuf);
-  strncpy(ybuf, receiveBuf + 9, 7);  
-  y = parseBuf(ybuf);
-  strncpy(zbuf, receiveBuf + 18, 7);  
-  z = parseBuf(zbuf);
-  logData(millis(), x, y, z, loggedPacketCount);
-
-  /*
-  if (x < minx)
-    minx = x;
-  if (x > maxx) 
-    maxx = x;
-    */
-  if (true) {
+  if (false) {
     if (goodSerial) {
       Serial.print(millis());
       printInt(", ", x);
@@ -386,7 +436,6 @@ void processReceiveBuf() {
     }
   }
   
-
   receiveCount++;
   receiveBufNextChar = 0;
   waitingForOk = false;
@@ -394,9 +443,11 @@ void processReceiveBuf() {
     Serial.println("five");
     int elapsed = (int)(timerStop - timerStart);
     int messagesPerSec = receiveCount * 1000 / elapsed;
-    sprintf(tmpBuf, "received %d messages in %d ms or %d msg/sec, samplesPerSec = %d"
-      , receiveCount, elapsed, messagesPerSec, samplesPerSecond);
-    Serial.println(tmpBuf);
+    sprintf(printBuf, "received %d messages in %d ms or %d msg/sec, samplesPerSec = %d"
+      , receiveCount, elapsed, messagesPerSec, SAMPLES_PER_SECOND);
+    Serial.println(printBuf);
+    sprintf(printBuf, "goodSampleLength = %d, badSampleLength = %d", goodSampleLength, badSampleLength);
+    Serial.println(printBuf);
     delay(500);
     // sprintf(buf, "That's %d messages per second", messagesPerSec);
     // Serial.println(buf);
@@ -404,7 +455,6 @@ void processReceiveBuf() {
     state++;
   }
 }
-
 
 
 /**
@@ -470,6 +520,7 @@ void updateDisplay() {
     } else {
       display.println(F("** Flight Unit **"));
     }
+
     if (goodSerial) {
       display.print(F("Ser: ok"));
     } else {
@@ -484,11 +535,11 @@ void updateDisplay() {
     display.print("File: "); display.println(logFileName);
     // display.println(lastReceiveBuf);
     // display.print("xbuf = "); display.println(xbuf);
-    display.print("m = "); display.println(millis());
+    display.print("sec = "); display.println(millis()/1000);
     display.print("x = "); display.println(x);
     display.print("y = "); display.println(y);
     display.print("z = "); display.println(z);
-    display.print("log: "); display.println(loggedPacketCount);
+    display.print("count: "); display.println(loggedPacketCount);
     /*
     display.print("RSSI: ");
     display.println(lastRssi);

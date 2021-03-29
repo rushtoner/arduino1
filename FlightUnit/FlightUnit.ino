@@ -4,6 +4,10 @@
 */
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <SPI.h>
+#include <LoRa.h>
+#include <Wire.h>
+#include <SD.h>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -34,7 +38,10 @@
 // How big the Serial1 receive buffer is
 #define RECEIVE_BUF_LEN 1000
 #define SERIAL_INIT_TIMEOUT_MS 10000
-#define CONTINUOUS_SECS 60
+#define CONTINUOUS_SECS (12 * 60 * 60)
+#define LOG_FILE_NAME_LEN 20
+#define LOG_BUF_LEN 256
+#define TMP_BUF_LEN 256
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
@@ -47,11 +54,28 @@ int n = 0;
 int state = 0;
 int lastState = -1;
 
-char buf[100];
+char tmpBuf[TMP_BUF_LEN];
 
 char receiveBuf[RECEIVE_BUF_LEN];
 int receiveBufNextChar = 0;  // character position of next char to go in
 char lastReceiveBuf[RECEIVE_BUF_LEN]; // copy here for printing "later"
+char logFileName[LOG_FILE_NAME_LEN];
+char logBuf[LOG_BUF_LEN];
+int loggedPacketCount = 0;
+
+#define X_BUF_LEN 32
+char xbuf[X_BUF_LEN];
+char ybuf[X_BUF_LEN];
+char zbuf[X_BUF_LEN];
+int x = 0; 
+int minx = 0;  // observed -32768 (with a magnet)
+int maxx = 0;  // observed 32608 (with a magnet)
+int y = 0;
+int miny = 0;
+int maxy = 0;
+int z = 0;
+int minz = 0;
+int maxz = 0;
 
 boolean waitingForOk = false;
 long waitUntilMs = 0L;
@@ -65,16 +89,22 @@ long lastMillis = 0;
 boolean goodSerial = false;
 boolean goodDisplay = false;
 boolean goodHMR = false;
-
+boolean goodSD = false;
 
 void setup() {
   goodSerial = setupSerial();
   goodDisplay = setupDisplay(5);
   goodHMR = setupHMR();
+  goodSD = setupSD();
   setupLED();
   Serial.println("Serial1 (HMR) ready.");
   Serial.print("state = ");
   Serial.println(state);
+  if (goodSD) {
+    Serial.println("goodSD is true");
+  } else {
+    Serial.println("goodSD is false");
+  }
 }
 
 
@@ -143,7 +173,59 @@ boolean setupHMR() {
   if (HMR) {
     result = true;
   }
+  strcpy(xbuf, "x?");
+  strcpy(ybuf, "y?");
+  strcpy(zbuf, "z?");
   return result;
+}
+
+
+boolean setupSD() {
+  boolean good = false;
+  char msg[20] = "SD: ";
+  if (SD.begin(SD_SPI_CHIPSELECT)) {
+    good = true;
+    strcat(msg, "good");
+    getNextFileName();
+    logHeader();
+  } else {
+    strcat(msg, "FAIL");
+  }
+  printlnStr(msg);
+  return good;
+}
+
+
+void logSD(const char *dataString) {
+  if (goodSD) {
+    // open the file. note that only one file can be open at a time,
+    // so you have to close this one before opening another.
+    File dataFile = SD.open(logFileName, FILE_WRITE);
+    // if the file is available, write to it:
+    if (dataFile) {
+      dataFile.println(dataString);
+      // dataFile.print("receivedPacketCount = ");
+      // dataFile.println(receivedPacketCount);
+      dataFile.close();
+      loggedPacketCount++;
+    } else {
+      if (goodSerial) {
+        // if the file isn't open, pop up an error:
+        strcpy(tmpBuf, "error opening:\n  ");
+        strcat(tmpBuf, logFileName);
+        Serial.println(tmpBuf);
+      }
+    }
+  }
+}
+
+void logHeader() {
+  logSD("millis,x,y,z,packetCount");
+}
+
+void logData(long ms, int x, int y, int z, int count) {
+  sprintf(tmpBuf,"%d,%d,%d,%d,%d", ms, x, y, z, count);
+  logSD(tmpBuf); 
 }
 
 
@@ -199,10 +281,10 @@ void loopHMR() {
         // int samplesPerSecond = 20;
         Serial.print("Setting polling rate to ");
         Serial.println(samplesPerSecond);
-        sprintf(buf, "*99R=%d\r", samplesPerSecond);
-        Serial.println(buf);
+        sprintf(tmpBuf, "*99R=%d\r", samplesPerSecond);
+        Serial.println(tmpBuf);
         // HMR.write("*99R=40\r");
-        HMR.write(buf);
+        HMR.write(tmpBuf);
         state++;
         waitingForOk = true;
       }
@@ -214,8 +296,7 @@ void loopHMR() {
       }
       break;
     case 2:
-      // poll for X/Y/Z
-      // HMR.write("*99P\r");
+      // HMR.write("*99P\r"); // P = Poll
       HMR.write("*99C\r"); // continuous until ESC
       timerStart = millis();
       state++;
@@ -273,9 +354,39 @@ void waitForResponse() {
 void processReceiveBuf() {
   receiveBuf[receiveBufNextChar++] = (char)0; // null terminate the string
   strcpy(lastReceiveBuf, receiveBuf); // make a copy that will persist even when reading in new data
-  Serial.print("receiveBuf = \"");
-  Serial.print(receiveBuf);
-  Serial.println("\"");
+  if (false) {
+    Serial.println("             \"012345678901234567890123456789\"");
+    Serial.print("receiveBuf = \"");
+    Serial.print(receiveBuf);
+    Serial.println("\"");
+  }
+  strncpy(xbuf, receiveBuf, 7);
+  x = parseBuf(xbuf);
+  strncpy(ybuf, receiveBuf + 9, 7);  
+  y = parseBuf(ybuf);
+  strncpy(zbuf, receiveBuf + 18, 7);  
+  z = parseBuf(zbuf);
+  logData(millis(), x, y, z, loggedPacketCount);
+
+  /*
+  if (x < minx)
+    minx = x;
+  if (x > maxx) 
+    maxx = x;
+    */
+  if (true) {
+    if (goodSerial) {
+      Serial.print(millis());
+      printInt(", ", x);
+      //printInt(", minx = ", minx);
+      //printlnInt(", maxx = ", maxx);
+      printInt(", ", y);
+      printInt(", ", z);
+      printlnInt(", ", loggedPacketCount);
+    }
+  }
+  
+
   receiveCount++;
   receiveBufNextChar = 0;
   waitingForOk = false;
@@ -283,9 +394,9 @@ void processReceiveBuf() {
     Serial.println("five");
     int elapsed = (int)(timerStop - timerStart);
     int messagesPerSec = receiveCount * 1000 / elapsed;
-    sprintf(buf, "received %d messages in %d ms or %d msg/sec, samplesPerSec = %d"
+    sprintf(tmpBuf, "received %d messages in %d ms or %d msg/sec, samplesPerSec = %d"
       , receiveCount, elapsed, messagesPerSec, samplesPerSecond);
-    Serial.println(buf);
+    Serial.println(tmpBuf);
     delay(500);
     // sprintf(buf, "That's %d messages per second", messagesPerSec);
     // Serial.println(buf);
@@ -300,16 +411,13 @@ void processReceiveBuf() {
  * Look at the SD card for files like LORA-1.LOG, LORA-2.LOG, etc, and choose the next numbered file name.
  */
 
- /*
+
 void getNextFileName() {
-  // Serial.println("getNextFileName()");
   File root = SD.open("/");
-  // Serial.print("root = ");
-  // Serial.println(root);
   boolean found = false;
   boolean exhausted = false;
   int n = 0;
-  int nextIndex = 0; // LORA-index.LOG
+  int nextIndex = 0; // HMR-0000.LOG
   do {
     File entry = root.openNextFile();
     if (false) {
@@ -323,17 +431,12 @@ void getNextFileName() {
       String name = entry.name();
       // Serial.println(name);
       entry.close();
-      if (name.startsWith("LORA-")) {
+      if (name.startsWith("HMR-")) {
         // Serial.println("starts with");
-        String tmp = name.substring(5, name.indexOf(".LOG"));
-        // Serial.print("tmp = \"");
-        // Serial.print(tmp);
-        // Serial.println("\"");
+        String tmp = name.substring(4, name.indexOf(".LOG"));
         int index = tmp.toInt();
         if (index >= nextIndex) {
           nextIndex = index + 1;
-          //Serial.print("new nextIndex = ");
-          //Serial.println(nextIndex);
         }
       } else {
         //Serial.println("does not start with");
@@ -345,12 +448,12 @@ void getNextFileName() {
     n++;
   } while (!found && !exhausted);
   root.close();
-  sprintf(loraLogFileName, "LORA-%03d.LOG", nextIndex); // file name max size: 8.3 I think
-  Serial.print("loraLogFileName = ");
-  Serial.println(loraLogFileName);
+  sprintf(logFileName, "HMR-%04d.LOG", nextIndex); // file name max size: 8.3 I think
+  Serial.print("logFileName = ");
+  Serial.println(logFileName);
   // Serial.println("done");
 }
-*/
+
 
 void updateDisplay() {
   if (goodDisplay) {
@@ -368,17 +471,24 @@ void updateDisplay() {
       display.println(F("** Flight Unit **"));
     }
     if (goodSerial) {
-      display.println(F("Serial: ready"));
+      display.print(F("Ser: ok"));
     } else {
-      display.println(F("Serial: FAIL"));
+      display.print(F("Ser: FAIL"));
     }
     if (goodHMR) {
-      display.println(F("   HMR: ready"));
+      display.println(F(" HMR: ok"));
     } else {
-      display.println(F("   HMR: FAIL"));
+      display.println(F(" HMR: FAIL"));
     }
-    display.print("state = "); display.println(state);
-    display.println(lastReceiveBuf);
+    // display.print("state = "); display.println(state);
+    display.print("File: "); display.println(logFileName);
+    // display.println(lastReceiveBuf);
+    // display.print("xbuf = "); display.println(xbuf);
+    display.print("m = "); display.println(millis());
+    display.print("x = "); display.println(x);
+    display.print("y = "); display.println(y);
+    display.print("z = "); display.println(z);
+    display.print("log: "); display.println(loggedPacketCount);
     /*
     display.print("RSSI: ");
     display.println(lastRssi);
@@ -423,9 +533,41 @@ void printlnStr2(const char* a, const char* b) {
   }
 }
 
+void printInt(const char* a, int b) {
+  if (goodSerial) {
+    Serial.print(a);
+    Serial.print(b);
+  }
+}
+
 void printlnInt(const char* a, int b) {
   if (goodSerial) {
     Serial.print(a);
     Serial.println(b);
   }
+}
+
+#define DIGITS_BUF_LEN 10
+char digitsBuf[DIGITS_BUF_LEN];
+
+int parseBuf(const char* buf) {
+  int result = 0;
+  boolean done = false;
+  int j = 0;
+  int dlen = 0;
+  digitsBuf[dlen++] = buf[0]; // get the sign, if any
+  while (!done && j < DIGITS_BUF_LEN) {
+    if (buf[0] == (char)0) {
+      done = true;
+    } else {
+      if (isDigit(buf[j])) {
+        digitsBuf[dlen++] = buf[j];
+      }
+    }
+    j++;
+  }
+  digitsBuf[dlen] = (char)0;
+  // Serial.print("digits: \""); Serial.print(digitsBuf); Serial.println("\"");
+  result = atoi(digitsBuf);
+  return result;
 }

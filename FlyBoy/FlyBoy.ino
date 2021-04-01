@@ -1,6 +1,9 @@
 /*
   Based on ReadHMR2300, by David Rush, 2021 Mar 28
-  First test of pulling data from HMR2300 on Arduino MKR 1310
+  Designed to run on a Arduino MKR WAN 1310, with on-board LoRa radio.
+  Expects a HMR2300 magnetometer on Serial1, at 9600 bps.
+  Expects a OLED screen on I2C.
+  Expects an SD card reader on SPI with chipselect on pin 4.
 */
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
@@ -54,6 +57,7 @@
 #define LOG_BUF_LEN 256
 #define TMP_BUF_LEN 256
 #define PRINT_BUF_LEN 256
+#define LED_BLINK_INTERVAL 200
 
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
@@ -98,13 +102,16 @@ int receiveCount = 0;
 long timerStart = 0;
 long timerStop = 0;
 long lastMillis = 0;
+long nextUpdateDisplay = 0; // every time the display is updated, update this to some time in the future
 
 // Set up boolean indicators of whether each subsystem was successfully initialized
 boolean goodSerial = false;
 boolean goodDisplay = false;
 boolean goodHMR = false;
 boolean goodSD = false;
+boolean goodLoRa = false;
 
+// count how many HMR2300 samples were of the expected length, vs. not
 int goodSampleLength = 0;
 int badSampleLength = 0;
 
@@ -113,6 +120,7 @@ void setup() {
   goodDisplay = setupDisplay(5);
   goodHMR = setupHMR();
   goodSD = setupSD();
+  goodLoRa = setupLoRa();
   setupLED();
   Serial.println("Serial1 (HMR) ready.");
   Serial.print("state = ");
@@ -178,6 +186,7 @@ boolean setupDisplay(int delaySecs) {
 
 
 boolean setupHMR() {
+  // Set up HMR2300 on Serial1
   boolean result = false;
   HMR.begin(9600); // HMR2300, via DF0077 level converter, on Serial1 (the UART pins)
   long start = millis();
@@ -190,7 +199,7 @@ boolean setupHMR() {
   if (HMR) {
     result = true;
   }
-  strcpy(xbuf, "x?");
+  strcpy(xbuf, "x?");  // Put SOMETHING in the buffers so they're not initially empty
   strcpy(ybuf, "y?");
   strcpy(zbuf, "z?");
   return result;
@@ -198,20 +207,65 @@ boolean setupHMR() {
 
 
 boolean setupSD() {
+  // Set up the SD card writer for logging
   boolean good = false;
   char msg[20] = "SD: ";
   if (SD.begin(SD_SPI_CHIPSELECT)) {
     good = true;
     strcat(msg, "good");
-    getNextFileName();
-    if (LOG_TO_SD) {
-      logHeader();
-    }
+    getNextFileName(); // look at what filenames already exist, and create a new one at index + 1
+    logHeader(); // Log a first line to describe what the data is
   } else {
     strcat(msg, "FAIL");
   }
-  printlnStr(msg);
   return good;
+}
+
+
+boolean setupLoRa() {
+  boolean result = false;
+  // not set up yet
+  return result;
+}
+
+
+void setupLED() {
+  // set up a distinctive blink pattern
+  pinMode(LED_BUILTIN, OUTPUT);
+}
+
+
+/* ******************************************************************************** */
+
+
+void loop() {
+  if (state != lastState) {
+    Serial.print("new state = ");
+    Serial.println(state);
+    lastState = state;
+  }
+  loopLED(); // blink the LED as proof-of-life
+  loopHMR(); // Check for HMR data from the HMR
+  
+  // Every so often update the OLED display
+  if (millis() >= nextUpdateDisplay) {
+    updateDisplay();
+  }
+}
+
+
+
+void loopLED() {
+  long ms = millis() % 2000;
+  if (ms < LED_BLINK_INTERVAL) {
+    digitalWrite(LED_BUILTIN, HIGH);
+  } else if (ms < 2 * LED_BLINK_INTERVAL) {
+    digitalWrite(LED_BUILTIN, LOW);
+  } else if (ms < 3 * LED_BLINK_INTERVAL) {
+    digitalWrite(LED_BUILTIN, HIGH);
+  } else {
+    digitalWrite(LED_BUILTIN, LOW);
+  }
 }
 
 
@@ -238,9 +292,11 @@ void logSD(const char *dataString) {
   }
 }
 
+
 void logHeader() {
   logSD("millis,x,y,z,packetCount");
 }
+
 
 void logData(long ms, int x, int y, int z, int count) {
   sprintf(tmpBuf,"%d,%d,%d,%d,%d", ms, x, y, z, count);
@@ -248,46 +304,8 @@ void logData(long ms, int x, int y, int z, int count) {
 }
 
 
-void setupLED() {
-  // set up a distinctive blink pattern
-  pinMode(LED_BUILTIN, OUTPUT);
-}
-
-
-void loop() {
-  if (state != lastState) {
-    Serial.print("new state = ");
-    Serial.println(state);
-    lastState = state;
-  }
-  loopLED();
-  loopHMR();
-  if (millis() - lastMillis > 200) {
-    //long start = millis();
-    updateDisplay();
-    //long elapsed = millis() - start;
-    //Serial.print("display time ms: "); Serial.println(elapsed);
-  }
-}
-
-
-#define BLINK_INTERVAL 200
-
-void loopLED() {
-  long ms = millis() % 2000;
-  if (ms < BLINK_INTERVAL) {
-    digitalWrite(LED_BUILTIN, HIGH);
-  } else if (ms < 2 * BLINK_INTERVAL) {
-    digitalWrite(LED_BUILTIN, LOW);
-  } else if (ms < 3 * BLINK_INTERVAL) {
-    digitalWrite(LED_BUILTIN, HIGH);
-  } else {
-    digitalWrite(LED_BUILTIN, LOW);
-  }
-}
-
-
 void loopHMR() {
+  // Pull any new chars from the serial port, and if we see the end of a packet, process it.
   int data = HMR.read();
   long a, b, elapsed;
   int messagesPerSec;
@@ -367,6 +385,7 @@ void loopHMR() {
 
 
 void waitForResponse() {
+  // Read chars from the serial port until we get a CR (or buffer gets full), then process it
   boolean done = false;
   while (!done) {
     int data = HMR.read();
@@ -383,6 +402,7 @@ void waitForResponse() {
 
 
 void processReceiveBuf() {
+  // The serial receive buffer is assumed to have a message that we should process
   receiveBuf[receiveBufNextChar++] = (char)0; // null terminate the string
   strcpy(lastReceiveBuf, receiveBuf); // make a copy that will persist even when reading in new data
   if (receiveBuf[0] == 'O' && receiveBuf[1] == 'K' && receiveBuf[2] == (char)0) {
@@ -423,20 +443,8 @@ void processReceiveBuf() {
         , receiveBuf, xbuf, x, ybuf, y, zbuf, z, goodSampleLength, badSampleLength);
       Serial.println(printBuf);
     }
-    if (LOG_TO_SD) {
-      // taking this out to see how it impacts performance
+    if (goodSD) {
       logData(millis(), x, y, z, loggedPacketCount);
-    }
-  }
-  if (false) {
-    if (goodSerial) {
-      Serial.print(millis());
-      printInt(", ", x);
-      //printInt(", minx = ", minx);
-      //printlnInt(", maxx = ", maxx);
-      printInt(", ", y);
-      printInt(", ", z);
-      printlnInt(", ", loggedPacketCount);
     }
   }
   
@@ -474,12 +482,6 @@ void getNextFileName() {
   int nextIndex = 0; // HMR-0000.LOG
   do {
     File entry = root.openNextFile();
-    if (false) {
-      Serial.print("n = ");
-      Serial.print(n);
-      Serial.print(", entry = ");
-      Serial.println(entry);
-    }
     if (entry) {
       // Serial.print("entry name = ");
       String name = entry.name();
@@ -544,36 +546,12 @@ void updateDisplay() {
     display.print("y = "); display.println(y);
     display.print("z = "); display.println(z);
     display.print("count: "); display.println(loggedPacketCount);
-    /*
-    display.print("RSSI: ");
-    display.println(lastRssi);
-    if (true) {
-      // Tried using "%,d" in order to get results like "1,234" but it didn't work
-      sprintf(tmpBuf, "Received: %d", receivedPacketCount);
-      display.println(tmpBuf);
-      // sprintf(tmpBuf, "Logged:   %d", loggedPacketCount);
-      sprintf(tmpBuf, "Logged:   %d, c %d", loggedPacketCount, canary);
-      display.println(tmpBuf);
-    } else {
-      display.print("Received: ");
-      display.println(receivedPacketCount);
-      display.print("Logged:   ");
-      display.println(loggedPacketCount);
-    }
-    */
-    /*
-    display.println(elapsedMsg(millis()));
-    if (printableBufCount <= DISPLAY_BUF_LEN) {
-      display.print(printableBuf);
-    } else {
-      strncpy(tmpBuf, printableBuf, DISPLAY_BUF_LEN);
-      display.print(tmpBuf);
-    }
-    */
     display.display();
   }
+  nextUpdateDisplay = millis() + DISPLAY_UPDATE_INTERVAL_MS;
   lastMillis = millis();
 }
+
 
 void printlnStr(const char* a) {
   if (goodSerial) {

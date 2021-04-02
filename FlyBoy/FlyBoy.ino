@@ -13,6 +13,9 @@
 #include <SD.h>
 #include <Regexp.h> // Library by Nick Gammon for regular expressions
 
+#define MINUTE (1000 * 60)
+#define HOUR (MINUTE * 60)
+#define CONTINUOUS_SECS (10 * HOUR)
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
@@ -42,7 +45,6 @@
 // How big the Serial1 receive buffer is
 #define RECEIVE_BUF_LEN 1000
 #define SERIAL_INIT_TIMEOUT_MS 10000
-#define CONTINUOUS_SECS (10)
 
 // In theory 34.3 samples/second is max for 280 bits at 9600 bps
 // In practice, about 31 samples/sec is the best throughput I've seen (even when asking for 40), 
@@ -215,6 +217,7 @@ boolean setupSD() {
     good = true;
     strcat(msg, "good");
     getNextFileName(); // look at what filenames already exist, and create a new one at index + 1
+    goodSD = true; // so logHeader will work
     logHeader(); // Log a first line to describe what the data is
   } else {
     strcat(msg, "FAIL");
@@ -253,7 +256,6 @@ void loop() {
     updateDisplay();
   }
 }
-
 
 
 void loopLED() {
@@ -407,8 +409,10 @@ void processReceiveBuf() {
   receiveBuf[receiveBufNextChar++] = (char)0; // null terminate the string
   strcpy(lastReceiveBuf, receiveBuf); // make a copy that will persist even when reading in new data
   if (parseXYZ(receiveBuf)) {
-    sprintf(printBuf, "Good result from \"%s\", x = %d, y = %d, z = %d", receiveBuf, x, y, z);
-    Serial.println(printBuf);
+    if (false) {
+      sprintf(printBuf, "Good result from \"%s\", x = %d, y = %d, z = %d", receiveBuf, x, y, z);
+      Serial.println(printBuf);
+    }
     if (goodSD) {
       logData(millis(), receiveBuf, x, y, z, loggedPacketCount);
     }
@@ -458,9 +462,12 @@ boolean parseXYZ(char *inputBuf) {
   // return true if we got fresh, new, legit-looking data
   boolean returnValue = false;
   if (strlen(inputBuf) != 27) {
-    sprintf(printBuf, "inputBuf is not 27 char long: \"%s\"", strlen(inputBuf));
-    logSD(printBuf);
-    Serial.println(printBuf);
+    if (strlen(inputBuf) != 0) {
+      // ignore blank lines
+      sprintf(printBuf, "inputBuf is not 27 char long: \"%s\"", strlen(inputBuf));
+      logSD(printBuf);
+      // Serial.println(printBuf);
+    }
   } else {
     MatchState ms;
     ms.Target(inputBuf);
@@ -618,6 +625,7 @@ void updateDisplay() {
     // display.print("state = "); display.println(state);
     display.print("File: "); display.println(logFileName);
     display.print("sec = "); display.println(millis()/1000);
+    display.print("until "); display.println(waitUntilMs / 1000);
     sprintf(printBuf, "x = %6d y = %6d\nz = %6d c = %d", x, y, z, loggedPacketCount);
     display.println(printBuf);
     display.display();

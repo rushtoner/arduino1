@@ -42,7 +42,7 @@
 // How big the Serial1 receive buffer is
 #define RECEIVE_BUF_LEN 1000
 #define SERIAL_INIT_TIMEOUT_MS 10000
-#define CONTINUOUS_SECS (10 * 60 * 60)
+#define CONTINUOUS_SECS (10)
 
 // In theory 34.3 samples/second is max for 280 bits at 9600 bps
 // In practice, about 31 samples/sec is the best throughput I've seen (even when asking for 40), 
@@ -295,12 +295,12 @@ void logSD(const char *dataString) {
 
 
 void logHeader() {
-  logSD("millis,x,y,z,packetCount");
+  logSD("millis\traw\tx\ty\tz\tcount");
 }
 
 
-void logData(long ms, int x, int y, int z, int count) {
-  sprintf(tmpBuf,"%d,%d,%d,%d,%d", ms, x, y, z, count);
+void logData(long ms, const char* rawData, int x, int y, int z, int count) {
+  sprintf(tmpBuf,"%d\t\"%s\"\t%d\t%d\t%d\t%d", ms, rawData, x, y, z, count);
   logSD(tmpBuf); 
 }
 
@@ -406,49 +406,22 @@ void processReceiveBuf() {
   // The serial receive buffer is assumed to have a message that we should process
   receiveBuf[receiveBufNextChar++] = (char)0; // null terminate the string
   strcpy(lastReceiveBuf, receiveBuf); // make a copy that will persist even when reading in new data
-  parseMessage(receiveBuf);
-  if (receiveBuf[0] == 'O' && receiveBuf[1] == 'K' && receiveBuf[2] == (char)0) {
-    // it's an "OK", ignore it for stats
-  } else {
-    if (strlen(receiveBuf) == 27) {
-      goodSampleLength++;
-      if (goodSampleLength % 100 == 0) {
-        // printlnInt("goodSampleLength = ", goodSampleLength);
-        sprintf(printBuf, "goodSampleLength = %d, badSampleLength = %d, total = %d, CONTINUOUS_SECS = %d"
-          , goodSampleLength, badSampleLength, (goodSampleLength + badSampleLength), CONTINUOUS_SECS);
-        Serial.println(printBuf);
-        Serial.println(receiveBuf);
-      }
-    } else {
-      badSampleLength++;
-      Serial.print("badLen = ");
-      Serial.print(badSampleLength);
-      Serial.print(", receiveBuf = \"");
-      Serial.print(receiveBuf);
-      Serial.println("\"");
-    }
-    //sprintf(printBuf, "receiveBuf = \"%s\"", receiveBuf);
-    //Serial.print(printBuf);
-    //                                                  "012345678901234567890123456"
-    //                                                   -32,000  -32,000  -32,000
-    //                                                   1234567  1234567  1234567
-    // receiveBuf expected to look something like this: "- 4,030    2,778    3,589  "
-    // But I've also seen "- 4,030   3,590  " (after "- 4,030    2,778    3,590  ")
-    // and "- 4,030 ,030    2,776    3,589  " (after "- 4,030    2,777    3,589  ")
-    strncpy(xbuf, receiveBuf, 7);
-    x = parseBuf(xbuf);
-    strncpy(ybuf, receiveBuf + 9, 7);  
-    y = parseBuf(ybuf);
-    strncpy(zbuf, receiveBuf + 18, 7);  
-    z = parseBuf(zbuf);
-    if (false) {
-      sprintf(printBuf, "receiveBuf = \"%s\", xbuf = \"%s\", x = %6d, ybuf = \"%s\", y = %8d, zbuf = \"%s\", z = %6d, good = %d, bad = %d"
-        , receiveBuf, xbuf, x, ybuf, y, zbuf, z, goodSampleLength, badSampleLength);
-      Serial.println(printBuf);
-    }
+  if (parseXYZ(receiveBuf)) {
+    sprintf(printBuf, "Good result from \"%s\", x = %d, y = %d, z = %d", receiveBuf, x, y, z);
+    Serial.println(printBuf);
     if (goodSD) {
-      logData(millis(), x, y, z, loggedPacketCount);
+      logData(millis(), receiveBuf, x, y, z, loggedPacketCount);
     }
+    goodSampleLength ++;
+  } else {
+    badSampleLength++;
+  }
+  if (goodSampleLength % 100 == 0) {
+    // printlnInt("goodSampleLength = ", goodSampleLength);
+    sprintf(printBuf, "goodSampleLength = %d, badSampleLength = %d, total = %d, CONTINUOUS_SECS = %d"
+      , goodSampleLength, badSampleLength, (goodSampleLength + badSampleLength), CONTINUOUS_SECS);
+    Serial.println(printBuf);
+    Serial.println(receiveBuf);
   }
   
   receiveCount++;
@@ -471,6 +444,115 @@ void processReceiveBuf() {
   }
 }
 
+    // Should be 27 chars long for a standard x, y, z triplet
+    // parse the x, y, and z values from an HMR2300 message
+    // Requires the Regexp (Regular Expressions) library by Nick Gammon
+    // Typical output: "  2,139  - 2,899    5,944  "
+    //             or: "-32,000  -32,000  -32,000  "
+    //             or: "- 1,363  - 4,175    4,667  "
+    //             or: "- 2,417  - 3,361  - 4,901  "
+    //             or: "  4,630  -   548  - 4,937  "
+    // About +/- 4900 is as high as I ever see just from earth/desk environment
+
+boolean parseXYZ(char *inputBuf) {
+  // return true if we got fresh, new, legit-looking data
+  boolean returnValue = false;
+  if (strlen(inputBuf) != 27) {
+    sprintf(printBuf, "inputBuf is not 27 char long: \"%s\"", strlen(inputBuf));
+    logSD(printBuf);
+    Serial.println(printBuf);
+  } else {
+    MatchState ms;
+    ms.Target(inputBuf);
+    char matchResult = ms.Match("(-?%s*[%d,]+)%s+(-?%s*[%d,]+)%s+(-?%s*[%d,]+)");
+    char tmp[32];
+    char tmp2[32];
+    int values[3]; // x, y, and z
+  
+    if (matchResult != REGEXP_MATCHED) {
+      sprintf(printBuf, "Regular expression not matched in \"%s\"", inputBuf);
+      logSD(printBuf);
+      Serial.println(printBuf);
+    } else {
+      if (ms.level != 3) {
+        sprintf(printBuf, "Regular expression matched, but level != 3 in \"%s\"", inputBuf);
+        logSD(printBuf);
+        Serial.print(printBuf);
+      } else {
+        if (false) {
+          sprintf(printBuf, "Good returnValue in \"%s\"", inputBuf);
+          logSD(printBuf);
+          Serial.println(printBuf);
+        }
+        for(int j = 0; j < ms.level; j++) {
+          ms.GetCapture(tmp, j);
+          justDigits(tmp2, tmp);
+          values[j] = atoi(tmp2);
+        }
+        x = values[0];
+        y = values[1];
+        z = values[2];
+        if (x < minx)
+          minx = x;
+        if (x > maxx)
+          maxx = x;
+        if (y < miny)
+          miny = y;
+        if (y > maxy)
+          maxy = y;
+        if (z < minz)
+          minz = z;
+        if (z > maxz)
+          maxz = z;
+        if (false) {
+          sprintf(printBuf, "x=%d, y=%d, z=%d", x, y, z);
+          Serial.println(printBuf);
+        }
+        returnValue = true; // good result
+      }
+    }
+  }
+  return returnValue;
+}
+
+/* Some example captured data (while playing with a magnet, regular values rarely reach +/- 5000)  
+18:49:58.634 -> input buf = "  4,534      302  - 5,726  ", Found 3: [0] = "  4,534" = "4534" =   4534, [1] = "    302" = "302" =    302, [2] = "- 5,726" = "-5726" =  -5726
+18:49:58.634 -> x =   4534, -32662,  32727, y =    302, -32768,  32712, z =  -5726, -32540,  32265
+18:49:58.743 -> input buf = "  4,534      305  - 5,729  ", Found 3: [0] = "  4,534" = "4534" =   4534, [1] = "    305" = "305" =    305, [2] = "- 5,729" = "-5729" =  -5729
+18:49:58.743 -> x =   4534, -32662,  32727, y =    305, -32768,  32712, z =  -5729, -32540,  32265
+18:49:58.818 -> input buf = "  4,534      305  - 5,729  ", Found 3: [0] = "  4,534" = "4534" =   4534, [1] = "    305" = "305" =    305, [2] = "- 5,729" = "-5729" =  -5729
+18:49:58.818 -> x =   4534, -32662,  32727, y =    305, -32768,  32712, z =  -5729, -32540,  32265
+18:49:58.927 -> input buf = "  4,534      303  - 5,728  ", Found 3: [0] = "  4,534" = "4534" =   4534, [1] = "    303" = "303" =    303, [2] = "- 5,728" = "-5728" =  -5728
+18:49:58.927 -> x =   4534, -32662,  32727, y =    303, -32768,  32712, z =  -5728, -32540,  32265
+18:49:59.038 -> input buf = "  4,534      305  - 5,729  ", Found 3: [0] = "  4,534" = "4534" =   4534, [1] = "    305" = "305" =    305, [2] = "- 5,729" = "-5729" =  -5729
+18:49:59.038 -> x =   4534, -32662,  32727, y =    305, -32768,  32712, z =  -5729, -32540,  32265
+18:49:59.147 -> input buf = "  4,534      305  - 5,729  ", Found 3: [0] = "  4,534" = "4534" =   4534, [1] = "    305" = "305" =    305, [2] = "- 5,729" = "-5729" =  -5729
+18:49:59.147 -> x =   4534, -32662,  32727, y =    305, -32768,  32712, z =  -5729, -32540,  32265
+18:49:59.257 -> input buf = "  4,534      303  - 5,728  ", Found 3: [0] = "  4,534" = "4534" =   4534, [1] = "    303" = "303" =    303, [2] = "- 5,728" = "-5728" =  -5728
+18:49:59.257 -> x =   4534, -32662,  32727, y =    303, -32768,  32712, z =  -5728, -32540,  32265
+18:49:59.332 -> input buf = "  4,534      305  - 5,729  ", Found 3: [0] = "  4,534" = "4534" =   4534, [1] = "    305" = "305" =    305, [2] = "- 5,729" = "-5729" =  -5729
+18:49:59.332 -> x =   4534, -32662,  32727, y =    305, -32768,  32712, z =  -5729, -32540,  32265
+18:49:59.444 -> input buf = "  4,534      303  - 5,726  ", Found 3: [0] = "  4,534" = "4534" =   4534, [1] = "    303" = "303" =    303, [2] = "- 5,726" = "-5726" =  -5726
+18:49:59.444 -> x =   4534, -32662,  32727, y =    303, -32768,  32712, z =  -5726, -32540,  32265
+18:49:59.557 -> input buf = "  4,534      303  - 5,728  ", Found 3: [0] = "  4,534" = "4534" =   4534, [1] = "    303" = "303" =    303, [2] = "- 5,728" = "-5728" =  -5728
+18:49:59.557 -> x =   4534, -32662,  32727, y =    303, -32768,  32712, z =  -5728, -32540,  32265
+ */
+
+
+char* justDigits(char* outBuf, const char *inBuf) {
+  int len = strlen(inBuf);
+  int k = 0;
+  char c;
+  for(int j = 0; j < len; j++) {
+    c = inBuf[j];
+    if ( (c >= '0' && c <= '9') || c == '-') {
+      outBuf[k++] = c;
+    }
+  }
+  outBuf[k] = (char)0;
+  return outBuf;
+}
+
 
 /**
  * Look at the SD card for files like LORA-1.LOG, LORA-2.LOG, etc, and choose the next numbered file name.
@@ -482,7 +564,7 @@ void getNextFileName() {
   boolean found = false;
   boolean exhausted = false;
   int n = 0;
-  int nextIndex = 0; // HMR-0000.LOG
+  int nextIndex = 0; // HMR-0000.TSV
   do {
     File entry = root.openNextFile();
     if (entry) {
@@ -492,7 +574,7 @@ void getNextFileName() {
       entry.close();
       if (name.startsWith("HMR-")) {
         // Serial.println("starts with");
-        String tmp = name.substring(4, name.indexOf(".LOG"));
+        String tmp = name.substring(4, name.indexOf(".TSV"));  // Tab-separated values
         int index = tmp.toInt();
         if (index >= nextIndex) {
           nextIndex = index + 1;
@@ -507,10 +589,7 @@ void getNextFileName() {
     n++;
   } while (!found && !exhausted);
   root.close();
-  sprintf(logFileName, "HMR-%04d.LOG", nextIndex); // file name max size: 8.3 I think
-  Serial.print("logFileName = ");
-  Serial.println(logFileName);
-  // Serial.println("done");
+  sprintf(logFileName, "HMR-%04d.TSV", nextIndex); // file name max size: 8.3 I think
 }
 
 
@@ -519,11 +598,7 @@ void updateDisplay() {
     // display.setTextSize(DISPLAY_TEXT_SIZE);      // Normal 1:1 pixel scale
     display.clearDisplay();
     display.setCursor(0,0);
-    /*
-    display.print(F("File: "));
-    display.print(loraLogFileName);
-    */
-    // make a flashing asterisk to show we're alive
+    // make a flashing asterisks to show we're alive
     if (millis() % 1000 < 500) {
       display.println(F("      Fly Boy *****"));
     } else {
@@ -542,13 +617,9 @@ void updateDisplay() {
     }
     // display.print("state = "); display.println(state);
     display.print("File: "); display.println(logFileName);
-    // display.println(lastReceiveBuf);
-    // display.print("xbuf = "); display.println(xbuf);
     display.print("sec = "); display.println(millis()/1000);
-    display.print("x = "); display.println(x);
-    display.print("y = "); display.println(y);
-    display.print("z = "); display.println(z);
-    display.print("count: "); display.println(loggedPacketCount);
+    sprintf(printBuf, "x = %6d y = %6d\nz = %6d c = %d", x, y, z, loggedPacketCount);
+    display.println(printBuf);
     display.display();
   }
   nextUpdateDisplay = millis() + DISPLAY_UPDATE_INTERVAL_MS;
@@ -586,61 +657,6 @@ void printlnInt(const char* a, int b) {
 #define DIGITS_BUF_LEN 10
 char digitsBuf[DIGITS_BUF_LEN];
 
-
-void parseMessage(char *buf) {
-  // parse the x, y, and z values from an HMR2300 message
-  // Requires the Regexp (Regular Expressions) library by Nick Gammon
-  // Typical output: "  2,139  - 2,899    5,944  "
-  //             or: "-32,000  -32,000  -32,000  "
-  //             or: "- 1,363  - 4,175    4,667  "
-  //             or: "- 2,417  - 3,361  - 4,901  "
-  //             or: "  4,630  -   548  - 4,937  "
-  // About +/- 4900 is as high as I ever see just from earth/desk environment
-  sprintf(printBuf, "input buf = \"%s\", ", buf);
-  Serial.print(printBuf);
-  MatchState ms;
-  ms.Target(buf);
-  //char result = ms.Match("-?[\\d,]+");
-  char result = ms.Match("(-?%s*[%d,]+)%s+(-?%s*[%d,]+)%s+(-?%s*[%d,]+)");
-  // char result = ms.Match("([0-9]+)");
-  char tmp[32];
-  char tmp2[32];
-  
-  if (result == REGEXP_MATCHED) {
-    sprintf(printBuf, "Found %d:", ms.level);
-    Serial.print(printBuf);
-    for(int j = 0; j < ms.level; j++) {
-      if (j > 0) {
-        Serial.print(",");
-      }
-      sprintf(printBuf, " [%d] = \"%7s\"", j, ms.GetCapture(tmp, j));
-      Serial.print(printBuf);
-      sprintf(printBuf, " = \"%s\"", justDigits(tmp2, tmp));
-      Serial.print(printBuf);
-      int i = atoi(tmp2);
-      sprintf(printBuf, " = %6d", i);
-      Serial.print(printBuf);
-    }
-  } else {
-    Serial.print("No match");
-  }
-  Serial.println();
-  
-}
-
-char* justDigits(char* outBuf, const char *inBuf) {
-  int len = strlen(inBuf);
-  int k = 0;
-  char c;
-  for(int j = 0; j < len; j++) {
-    c = inBuf[j];
-    if ( (c >= '0' && c <= '9') || c == '-') {
-      outBuf[k++] = c;
-    }
-  }
-  outBuf[k] = (char)0;
-  return outBuf;
-}
 
 int parseBuf(char* buf) {
   int result = 0;

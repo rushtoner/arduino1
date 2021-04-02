@@ -11,6 +11,7 @@
 #include <LoRa.h>
 #include <Wire.h>
 #include <SD.h>
+#include <Regexp.h> // Library by Nick Gammon for regular expressions
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -405,6 +406,7 @@ void processReceiveBuf() {
   // The serial receive buffer is assumed to have a message that we should process
   receiveBuf[receiveBufNextChar++] = (char)0; // null terminate the string
   strcpy(lastReceiveBuf, receiveBuf); // make a copy that will persist even when reading in new data
+  parseMessage(receiveBuf);
   if (receiveBuf[0] == 'O' && receiveBuf[1] == 'K' && receiveBuf[2] == (char)0) {
     // it's an "OK", ignore it for stats
   } else {
@@ -415,6 +417,7 @@ void processReceiveBuf() {
         sprintf(printBuf, "goodSampleLength = %d, badSampleLength = %d, total = %d, CONTINUOUS_SECS = %d"
           , goodSampleLength, badSampleLength, (goodSampleLength + badSampleLength), CONTINUOUS_SECS);
         Serial.println(printBuf);
+        Serial.println(receiveBuf);
       }
     } else {
       badSampleLength++;
@@ -583,7 +586,63 @@ void printlnInt(const char* a, int b) {
 #define DIGITS_BUF_LEN 10
 char digitsBuf[DIGITS_BUF_LEN];
 
-int parseBuf(const char* buf) {
+
+void parseMessage(char *buf) {
+  // parse the x, y, and z values from an HMR2300 message
+  // Requires the Regexp (Regular Expressions) library by Nick Gammon
+  // Typical output: "  2,139  - 2,899    5,944  "
+  //             or: "-32,000  -32,000  -32,000  "
+  //             or: "- 1,363  - 4,175    4,667  "
+  //             or: "- 2,417  - 3,361  - 4,901  "
+  //             or: "  4,630  -   548  - 4,937  "
+  // About +/- 4900 is as high as I ever see just from earth/desk environment
+  sprintf(printBuf, "input buf = \"%s\", ", buf);
+  Serial.print(printBuf);
+  MatchState ms;
+  ms.Target(buf);
+  //char result = ms.Match("-?[\\d,]+");
+  char result = ms.Match("(-?%s*[%d,]+)%s+(-?%s*[%d,]+)%s+(-?%s*[%d,]+)");
+  // char result = ms.Match("([0-9]+)");
+  char tmp[32];
+  char tmp2[32];
+  
+  if (result == REGEXP_MATCHED) {
+    sprintf(printBuf, "Found %d:", ms.level);
+    Serial.print(printBuf);
+    for(int j = 0; j < ms.level; j++) {
+      if (j > 0) {
+        Serial.print(",");
+      }
+      sprintf(printBuf, " [%d] = \"%7s\"", j, ms.GetCapture(tmp, j));
+      Serial.print(printBuf);
+      sprintf(printBuf, " = \"%s\"", justDigits(tmp2, tmp));
+      Serial.print(printBuf);
+      int i = atoi(tmp2);
+      sprintf(printBuf, " = %6d", i);
+      Serial.print(printBuf);
+    }
+  } else {
+    Serial.print("No match");
+  }
+  Serial.println();
+  
+}
+
+char* justDigits(char* outBuf, const char *inBuf) {
+  int len = strlen(inBuf);
+  int k = 0;
+  char c;
+  for(int j = 0; j < len; j++) {
+    c = inBuf[j];
+    if ( (c >= '0' && c <= '9') || c == '-') {
+      outBuf[k++] = c;
+    }
+  }
+  outBuf[k] = (char)0;
+  return outBuf;
+}
+
+int parseBuf(char* buf) {
   int result = 0;
   boolean done = false;
   int j = 0;

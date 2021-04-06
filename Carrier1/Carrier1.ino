@@ -1,8 +1,12 @@
 /*
   First test sketch of MKR IoT Carrier board.
 */
+#define USE_IOT_CARRIER
+
+#ifdef USE_IOT_CARRIER
 #include <Arduino_MKRIoTCarrier.h>
 MKRIoTCarrier carrier;
+#endif
 
 // #include <LoRa.h>
 // #include <Wire.h>
@@ -56,7 +60,6 @@ boolean setupCarrier() {
 }
 
 
-
 void setupLED() {
   // set up a distinctive blink pattern
   pinMode(LED_BUILTIN, OUTPUT);
@@ -65,10 +68,26 @@ void setupLED() {
 
 /* ******************************************************************************** */
 
+int loopCount = 0;
+long nextDisplayMillis = 0;
+long nextLoopCarrier = 0;
 
 void loop() {
-  loopLED(); // blink the LED as proof-of-life
-  loopCarrier();
+  // loopLED(); // blink the LED as proof-of-life, but doesn't work with IoT Carrier board?
+  if (millis() >= nextLoopCarrier) {
+    loopCarrier();
+    nextLoopCarrier = millis() + 1000L;
+  }
+  if (millis() >= nextDisplayMillis) {
+    loopDisplay();
+    Serial.print("millis = "); Serial.println(millis());
+    nextDisplayMillis = millis() + 1000L;
+    Serial.print("nextDisplayMillis = "); Serial.println(nextDisplayMillis);
+  }
+  if (true || loopCount % 1000 == 0) {
+    Serial.print("millis = "); Serial.println(millis());    
+  }
+  loopCount++;
 }
 
 
@@ -85,7 +104,9 @@ void loopLED() {
   }
 }
 
+
 void loopCarrier() {
+  // Serial.print("loopCarrier start, loopCount = "); Serial.println(loopCount);
   temperature = carrier.Env.readTemperature(); //reads temperature
   humidity = carrier.Env.readHumidity(); //reads humidity
   pressure = carrier.Pressure.readPressure(); //reads pressure
@@ -112,25 +133,37 @@ void loopCarrier() {
   /*
   carrier.leds.setPixelColor(pixel, g , r , b); //sets pixels. e.g. 3, 255, 0 , 255
   carrier.leds.show(); //displays pixels
-
-  carrier.Relay1.open(); //opens relay 1
-  carrier.Relay1.close(); //closes relay 1
-
-  carrier.Buzzer.sound(500); //sets frequency of buzzer
-  delay(1000); //sets duration for sounds
-  carrier.Buzzer.noSound(); //stops buzzer
   */
 
+  /*
+  carrier.Relay1.open(); //opens relay 1
+  delay(500);
+  carrier.Relay1.close(); //closes relay 1
+  delay(500);
+  */
+  
+  if (loopCount == 0) {
+    carrier.Buzzer.sound(500); //sets frequency of buzzer
+    delay(250); //sets duration for sounds
+    carrier.Buzzer.noSound(); //stops buzzer
+    delay(250);
+  }
+  // delay(100); // without this, loopCarrier hangs after about the 3rd iteration
+  // Serial.println("loopCarrier end");
+}
+
+
+void loopDisplay() {
   //controlling screen
   carrier.display.fillScreen(ST77XX_RED); //red background
   carrier.display.setTextColor(ST77XX_WHITE); //white text
   carrier.display.setTextSize(2); //medium sized text
 
-  carrier.display.setCursor(20, 110); //sets position for printing (x and y)
+  carrier.display.setCursor(0, 0); //sets position for printing (x and y)
   carrier.display.print("Temp: "); //prints text
   carrier.display.print(temperature); //prints a variable
   carrier.display.println(" C"); //prints text
   carrier.display.print("Humid: "); carrier.display.print(humidity); carrier.display.println(" %");
   carrier.display.print("Pressure: "); carrier.display.print(pressure); carrier.display.println(" ?");
-  
+  carrier.display.print("loopCount: "); carrier.display.println(loopCount);
 }

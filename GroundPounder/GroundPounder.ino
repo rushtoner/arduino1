@@ -37,7 +37,7 @@
 #define MS_PER_MINUTE (1000 * 60)
 #define MS_PER_HOUR (MS_PER_MINUTE * 60)
 
-char *title = "Ground Pounder";
+char title[] = "Ground Pounder";
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 

@@ -1,38 +1,83 @@
 /*
-  Based on ReadHMR2300, by David Rush, 2021 Mar 28
+  Flight code intended for reading and logging data from HMR2300 as "baseline" magnetometer data.
   Designed to run on a Arduino MKR WAN 1310, with on-board LoRa radio.
   Expects a HMR2300 magnetometer on Serial1, at 9600 bps.
+  Originally written for discrete 1306 OLED display and SD card writer.
+  Modified to work with MKR IoT Carrier board, too.
   Expects a OLED screen on I2C.
   Expects an SD card reader on SPI with chipselect on pin 4.
 */
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-#include <SPI.h>
+
+// define USE_IOT_CARRIER if this code is to be deployed on a MKR 1310 that's riding on an IoT Carrier board.
+// Do not define IOT_CARRIER if this code is to use discrete OLED display and SD card writer.
+
+#define USE_IOT_CARRIER
+
+#ifdef USE_IOT_CARRIER
+  /* Arduino_MKRIoTCarrier.h also includes:
+   *  Arduino.h, Wire.h, Arduino_PMIC.h, Arduino_APDS9960.h (ambient light sensor), 
+   *  Arduino_LPS22HB.h (pressure sensor), Arduino_LSM6DS3.h (IMU),
+   *  Arduino_HTS221.h (environmental sensor)
+   *  Relays, Buzzer, Qtouch,
+   *  SD.h (SD card), 
+   *  Adafruit_GFX.h (core graphics), Adafruit_ST7735.h, Adafruit_ST7789.h
+   *  SPI.h
+   *  Adafruit_DotStar.h
+   *  
+   *  And it defines:
+   *  DotStar DATAPIN 5, CLOCKPIN 4
+   *  RELAY_1 14 // note that 13 and 14 are also the 1310's TX and RX lines for serial port, thus conflict
+   *  RELAY_2 13
+   *  BUZZER 7
+   *  GROVE_AN1 A5
+   *  GROVE_AN2 A6
+   *  SD_CS 0
+   *  INT 6 // every sensor interrupt pin, PULL-UP
+   *  LED_CKI 4
+   *  LED_SDI 5
+   *  TFT_CS 2
+   *  TFT_RST -1
+   *  TFT_DC  1
+   *  TFT_BACKLIGHT 3
+   */
+  #include <Arduino_MKRIoTCarrier.h>
+  MKRIoTCarrier carrier;
+#elif
+  #include <Adafruit_GFX.h>
+  #include <Adafruit_SSD1306.h>
+  #include <SPI.h>
+  #include <Wire.h>
+  #include <SD.h>
+  int carrier = 0; // will be ignored, but compiler needs something
+#endif
+
 #include <LoRa.h>
-#include <Wire.h>
-#include <SD.h>
 #include <Regexp.h> // Library by Nick Gammon for regular expressions
 
 #define MINUTE (1000 * 60)
 #define HOUR (MINUTE * 60)
 #define CONTINUOUS_SECS (10 * HOUR)
-#define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+
+#ifdef USE_IOT_CARRIER
+  #define DISPLAY_WIDTH_PIXELS 128 // IoT carrier display width, in pixels
+  #define DISPLAY_HEIGHT_PIXELS 64 // IoT carrier display height, in pixels
+#elif
+  #define DISPLAY_WIDTH_PIXELS 128 // OLED display width, in pixels
+  #define DISPLAY_HEIGHT_PIXELS 64 // OLED display height, in pixels
+#endif
 
 #define OLED_RESET     4 // Reset pin # (or -1 if sharing Arduino reset pin)
-#define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+#define OLED_DISPLAY_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
 /* added for display above */
-#define DISPLAY_TEXT_SIZE 1
-#define TEXT_COLUMNS 21
-#define DATA_TEXT_ROWS 3
-#define DISPLAY_UPDATE_INTERVAL_MS 250
+#define OLED_DISPLAY_TEXT_SIZE 1
+// #define TEXT_COLUMNS 21
+// #define DATA_TEXT_ROWS 3
+#define DISPLAY_UPDATE_INTERVAL_MS 1000
 // #define BUF_LEN 100
 
 // assign the chip select line for the SD card on pin 4
 #define SD_SPI_CHIPSELECT 4
-#define DISPLAY_WIDTH 128 // OLED display width, in pixels
-#define DISPLAY_HEIGHT 64 // OLED display height, in pixels
-#define TEXT_SIZE 1
+// #define OLED_TEXT_SIZE 1
 #define DISPLAY_COLS 21
 #define DISPLAY_ROWS 8
 #define LORA_FREQ 915E6
@@ -62,8 +107,11 @@
 #define PRINT_BUF_LEN 256
 #define LED_BLINK_INTERVAL 200
 
-
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+#ifdef USE_IOT_CARRIER
+  int display = 0;
+#else
+  Adafruit_SSD1306 display(DISPLAY_WIDTH_PIXELS, DISPLAY_HEIGHT_PIXELS, &Wire, OLED_RESET);
+#endif
 
 int n = 0;
 
@@ -73,6 +121,8 @@ int n = 0;
 // state 2 = just do single-shot on request
 int state = 0;
 int lastState = -1;
+float temperature = 0.0, humidity = 0.0, pressure = 0.0;
+int loopCount = 0;
 
 char tmpBuf[TMP_BUF_LEN];
 char receiveBuf[RECEIVE_BUF_LEN]; // for assembling HMR data from serial port
@@ -83,11 +133,12 @@ char lastReceiveBuf[RECEIVE_BUF_LEN]; // copy here for printing "later"
 char logFileName[LOG_FILE_NAME_LEN];
 char logBuf[LOG_BUF_LEN];
 int loggedPacketCount = 0;
+char relayStatus[32];
 
 #define X_BUF_LEN 32
-char xbuf[X_BUF_LEN];
-char ybuf[X_BUF_LEN];
-char zbuf[X_BUF_LEN];
+// char xbuf[X_BUF_LEN];
+// char ybuf[X_BUF_LEN];
+// char zbuf[X_BUF_LEN];
 int x = 0; 
 int minx = 0;  // observed -32768 (with a magnet)
 int maxx = 0;  // observed 32608 (with a magnet)
@@ -121,10 +172,11 @@ int badSampleLength = 0;
 void setup() {
   goodSerial = setupSerial();
   goodDisplay = setupDisplay(5);
-  goodHMR = setupHMR();
+  // goodHMR = setupHMR();
   goodSD = setupSD();
   goodLoRa = setupLoRa();
   setupLED();
+  strcpy(relayStatus, "?");
   Serial.println("Serial1 (HMR) ready.");
   Serial.print("state = ");
   Serial.println(state);
@@ -156,34 +208,40 @@ boolean setupSerial() {
 
 boolean setupDisplay(int delaySecs) {
   boolean result = false;
-  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
-    printlnStr("SSD1306 allocation failed");
-  } else {
+  #ifdef USE_IOT_CARRIER
+    CARRIER_CASE = false;
+    carrier.begin();
     result = true;
-    // Show initial display buffer contents on the screen --
-    // the library initializes this with an Adafruit splash screen.
-    // Clear the buffer
-    display.clearDisplay();
-    display.setTextSize(DISPLAY_TEXT_SIZE);      // Normal 1:1 pixel scale
-    display.setTextColor(SSD1306_WHITE); // Draw white text
-    display.setCursor(0, 0);     // Start at top-left corner
-    display.cp437(true);         // Use full 256 char 'Code Page 437' font
-    //                 123456789012345678901
-    display.println(F("-- Fly Boy --"));
-    display.println(F("Logs HMR2300 data"));
-    display.println(F("  to SD card"));
-    display.println();
-    display.print(delaySecs); display.println(" sec delay...");
-    display.display();
-  }
-  delaySecs--;
-  while (delaySecs >= 0) {
-    delay(1000);
-    display.print(" ");
-    display.print(delaySecs);
-    display.display();
+  #else
+    if(!display.begin(SSD1306_SWITCHCAPVCC, OLED_DISPLAY_ADDRESS)) {
+      printlnStr("SSD1306 allocation failed");
+    } else {
+      result = true;
+      // Show initial display buffer contents on the screen --
+      // the library initializes this with an Adafruit splash screen.
+      // Clear the buffer
+      display.clearDisplay();
+      display.setTextSize(OLED_DISPLAY_TEXT_SIZE);      // Normal 1:1 pixel scale
+      display.setTextColor(SSD1306_WHITE); // Draw white text
+      display.setCursor(0, 0);     // Start at top-left corner
+      display.cp437(true);         // Use full 256 char 'Code Page 437' font
+      //                 123456789012345678901
+      display.println(F("-- Fly Boy --"));
+      display.println(F("Logs HMR2300 data"));
+      display.println(F("  to SD card"));
+      display.println();
+      display.print(delaySecs); display.println(" sec delay...");
+      display.display();
+    }
     delaySecs--;
-  }
+    while (delaySecs >= 0) {
+      delay(1000);
+      display.print(" ");
+      display.print(delaySecs);
+      display.display();
+      delaySecs--;
+    }
+  #endif
   return result;
 }
 
@@ -202,9 +260,9 @@ boolean setupHMR() {
   if (HMR) {
     result = true;
   }
-  strcpy(xbuf, "x?");  // Put SOMETHING in the buffers so they're not initially empty
-  strcpy(ybuf, "y?");
-  strcpy(zbuf, "z?");
+  // strcpy(xbuf, "x?");  // Put SOMETHING in the buffers so they're not initially empty
+  // strcpy(ybuf, "y?");
+  // strcpy(zbuf, "z?");
   return result;
 }
 
@@ -254,21 +312,40 @@ void loop() {
   // Every so often update the OLED display
   if (millis() >= nextUpdateDisplay) {
     updateDisplay();
+    nextUpdateDisplay = millis() + DISPLAY_UPDATE_INTERVAL_MS;
   }
+  // loopRelays();
+  loopCount++;
 }
 
 
 void loopLED() {
-  long ms = millis() % 2000;
-  if (ms < LED_BLINK_INTERVAL) {
-    digitalWrite(LED_BUILTIN, HIGH);
-  } else if (ms < 2 * LED_BLINK_INTERVAL) {
-    digitalWrite(LED_BUILTIN, LOW);
-  } else if (ms < 3 * LED_BLINK_INTERVAL) {
-    digitalWrite(LED_BUILTIN, HIGH);
-  } else {
-    digitalWrite(LED_BUILTIN, LOW);
-  }
+  #ifdef USE_IOT_CARRIER
+  long ms = millis() % 1000;
+    int p = ms / 200; // which LED, 0-4
+    int a = 0; // off color
+    int b = 32; // on color (255 is VERY bright)
+    for(int j = 0; j < NUMPIXELS; j++) {
+      if (j == p) {
+        carrier.leds.setPixelColor(j, 0, b, 0);
+      } else {
+        carrier.leds.setPixelColor(j, a, a, a);
+      }
+    }
+    carrier.leds.show();
+  #else  
+    long ms = millis() % 2000;
+    if (ms < LED_BLINK_INTERVAL) {
+      digitalWrite(LED_BUILTIN, HIGH);
+    } else if (ms < 2 * LED_BLINK_INTERVAL) {
+      digitalWrite(LED_BUILTIN, LOW);
+    } else if (ms < 3 * LED_BLINK_INTERVAL) {
+      digitalWrite(LED_BUILTIN, HIGH);
+    } else {
+      digitalWrite(LED_BUILTIN, LOW);
+    }
+  #endif
+  
 }
 
 
@@ -602,35 +679,49 @@ void getNextFileName() {
 
 void updateDisplay() {
   if (goodDisplay) {
-    // display.setTextSize(DISPLAY_TEXT_SIZE);      // Normal 1:1 pixel scale
-    display.clearDisplay();
-    display.setCursor(0,0);
-    // make a flashing asterisks to show we're alive
-    if (millis() % 1000 < 500) {
-      display.println(F("      Fly Boy *****"));
-    } else {
-      display.println(F("***** Fly Boy      "));
-    }
-
-    if (goodSerial) {
-      display.print(F("Ser: ok"));
-    } else {
-      display.print(F("Ser: FAIL"));
-    }
-    if (goodHMR) {
-      display.println(F(" HMR: ok"));
-    } else {
-      display.println(F(" HMR: FAIL"));
-    }
-    // display.print("state = "); display.println(state);
-    display.print("File: "); display.println(logFileName);
-    display.print("sec = "); display.println(millis()/1000);
-    display.print("until "); display.println(waitUntilMs / 1000);
-    sprintf(printBuf, "x = %6d y = %6d\nz = %6d c = %d", x, y, z, loggedPacketCount);
-    display.println(printBuf);
-    display.display();
+    #ifdef USE_IOT_CARRIER
+      carrier.display.fillScreen(ST77XX_RED); //red background
+      carrier.display.setTextColor(ST77XX_WHITE); //white text
+      carrier.display.setTextSize(2); //medium sized text
+    
+      carrier.display.setCursor(0, 0); //sets position for printing (x and y)
+      carrier.display.print("Temp: "); //prints text
+      carrier.display.print(temperature); //prints a variable
+      carrier.display.println(" C"); //prints text
+      carrier.display.print("Humid: "); carrier.display.print(humidity); carrier.display.println(" %");
+      carrier.display.print("Pressure: "); carrier.display.print(pressure); carrier.display.println(" ?");
+      carrier.display.print("loopCount: "); carrier.display.println(loopCount);
+      carrier.display.print("relayStatus: "); carrier.display.println(relayStatus);
+    #else
+      // display.setTextSize(OLED_DISPLAY_TEXT_SIZE);      // Normal 1:1 pixel scale
+      display.clearDisplay();
+      display.setCursor(0,0);
+      // make a flashing asterisks to show we're alive
+      if (millis() % 1000 < 500) {
+        display.println(F("      Fly Boy *****"));
+      } else {
+        display.println(F("***** Fly Boy      "));
+      }
+  
+      if (goodSerial) {
+        display.print(F("Ser: ok"));
+      } else {
+        display.print(F("Ser: FAIL"));
+      }
+      if (goodHMR) {
+        display.println(F(" HMR: ok"));
+      } else {
+        display.println(F(" HMR: FAIL"));
+      }
+      // display.print("state = "); display.println(state);
+      display.print("File: "); display.println(logFileName);
+      display.print("sec = "); display.println(millis()/1000);
+      display.print("until "); display.println(waitUntilMs / 1000);
+      sprintf(printBuf, "x = %6d y = %6d\nz = %6d c = %d", x, y, z, loggedPacketCount);
+      display.println(printBuf);
+      display.display();
+    #endif
   }
-  nextUpdateDisplay = millis() + DISPLAY_UPDATE_INTERVAL_MS;
   lastMillis = millis();
 }
 
@@ -686,4 +777,23 @@ int parseBuf(char* buf) {
   // Serial.print("digits: \""); Serial.print(digitsBuf); Serial.println("\"");
   result = atoi(digitsBuf);
   return result;
+}
+
+
+void loopRelays() {
+  long ms = millis() % 9000;
+  if (ms < 3000) {
+    strcpy(relayStatus, "both open");
+    carrier.Relay1.open();
+    carrier.Relay2.open();
+  } else if (ms < 6000) {
+    strcpy(relayStatus, "one open, one closed");
+    carrier.Relay1.close();
+    carrier.Relay2.open();
+  } else {
+    strcpy(relayStatus, "both closed");
+    carrier.Relay1.close();
+    carrier.Relay2.close();
+  }
+  delay(500);
 }

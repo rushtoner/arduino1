@@ -13,6 +13,10 @@
 
 // #define USE_IOT_CARRIER
 
+// Define exactly ONE, either USE_8 or USE_4, but not both
+#define USE_8_LINE_OLED_DISPLAY
+// #define USE_4_LINE_OLED_DISPLAY
+
 #ifdef USE_IOT_CARRIER
   /* Arduino_MKRIoTCarrier.h also includes:
    *  Arduino.h, Wire.h, Arduino_PMIC.h, Arduino_APDS9960.h (ambient light sensor), 
@@ -54,8 +58,6 @@
 #include <LoRa.h>
 #include <Regexp.h> // Library by Nick Gammon for regular expressions
 
-// #define USE_8_LINE_OLED_DISPLAY
-#define USE_4_LINE_OLED_DISPLAY
 
 #define MINUTE (1000 * 60)
 #define HOUR (MINUTE * 60)
@@ -64,7 +66,7 @@
 #ifdef USE_IOT_CARRIER
   #define DISPLAY_WIDTH_PIXELS  240 // IoT carrier display width, in pixels
   #define DISPLAY_HEIGHT_PIXELS 240 // IoT carrier display height, in pixels
-#elif USE_8_LINE_OLED_DISPLAY
+#elifdef USE_8_LINE_OLED_DISPLAY
   #define DISPLAY_WIDTH_PIXELS 128 // OLED display width, in pixels
   #define DISPLAY_HEIGHT_PIXELS 64 // OLED display height, in pixels
 #else
@@ -76,7 +78,7 @@
 
 #define DISPLAY_COLS 21
 #ifdef USE_8_LINE_OLED_DISPLAY
-  #define OLED_DISPLAY_ADDRESS 0x3D ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+  #define OLED_DISPLAY_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32 - Actually, the 0x3C address seems to work for both my 32 and 64-line displays
   #define DISPLAY_ROWS 8
 #endif
 #ifdef USE_4_LINE_OLED_DISPLAY
@@ -125,7 +127,8 @@
 #ifdef USE_IOT_CARRIER
   int display = 0;
 #else
-  Adafruit_SSD1306 display(DISPLAY_WIDTH_PIXELS, DISPLAY_HEIGHT_PIXELS, &Wire, OLED_RESET);
+  // Adafruit_SSD1306 display(DISPLAY_WIDTH_PIXELS, DISPLAY_HEIGHT_PIXELS, &Wire, OLED_RESET);
+  Adafruit_SSD1306 display(128, 64, &Wire, OLED_RESET);
 #endif
 
 int n = 0;
@@ -237,6 +240,7 @@ boolean setupDisplay(int delaySecs) {
       // Clear the buffer
       display.clearDisplay();
       display.setTextSize(OLED_DISPLAY_TEXT_SIZE);      // Normal 1:1 pixel scale
+      display.setTextSize(0.5);      // Normal 1:1 pixel scale
       display.setTextColor(SSD1306_WHITE); // Draw white text
       display.setCursor(0, 0);     // Start at top-left corner
       display.cp437(true);         // Use full 256 char 'Code Page 437' font

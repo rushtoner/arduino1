@@ -11,7 +11,7 @@
 // define USE_IOT_CARRIER if this code is to be deployed on a MKR 1310 that's riding on an IoT Carrier board.
 // Do not define IOT_CARRIER if this code is to use discrete OLED display and SD card writer.
 
-#define USE_IOT_CARRIER
+// #define USE_IOT_CARRIER
 
 #ifdef USE_IOT_CARRIER
   /* Arduino_MKRIoTCarrier.h also includes:
@@ -42,7 +42,7 @@
    */
   #include <Arduino_MKRIoTCarrier.h>
   MKRIoTCarrier carrier;
-#elif
+#else
   #include <Adafruit_GFX.h>
   #include <Adafruit_SSD1306.h>
   #include <SPI.h>
@@ -54,20 +54,36 @@
 #include <LoRa.h>
 #include <Regexp.h> // Library by Nick Gammon for regular expressions
 
+// #define USE_8_LINE_OLED_DISPLAY
+#define USE_4_LINE_OLED_DISPLAY
+
 #define MINUTE (1000 * 60)
 #define HOUR (MINUTE * 60)
-#define CONTINUOUS_SECS (10 * HOUR)
+#define CONTINUOUS_SECS (1 * MINUTE)
 
 #ifdef USE_IOT_CARRIER
-  #define DISPLAY_WIDTH_PIXELS 128 // IoT carrier display width, in pixels
-  #define DISPLAY_HEIGHT_PIXELS 64 // IoT carrier display height, in pixels
-#elif
+  #define DISPLAY_WIDTH_PIXELS  240 // IoT carrier display width, in pixels
+  #define DISPLAY_HEIGHT_PIXELS 240 // IoT carrier display height, in pixels
+#elif USE_8_LINE_OLED_DISPLAY
   #define DISPLAY_WIDTH_PIXELS 128 // OLED display width, in pixels
   #define DISPLAY_HEIGHT_PIXELS 64 // OLED display height, in pixels
+#else
+  #define DISPLAY_WIDTH_PIXELS 128 // OLED display width, in pixels
+  #define DISPLAY_HEIGHT_PIXELS 32 // OLED display height, in pixels
 #endif
 
 #define OLED_RESET     4 // Reset pin # (or -1 if sharing Arduino reset pin)
-#define OLED_DISPLAY_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+
+#define DISPLAY_COLS 21
+#ifdef USE_8_LINE_OLED_DISPLAY
+  #define OLED_DISPLAY_ADDRESS 0x3D ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+  #define DISPLAY_ROWS 8
+#endif
+#ifdef USE_4_LINE_OLED_DISPLAY
+  #define OLED_DISPLAY_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+  #define DISPLAY_ROWS 4
+#endif
+
 /* added for display above */
 #define OLED_DISPLAY_TEXT_SIZE 1
 // #define TEXT_COLUMNS 21
@@ -78,8 +94,7 @@
 // assign the chip select line for the SD card on pin 4
 #define SD_SPI_CHIPSELECT 4
 // #define OLED_TEXT_SIZE 1
-#define DISPLAY_COLS 21
-#define DISPLAY_ROWS 8
+
 #define LORA_FREQ 915E6
 // ESC is sent to the HMR2300 in order to stop the unit from sending data continuously
 #define ESC 0x1b
@@ -321,7 +336,7 @@ void loop() {
 
 void loopLED() {
   #ifdef USE_IOT_CARRIER
-  long ms = millis() % 1000;
+    long ms = millis() % 1000;
     int p = ms / 200; // which LED, 0-4
     int a = 0; // off color
     int b = 32; // on color (255 is VERY bright)
@@ -781,19 +796,21 @@ int parseBuf(char* buf) {
 
 
 void loopRelays() {
-  long ms = millis() % 9000;
-  if (ms < 3000) {
-    strcpy(relayStatus, "both open");
-    carrier.Relay1.open();
-    carrier.Relay2.open();
-  } else if (ms < 6000) {
-    strcpy(relayStatus, "one open, one closed");
-    carrier.Relay1.close();
-    carrier.Relay2.open();
-  } else {
-    strcpy(relayStatus, "both closed");
-    carrier.Relay1.close();
-    carrier.Relay2.close();
-  }
-  delay(500);
+  #ifdef USE_IOT_CARRIER
+    long ms = millis() % 9000;
+    if (ms < 3000) {
+      strcpy(relayStatus, "both open");
+      carrier.Relay1.open();
+      carrier.Relay2.open();
+    } else if (ms < 6000) {
+      strcpy(relayStatus, "one open, one closed");
+      carrier.Relay1.close();
+      carrier.Relay2.open();
+    } else {
+      strcpy(relayStatus, "both closed");
+      carrier.Relay1.close();
+      carrier.Relay2.close();
+    }
+    delay(500);
+  #endif
 }

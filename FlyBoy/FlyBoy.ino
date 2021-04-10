@@ -190,12 +190,16 @@ int badSampleLength = 0;
 void setup() {
   goodSerial = setupSerial();
   goodDisplay = setupDisplay(5);
-  // goodHMR = setupHMR();
+  goodHMR = setupHMR();
   goodSD = setupSD();
   goodLoRa = setupLoRa();
   setupLED();
   strcpy(relayStatus, "?");
-  Serial.println("Serial1 (HMR) ready.");
+  if (goodHMR) {
+    Serial.println("Serial1 (HMR) ready.");
+  } else {
+    Serial.println("Serial1 (HMR) not ready.");
+  }
   Serial.print("state = ");
   Serial.println(state);
   if (goodSD) {

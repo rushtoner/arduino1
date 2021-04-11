@@ -46,58 +46,48 @@
    */
   #include <Arduino_MKRIoTCarrier.h>
   MKRIoTCarrier carrier;
+  #define DISPLAY_WIDTH_PIXELS  240 // IoT carrier display width, in pixels
+  #define DISPLAY_HEIGHT_PIXELS 240 // IoT carrier display height, in pixels
 #else
   #include <Adafruit_GFX.h>
   #include <Adafruit_SSD1306.h>
   #include <SPI.h>
   #include <Wire.h>
   #include <SD.h>
+  #define OLED_RESET     4 // Reset pin # (or -1 if sharing Arduino reset pin)
   int carrier = 0; // will be ignored, but compiler needs something
+  #ifdef USE_8_LINE_OLED_DISPLAY
+    #define DISPLAY_WIDTH_PIXELS 128 // OLED display width, in pixels
+    #define DISPLAY_HEIGHT_PIXELS 64 // OLED display height, in pixels
+    #define OLED_DISPLAY_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32 - Actually, the 0x3C address seems to work for both my 32 and 64-line displays
+    #define DISPLAY_ROWS 8
+  #else
+    #define DISPLAY_WIDTH_PIXELS 128 // OLED display width, in pixels
+    #define DISPLAY_HEIGHT_PIXELS 32 // OLED display height, in pixels
+    #define OLED_DISPLAY_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+    #define DISPLAY_ROWS 4
+  #endif
+  #define DISPLAY_COLS 21
 #endif
 
 #include <LoRa.h>
 #include <Regexp.h> // Library by Nick Gammon for regular expressions
 
+#define MS_PER_SECOND 1000
+#define MS_PER_MINUTE (MS_PER_SECOND * 60)
+#define MS_PER_HOUR (MS_PER_MINUTE * 60)
+#define CONTINUOUS_SECS (1 * MS_PER_MINUTE)
 
-#define MINUTE (1000 * 60)
-#define HOUR (MINUTE * 60)
-#define CONTINUOUS_SECS (1 * MINUTE)
-
-#ifdef USE_IOT_CARRIER
-  #define DISPLAY_WIDTH_PIXELS  240 // IoT carrier display width, in pixels
-  #define DISPLAY_HEIGHT_PIXELS 240 // IoT carrier display height, in pixels
-#elifdef USE_8_LINE_OLED_DISPLAY
-  #define DISPLAY_WIDTH_PIXELS 128 // OLED display width, in pixels
-  #define DISPLAY_HEIGHT_PIXELS 64 // OLED display height, in pixels
-#else
-  #define DISPLAY_WIDTH_PIXELS 128 // OLED display width, in pixels
-  #define DISPLAY_HEIGHT_PIXELS 32 // OLED display height, in pixels
-#endif
-
-#define OLED_RESET     4 // Reset pin # (or -1 if sharing Arduino reset pin)
-
-#define DISPLAY_COLS 21
-#ifdef USE_8_LINE_OLED_DISPLAY
-  #define OLED_DISPLAY_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32 - Actually, the 0x3C address seems to work for both my 32 and 64-line displays
-  #define DISPLAY_ROWS 8
-#endif
-#ifdef USE_4_LINE_OLED_DISPLAY
-  #define OLED_DISPLAY_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
-  #define DISPLAY_ROWS 4
-#endif
 
 /* added for display above */
 #define OLED_DISPLAY_TEXT_SIZE 1
-// #define TEXT_COLUMNS 21
-// #define DATA_TEXT_ROWS 3
-#define DISPLAY_UPDATE_INTERVAL_MS 1000
-// #define BUF_LEN 100
+#define DISPLAY_UPDATE_INTERVAL_MS 200
 
 // assign the chip select line for the SD card on pin 4
 #define SD_SPI_CHIPSELECT 4
-// #define OLED_TEXT_SIZE 1
 
 #define LORA_FREQ 915E6
+
 // ESC is sent to the HMR2300 in order to stop the unit from sending data continuously
 #define ESC 0x1b
 
@@ -105,8 +95,11 @@
 #define HMR Serial1
 
 // How big the Serial1 receive buffer is
-#define RECEIVE_BUF_LEN 1000
+#define S1_RECEIVE_BUF_LEN 1000
 #define SERIAL_INIT_TIMEOUT_MS 10000
+
+#define LORA_RX_BUF_LEN 2000
+char loRaRxBuf[LORA_RX_BUF_LEN];
 
 // In theory 34.3 samples/second is max for 280 bits at 9600 bps
 // In practice, about 31 samples/sec is the best throughput I've seen (even when asking for 40), 
@@ -131,32 +124,39 @@
   Adafruit_SSD1306 display(128, 64, &Wire, OLED_RESET);
 #endif
 
+// Report HMR data every 10 seconds
+#define LORA_TRANSMIT_INTERVAL_MS 10000
 int n = 0;
 
 // Loop code runs as a state machine
 // state 0 = warming up
 // state 1 = command sent
 // state 2 = just do single-shot on request
-int state = 0;
-int lastState = -1;
+int hmrState = 0;
+int lastHmrState = -1;
+long nextHmrStateTransition = -1;
+long nextLoRaTransmitMillis = 0;
+
 float temperature = 0.0, humidity = 0.0, pressure = 0.0;
 int loopCount = 0;
 
 char tmpBuf[TMP_BUF_LEN];
-char receiveBuf[RECEIVE_BUF_LEN]; // for assembling HMR data from serial port
+char receiveBuf[S1_RECEIVE_BUF_LEN]; // for assembling HMR data from serial port
 char printBuf[PRINT_BUF_LEN];     // for sprintf() then Serial.println() output
 
 int receiveBufNextChar = 0;  // character position of next char to go in
-char lastReceiveBuf[RECEIVE_BUF_LEN]; // copy here for printing "later"
+char lastReceiveBuf[S1_RECEIVE_BUF_LEN]; // copy here for printing "later"
 char logFileName[LOG_FILE_NAME_LEN];
 char logBuf[LOG_BUF_LEN];
 int loggedPacketCount = 0;
 char relayStatus[32];
 
-#define X_BUF_LEN 32
+// #define X_BUF_LEN 32
 // char xbuf[X_BUF_LEN];
 // char ybuf[X_BUF_LEN];
 // char zbuf[X_BUF_LEN];
+
+// x, y, and z values (and min/max values) are parsed from the Serial1 (HMR) input buffer
 int x = 0; 
 int minx = 0;  // observed -32768 (with a magnet)
 int maxx = 0;  // observed 32608 (with a magnet)
@@ -193,6 +193,10 @@ void setup() {
   goodHMR = setupHMR();
   goodSD = setupSD();
   goodLoRa = setupLoRa();
+  if (goodLoRa) {
+    loRaTransmit("FlyBoy is on the air!");
+    nextLoRaTransmitMillis = millis() + LORA_TRANSMIT_INTERVAL_MS;
+  }
   setupLED();
   strcpy(relayStatus, "?");
   if (goodHMR) {
@@ -200,8 +204,8 @@ void setup() {
   } else {
     Serial.println("Serial1 (HMR) not ready.");
   }
-  Serial.print("state = ");
-  Serial.println(state);
+  Serial.print("hmrState = ");
+  Serial.println(hmrState);
   if (goodSD) {
     Serial.println("goodSD is true");
   } else {
@@ -211,6 +215,7 @@ void setup() {
 
 
 boolean setupSerial() {
+  // This sets up the serial monitor for output to your computer while writing and debugging the program
   boolean result = false;
   // initialize serial communications and wait for port to open:
   Serial.begin(19200); // USB and serial monitor
@@ -286,6 +291,8 @@ boolean setupHMR() {
   // strcpy(xbuf, "x?");  // Put SOMETHING in the buffers so they're not initially empty
   // strcpy(ybuf, "y?");
   // strcpy(zbuf, "z?");
+  nextHmrStateTransition = millis() + 3000; // 3 seconds after setup, starting sending things to the HMR
+  printlnLong("nextHmrStateTransition = ", nextHmrStateTransition);
   return result;
 }
 
@@ -309,7 +316,13 @@ boolean setupSD() {
 
 boolean setupLoRa() {
   boolean result = false;
-  // not set up yet
+  strncpy(printBuf, "nothing yet", PRINT_BUF_LEN - 1);
+  if (!LoRa.begin(915E6)) {
+    printlnStr("Starting LoRa failed!");
+    result = false;
+  } else {
+    result = true;
+  }
   return result;
 }
 
@@ -324,13 +337,14 @@ void setupLED() {
 
 
 void loop() {
-  if (state != lastState) {
-    Serial.print("new state = ");
-    Serial.println(state);
-    lastState = state;
+  if (hmrState != lastHmrState) {
+    Serial.print("new hmrState = ");
+    Serial.println(hmrState);
+    lastHmrState = hmrState;
   }
   loopLED(); // blink the LED as proof-of-life
   loopHMR(); // Check for HMR data from the HMR
+  loopLoRa();
   
   // Every so often update the OLED display
   if (millis() >= nextUpdateDisplay) {
@@ -338,6 +352,7 @@ void loop() {
     nextUpdateDisplay = millis() + DISPLAY_UPDATE_INTERVAL_MS;
   }
   // loopRelays();
+  
   loopCount++;
 }
 
@@ -368,7 +383,41 @@ void loopLED() {
       digitalWrite(LED_BUILTIN, LOW);
     }
   #endif
-  
+}
+
+
+void loopLoRa() {
+  if (goodLoRa) {
+    // Receive first
+      boolean result = false;
+    int packetSize = LoRa.parsePacket();
+    if (packetSize) {
+      char* buf = loRaRead(packetSize);
+      Serial.println(buf);
+    }
+
+    // Now transmit every once in a while, maybe
+    if (millis() >= nextLoRaTransmitMillis) {
+      snprintf(printBuf, PRINT_BUF_LEN, "FlyBoy s/x/y/z,%d,%d,%d,%d", millis()/MS_PER_SECOND, x, y, z);
+      loRaTransmit(printBuf);
+      nextLoRaTransmitMillis = millis() + LORA_TRANSMIT_INTERVAL_MS;
+    }
+  }
+}
+
+
+char* loRaRead(int packetSize) {
+  int n = 0; // pointer into the receive buffer
+  // read packet
+  int count = 0;
+  while (LoRa.available()) {
+    int d = LoRa.read();
+    if (n < LORA_RX_BUF_LEN - 1) {
+      loRaRxBuf[n++] = (char)d;
+    }
+    loRaRxBuf[n++] = (char)0; // null terminate it
+  }
+  return loRaRxBuf;
 }
 
 
@@ -409,44 +458,50 @@ void logData(long ms, const char* rawData, int x, int y, int z, int count) {
 
 void loopHMR() {
   // Pull any new chars from the serial port, and if we see the end of a packet, process it.
+  // HMR states:
+  // 0 = Initial, nothing done yet
+  // 1 = 
   int data = HMR.read();
   long a, b, elapsed;
   int messagesPerSec;
   if (data > 0) {
-    if (data == 13 || receiveBufNextChar >= RECEIVE_BUF_LEN - 1) {
+    if (data == 13 || receiveBufNextChar >= S1_RECEIVE_BUF_LEN - 1) {
       processReceiveBuf();
     } else {
       receiveBuf[receiveBufNextChar++] = (char)(data & 0x7F);
     }
   }
-  switch(state) {
+  switch(hmrState) {
     case 0: // wait 3 seconds before starting
       if (millis() > 3000) {
         printlnInt("Setting polling rate to ", SAMPLES_PER_SECOND);
-        sprintf(tmpBuf, "*99R=%d\r", SAMPLES_PER_SECOND);
-        printlnStr(tmpBuf);
-        // HMR.write("*99R=40\r");
-        HMR.write(tmpBuf);
-        state++;
+        snprintf(printBuf, PRINT_BUF_LEN, "*99R=%d\r", SAMPLES_PER_SECOND);
+        printlnStr(printBuf);
+        HMR.write(printBuf);
+        hmrState++;
         waitingForOk = true;
       }
       break;
     case 1:
       // waiting for OK
       if (!waitingForOk) {
-        state++;
+        hmrState++;
       }
       break;
     case 2:
       // HMR.write("*99P\r"); // P = Poll
       HMR.write("*99C\r"); // continuous until ESC
-      timerStart = millis();
-      state++;
-      waitUntilMs = millis() + CONTINUOUS_SECS * 1000L; // wait a few seconds
+      // timerStart = millis();
+      hmrState++;
+      // waitUntilMs = millis() + CONTINUOUS_SECS * 1000L; // wait a few seconds
       break;
+    case 3:
+      // stay in hmrState 3 forever
+      break;
+    /*
     case 3: // wait for waitUntilMs has passed
       if (millis() >= waitUntilMs) {
-        state++;
+        hmrState++;
         timerStop = millis();
       }
       break;
@@ -454,7 +509,7 @@ void loopHMR() {
       HMR.write(ESC);
       HMR.write("\n");
       Serial.write("Stopped.\n");
-      state++;
+      hmrState++;
       break;
     case 5: // we've stopped the HMR, print results
       Serial.println("five");
@@ -473,16 +528,15 @@ void loopHMR() {
       // sprintf(buf, "That's %d messages per second", messagesPerSec);
       // Serial.println(buf);
       //Serial.println("Done.");
-      state++;
+      hmrState++;
       break;
     case 6: // report then do nothing
       Serial.println("Done.");
-      state++;
+      hmrState++;
       break;
     case 7: // do nothing
       break;
-  }
-  if (state == 5) {
+      */
   }
 }
 
@@ -493,7 +547,7 @@ void waitForResponse() {
   while (!done) {
     int data = HMR.read();
     if (data > 0) {
-      if (data == 13 || receiveBufNextChar >= RECEIVE_BUF_LEN - 1) {
+      if (data == 13 || receiveBufNextChar >= S1_RECEIVE_BUF_LEN - 1) {
         processReceiveBuf();
         done = true;
       } else {
@@ -531,7 +585,7 @@ void processReceiveBuf() {
   receiveCount++;
   receiveBufNextChar = 0;
   waitingForOk = false;
-  if (state == 5) {
+  if (hmrState == 5) {
     Serial.println("five");
     int elapsed = (int)(timerStop - timerStart);
     int messagesPerSec = receiveCount * 1000 / elapsed;
@@ -544,7 +598,7 @@ void processReceiveBuf() {
     // sprintf(buf, "That's %d messages per second", messagesPerSec);
     // Serial.println(buf);
     //Serial.println("Done.");
-    state++;
+    hmrState++;
   }
 }
 
@@ -736,10 +790,9 @@ void updateDisplay() {
       } else {
         display.println(F(" HMR: FAIL"));
       }
-      // display.print("state = "); display.println(state);
+      // display.print("hmrState = "); display.println(hmrState);
       display.print("File: "); display.println(logFileName);
-      display.print("sec = "); display.println(millis()/1000);
-      display.print("until "); display.println(waitUntilMs / 1000);
+      display.println(getRunTime(millis()));
       sprintf(printBuf, "x = %6d y = %6d\nz = %6d c = %d", x, y, z, loggedPacketCount);
       display.println(printBuf);
       display.display();
@@ -748,6 +801,23 @@ void updateDisplay() {
   lastMillis = millis();
 }
 
+// Define a buffer dedicated to the getRunTime() function
+// Looks like "Run time
+#define RUN_TIME_BUF_LEN 20
+char runTimeBuf[RUN_TIME_BUF_LEN];
+
+char* getRunTime(long ms) {
+  int hours = ms / MS_PER_HOUR;
+  ms -= hours * MS_PER_HOUR;
+  int minutes = ms / MS_PER_MINUTE;
+  ms -= minutes * MS_PER_MINUTE;
+  int seconds = ms / 1000;
+  ms -= seconds * 1000;
+  //                   12345678901234567890
+  //                   Run time 000:00:00.0
+  snprintf(runTimeBuf, RUN_TIME_BUF_LEN, "Run time %d:%02d:%02d.%1d", hours, minutes, seconds, ms/100);
+  return runTimeBuf;
+}
 
 void printlnStr(const char* a) {
   if (goodSerial) {
@@ -770,6 +840,13 @@ void printInt(const char* a, int b) {
 }
 
 void printlnInt(const char* a, int b) {
+  if (goodSerial) {
+    Serial.print(a);
+    Serial.println(b);
+  }
+}
+
+void printlnLong(const char* a, long b) {
   if (goodSerial) {
     Serial.print(a);
     Serial.println(b);
@@ -821,4 +898,15 @@ void loopRelays() {
     }
     delay(500);
   #endif
+}
+
+
+void loRaTransmit(String str) {
+  if (goodLoRa) {
+    LoRa.beginPacket();
+    LoRa.print(str);
+    LoRa.endPacket();
+  } else {
+    Serial.print("Cannot send to LoRa: "); Serial.print(str);
+  }
 }

@@ -36,6 +36,8 @@
 #define PRINT_RULER false
 #define MS_PER_MINUTE (1000 * 60)
 #define MS_PER_HOUR (MS_PER_MINUTE * 60)
+#define GPSRx Serial1
+#define SERIAL_INIT_TIMEOUT_MS 5000 // wait up to 5 seconds for the GPSRx serial port to initialize
 
 char title[] = "Ground Pounder";
 
@@ -65,12 +67,18 @@ int serialBufCount = 0;
 char loraLogFileName[LORA_LOG_FILE_NAME_LEN];
 char ruler[PRINTABLE_BUF_LEN];
 
+#define GPS_RX_BUF_LEN 256 // 256 should be plenty, right?
+char gpsRxBuf[GPS_RX_BUF_LEN];
+int gpsRxBufCount = 0; // pointer for the next char into gpsRxBuf
+int gpsFixState = 0; // 0 = No info (gps not there?), 1 = GPS told is no fix, 2 = 2-D fix, 3 = 3-D fix
+int lastGpsFixState = gpsFixState;
 
 // Set up a "good" flag for each subsystem, to keep track of which ones initialized okay.
 boolean goodSerial  = false;
 boolean goodSD      = false;
 boolean goodDisplay = false;
 boolean goodLoRa    = false;
+boolean goodGPSRx   = false; // GPS receiver expected on Serial1
 
 
 void setup() {
@@ -79,9 +87,11 @@ void setup() {
   goodSerial  = setupSerial();
   goodLoRa    = setupLoRa();
   goodSD      = setupSD();
+  goodGPSRx   = setupGPSRx();
   setupLED();
   setupRuler();
 }
+
 
 void setupRuler() {
   if (PRINT_RULER) {
@@ -155,6 +165,20 @@ void setupLED() {
 }
 
 
+boolean setupGPSRx() {
+  boolean result = false;
+  GPSRx.begin(9600);
+  long timeout = millis() + SERIAL_INIT_TIMEOUT_MS;
+  while (!GPSRx && millis() < timeout) {
+    delay(50);
+  }
+  if (GPSRx) {
+    result = true;
+  }
+  return result;
+}
+
+
 void loop() {
   loopLED();  // do the distinctive blink pattern
   if (loopLoRa()) {
@@ -178,6 +202,9 @@ void loop() {
     if (millis() > lastMillis + DISPLAY_UPDATE_INTERVAL_MS) {
       updateDisplay();
     }
+  }
+  if (loopGPSRx()) {
+    processGPSRx();
   }
 }
 
@@ -275,35 +302,47 @@ void printCurrentState(int d, char c, int count) {
 void updateDisplay() {
   if (goodDisplay) {
     // display.setTextSize(DISPLAY_TEXT_SIZE);      // Normal 1:1 pixel scale
+    /*
+     *   123456789012345678901
+     * 1 GroundPounder * 3
+     * 2 GPS 3 LORA-123.LOG
+     * 3 S-000 R0000 L0000
+     * 4 Run time HHH:MM:SS.T
+     * 5 FlyBoy s/x/y/z 3647,1
+     * 6 446,4332,-6898
+     * 7
+     * 8
+     */
     display.clearDisplay();
     display.setCursor(0,0);
+    display.print(title);
     if (millis() % 1000 < 500) {
-      //             123456789012345678901
-      display.print("** ");
-      display.println(title);
+      display.print("  ");
     } else {
-      display.print("   ");
-      display.print(title);
-      display.println(" **");
+      display.print(" *");
     }
-    display.print(F("File: "));
+    // display.print(" GPS ");
+    // display.println(gpsFixState);
+    display.println();
+    snprintf(tmpBuf, TMP_BUF_LEN, "GPS %d %s", gpsFixState, loraLogFileName);
+    display.println(tmpBuf);
+    /*
+    display.println(gpsFixState);
+    display.print("GPS "); display.print(gpsFixState);
+    display.print(" ");
     display.println(loraLogFileName);
-    if (false) {
-      // make a flashing asterisk to show we're alive
-      if (millis() % 1000 < 500) {
-        display.println(" ");
-      } else {
-        display.println("*");
-      }
-    }
+    */
     // 123456789012345678901
-    // S -999 R 1000 L 1000
+    // Sig -999 Rec 1000
+    snprintf(tmpBuf, TMP_BUF_LEN, "Sig %d Rec %d pkts", lastRssi, receivedPacketCount);
+    /*
     display.print("S");
     display.print(lastRssi);
     display.print(" R");
     display.print(receivedPacketCount);
     display.print(" L");
     display.println(loggedPacketCount);
+    */
     if (false) {
       if (true) {
         // Tried using "%,d" in order to get results like "1,234" but it didn't work
@@ -461,6 +500,83 @@ void loopLED() {
     digitalWrite(LED_BUILTIN, HIGH);
   } else {
     digitalWrite(LED_BUILTIN, LOW);
+  }
+}
+
+
+#define END_OF_GPS_SENTENCE 10
+#define CARRIAGE_RETURN 13
+
+
+boolean loopGPSRx() {
+  boolean result = false;
+  // Check for any new data in the Serial1 port the GPS is attached to, and if it ends with \n then return true, indicating a new string is complete and ready
+  int data = GPSRx.read();
+  if (data > 0) {
+    if (data == END_OF_GPS_SENTENCE) { // end of a sentence
+      result = true;
+    } else if (data == CARRIAGE_RETURN) {
+      // just ignore this
+    } else {
+      // add to the buffer
+      if (gpsRxBufCount < GPS_RX_BUF_LEN - 1) {
+        gpsRxBuf[gpsRxBufCount++] = (char)data;
+        gpsRxBuf[gpsRxBufCount] = (char)0; // keep it null terminated
+      }
+    }
+  }
+  return result;
+}
+
+
+int gpsRxBufCountMax = 0;
+
+#define VERBOSE_GPS false
+
+void processGPSRx() {
+  if (VERBOSE_GPS) {
+    Serial.print("GPS: ");
+    Serial.println(gpsRxBuf);
+  }
+  if (gpsRxBufCount > gpsRxBufCountMax) {
+    gpsRxBufCountMax = gpsRxBufCount;
+    Serial.print("gpsRxBufCountMax = "); Serial.println(gpsRxBufCountMax);
+  }
+  String str(gpsRxBuf);
+  if (str.startsWith("$GPGSA")) {
+    processGPGSA(str);
+  }
+  gpsRxBufCount = 0; // empty it
+}
+
+
+long nextGPGSAReport = 0;
+
+void processGPGSA(String str) {
+  /*    
+    0123456789
+    $GPGSA,A,3,32,26,25,31,03,22,,,,,,,1.60,1.30,0.93*0E
+    A = Auto 2D/3D
+    3 = 3D fix available, or 2 = 2D fix available, or 1 = No fix
+  */
+  char fix = gpsRxBuf[9];
+  // Serial.print("fix = "); Serial.println(fix);
+  if (fix == '3') {
+    // 3-D fix available
+    // Serial.println("3-D fix");
+    gpsFixState = 3;
+  } else if (fix == '2') {
+    // 2-D fix available
+    // Serial.println("2-D fix");
+    gpsFixState = 2;
+  } else if (fix == '1') {
+    // No fix available
+    // Serial.println("No fix");
+    gpsFixState = 1;
+  }
+  if (gpsFixState != lastGpsFixState) {
+    Serial.print("New gpsFixState = "); Serial.println(gpsFixState);
+    lastGpsFixState = gpsFixState;
   }
 }
 

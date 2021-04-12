@@ -39,6 +39,7 @@
 #define MS_PER_HOUR (MS_PER_MINUTE * 60)
 #define GPSRx Serial1
 #define SERIAL_INIT_TIMEOUT_MS 5000 // wait up to 5 seconds for the GPSRx serial port to initialize
+#define TIMESTAMP_BEACON_INTERVAL_MS 60000 // send a GPS timestamp beacon every 10 seconds
 
 char title[] = "Ground Pounder";
 
@@ -75,7 +76,12 @@ int gpsFixState = 0; // 0 = No info (gps not there?), 1 = GPS told is no fix, 2 
 int lastGpsFixState = gpsFixState;
 char latBuf[TMP_BUF_LEN];
 char lonBuf[TMP_BUF_LEN];
-char gpsFixQuality[22];
+
+int gpsFixQuality = -1;
+char gpsFixQualityBuf[22];
+#define GPS_TIME_BUF_LEN 32
+char gpsTimeBuf[GPS_TIME_BUF_LEN];
+long nextTimestampBeaconMs = TIMESTAMP_BEACON_INTERVAL_MS * 2;
 
 // Support multiple plans for what is displayed on the screen.  Cycle thorugh them over time and/or via a button.
 #define SCREEN_CHANGE_INTERVAL_MS 5000
@@ -190,7 +196,7 @@ boolean setupGPSRx() {
   }
   strcpy(lonBuf, "Lat: ?");
   strcpy(latBuf, "Lon: ?");
-  strcpy(gpsFixQuality, "Qual: ?");
+  strcpy(gpsFixQualityBuf, "Qual: ?");
   return result;
 }
 
@@ -377,9 +383,10 @@ void updateDisplay() {
     } else if (screen == SCREEN_GPS) {
       snprintf(tmpBuf, TMP_BUF_LEN, "GPS Status\nFix state %d\n", gpsFixState);
       display.println(tmpBuf);
-      display.println(gpsFixQuality);
+      display.println(gpsFixQualityBuf);
       display.println(lonBuf);
       display.println(latBuf);
+      display.println(gpsTimeBuf);
     }
     display.display();
     if (millis() > nextScreenChangeMs) {
@@ -567,6 +574,10 @@ void processGPSRx() {
     processGPGSA(str);
   } else if (str.startsWith("$GPGGA")) {
     processGPGGA(str);
+  } else if (str.startsWith("$GPRMC")) {
+    processGPRMC(str);
+  } else {
+    // Serial.print("Ignoring: "); Serial.println(str);
   }
   gpsRxBufCount = 0; // empty it
 }
@@ -615,34 +626,81 @@ void processGPGGA(String str) {
   ms.Target(gpsRxBuf);              //  time      latitude
   char matchResult = ms.Match("$GPGGA,([0-9\.]+),([0-9\.]+),([NS]),([0-9]*\.[0-9]*),([EW]),(%d),");
   if (matchResult == REGEXP_MATCHED) {
-    Serial.println("Match");
+    // Serial.println("Match");
     // Latitude
-    int n = 1;
+    int n = 0;
+    ms.GetCapture(a, n++); // gps time of day, UTC
+    int m = 0;
+    gpsTimeBuf[m++] = a[0];
+    gpsTimeBuf[m++] = a[1];
+    gpsTimeBuf[m++] = ':';
+    gpsTimeBuf[m++] = a[2];
+    gpsTimeBuf[m++] = a[3];
+    gpsTimeBuf[m++] = ':';
+    gpsTimeBuf[m++] = a[4];
+    gpsTimeBuf[m++] = a[5];
+    gpsTimeBuf[m++] = ' ';
+    gpsTimeBuf[m++] = 'U';
+    gpsTimeBuf[m++] = 'T';
+    gpsTimeBuf[m++] = 'C';
+    gpsTimeBuf[m++] = (char)0;
+    if (millis() >= nextTimestampBeaconMs) {
+      if (gpsFixQuality >= 1) {
+        sendTimestampBeacon(gpsTimeBuf);
+      }
+      nextTimestampBeaconMs = millis() + TIMESTAMP_BEACON_INTERVAL_MS;
+    }
     ms.GetCapture(a, n++); // degrees & minutes
     ms.GetCapture(b, n++); // hemisphere
     snprintf(latBuf, TMP_BUF_LEN, "Lat:  %c%c %s %s", a[0], a[1], &a[2], b);
-    Serial.println(latBuf);
+    // Serial.println(latBuf);
     // Longitude
     ms.GetCapture(a, n++);
     ms.GetCapture(b, n++);
     snprintf(lonBuf, TMP_BUF_LEN, "Lon: %c%c%c %s %s", a[0], a[1], a[2], &a[3], b);
-    Serial.println(lonBuf);
+    // Serial.println(lonBuf);
     ms.GetCapture(a, n++); // fix quality
     if (a[0] == '0') {
-      strcpy(gpsFixQuality, "Qual: 0 = Invalid");
+      gpsFixQuality = 0;
+      strcpy(gpsFixQualityBuf, "Qual: 0 = Invalid");
     } else if (a[0] == '1') {
-      strcpy(gpsFixQuality, "Qual: 1 = GPS Fix");
+      gpsFixQuality = 1;
+      strcpy(gpsFixQualityBuf, "Qual: 1 = GPS Fix");
     } else if (a[0] == '2') {
-      strcpy(gpsFixQuality, "Qual: 2 = DGPS Fix");
+      gpsFixQuality = 2;
+      strcpy(gpsFixQualityBuf, "Qual: 2 = DGPS Fix");
     } else {
-      strcpy(gpsFixQuality, "Qual: Unknown");
+      gpsFixQuality = -1;
+      strcpy(gpsFixQualityBuf, "Qual: Unknown");
     }
   } else {
-    Serial.print("No match: "); Serial.println(gpsRxBuf);
+    // Serial.print("No match: "); Serial.println(gpsRxBuf);
   }
-  Serial.println(str);
+  // Serial.println(str);
 }
 
+
+void processGPRMC(String str) {
+  // 
+}
+
+
+void sendTimestampBeacon(const char* buf) {
+  snprintf(tmpBuf, TMP_BUF_LEN, "timestamp beacon %s", buf);
+  Serial.println(tmpBuf);
+  loRaTransmit(tmpBuf);
+}
+
+
+void loRaTransmit(String str) {
+  if (goodLoRa) {
+    LoRa.beginPacket();
+    LoRa.print(str);
+    LoRa.endPacket();
+  } else {
+    Serial.print("Cannot send to LoRa: "); Serial.print(str);
+  }
+}
 
 void printInt(const char *str, int j) {
   if (goodSerial) {

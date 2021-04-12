@@ -160,7 +160,7 @@ boolean setupSerial() {
   delay(1000); // sometimes it takes a bit of time for the Serial port to come alive
   if (Serial) {
     good = true;
-    Serial.println(F("LoRa Logger starting"));
+    Serial.print(title); Serial.println(" starting...");
   }
   return good;
 }
@@ -686,7 +686,7 @@ void processGPRMC(String str) {
 
 
 void sendTimestampBeacon(const char* buf) {
-  snprintf(tmpBuf, TMP_BUF_LEN, "timestamp beacon %s", buf);
+  snprintf(tmpBuf, TMP_BUF_LEN, "Ground Pounder timestamp beacon %s", buf);
   Serial.println(tmpBuf);
   loRaTransmit(tmpBuf);
 }

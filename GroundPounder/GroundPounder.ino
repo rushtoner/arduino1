@@ -2,6 +2,7 @@
 #include <LoRa.h>
 #include <Wire.h>
 #include <SD.h>
+#include <Regexp.h> // Library by Nick Gammon for regular expressions
 
 // Adafruit GFX and SSD1303 for the 128x32 or 128x64 OLED displays
 #include <Adafruit_GFX.h>
@@ -72,6 +73,17 @@ char gpsRxBuf[GPS_RX_BUF_LEN];
 int gpsRxBufCount = 0; // pointer for the next char into gpsRxBuf
 int gpsFixState = 0; // 0 = No info (gps not there?), 1 = GPS told is no fix, 2 = 2-D fix, 3 = 3-D fix
 int lastGpsFixState = gpsFixState;
+char latBuf[TMP_BUF_LEN];
+char lonBuf[TMP_BUF_LEN];
+char gpsFixQuality[22];
+
+// Support multiple plans for what is displayed on the screen.  Cycle thorugh them over time and/or via a button.
+#define SCREEN_CHANGE_INTERVAL_MS 5000
+#define SCREEN_DEFAULT 0
+#define SCREEN_GPS 1
+#define NUMBER_OF_SCREENS 2
+int currentScreen = SCREEN_DEFAULT;
+long nextScreenChangeMs = SCREEN_CHANGE_INTERVAL_MS;
 
 // Set up a "good" flag for each subsystem, to keep track of which ones initialized okay.
 boolean goodSerial  = false;
@@ -90,6 +102,7 @@ void setup() {
   goodGPSRx   = setupGPSRx();
   setupLED();
   setupRuler();
+  nextScreenChangeMs = SCREEN_CHANGE_INTERVAL_MS;
 }
 
 
@@ -175,6 +188,9 @@ boolean setupGPSRx() {
   if (GPSRx) {
     result = true;
   }
+  strcpy(lonBuf, "Lat: ?");
+  strcpy(latBuf, "Lon: ?");
+  strcpy(gpsFixQuality, "Qual: ?");
   return result;
 }
 
@@ -315,57 +331,61 @@ void updateDisplay() {
      */
     display.clearDisplay();
     display.setCursor(0,0);
-    display.print(title);
     if (millis() % 1000 < 500) {
-      display.print("  ");
+      display.println("** Ground Pounder");
     } else {
-      display.print(" *");
+      display.println("   Ground Pounder **");
     }
-    // display.print(" GPS ");
-    // display.println(gpsFixState);
-    display.println();
-    snprintf(tmpBuf, TMP_BUF_LEN, "GPS %d %s", gpsFixState, loraLogFileName);
-    display.println(tmpBuf);
-    /*
-    display.println(gpsFixState);
-    display.print("GPS "); display.print(gpsFixState);
-    display.print(" ");
-    display.println(loraLogFileName);
-    */
-    // 123456789012345678901
-    // Sig -999 Rec 1000
-    snprintf(tmpBuf, TMP_BUF_LEN, "Sig %d Rec %d pkts", lastRssi, receivedPacketCount);
-    /*
-    display.print("S");
-    display.print(lastRssi);
-    display.print(" R");
-    display.print(receivedPacketCount);
-    display.print(" L");
-    display.println(loggedPacketCount);
-    */
-    if (false) {
-      if (true) {
-        // Tried using "%,d" in order to get results like "1,234" but it didn't work
-        sprintf(tmpBuf, "Received: %d", receivedPacketCount);
-        display.println(tmpBuf);
-        // sprintf(tmpBuf, "Logged:   %d", loggedPacketCount);
-        sprintf(tmpBuf, "Logged:   %d, c %d", loggedPacketCount, canary);
-        display.println(tmpBuf);
-      } else {
-        display.print("Received: ");
-        display.println(receivedPacketCount);
-        display.print("Logged:   ");
-        display.println(loggedPacketCount);
+    int screen = currentScreen % NUMBER_OF_SCREENS;
+    if (screen == SCREEN_DEFAULT) {
+      snprintf(tmpBuf, TMP_BUF_LEN, "GPS %d %s", gpsFixState, loraLogFileName);
+      display.println(tmpBuf);
+      // 123456789012345678901
+      // Sig -999 Rec 1000
+      snprintf(tmpBuf, TMP_BUF_LEN, "Sig %d Rec %d pkts", lastRssi, receivedPacketCount);
+      display.println(tmpBuf);
+      /*
+      display.print("S");
+      display.print(lastRssi);
+      display.print(" R");
+      display.print(receivedPacketCount);
+      display.print(" L");
+      display.println(loggedPacketCount);
+      */
+      if (false) {
+        if (true) {
+          // Tried using "%,d" in order to get results like "1,234" but it didn't work
+          sprintf(tmpBuf, "Received: %d", receivedPacketCount);
+          display.println(tmpBuf);
+          // sprintf(tmpBuf, "Logged:   %d", loggedPacketCount);
+          sprintf(tmpBuf, "Logged:   %d, c %d", loggedPacketCount, canary);
+          display.println(tmpBuf);
+        } else {
+          display.print("Received: ");
+          display.println(receivedPacketCount);
+          display.print("Logged:   ");
+          display.println(loggedPacketCount);
+        }
       }
-    }
-    display.println(elapsedMsg(millis()));
-    if (printableBufCount <= DISPLAY_BUF_LEN) {
-      display.print(printableBuf);
-    } else {
-      strncpy(tmpBuf, printableBuf, min(min(DISPLAY_BUF_LEN,PRINTABLE_BUF_LEN),TMP_BUF_LEN));
-      display.print(tmpBuf);
+      display.println(elapsedMsg(millis()));
+      if (printableBufCount <= DISPLAY_BUF_LEN) {
+        display.print(printableBuf);
+      } else {
+        strncpy(tmpBuf, printableBuf, min(min(DISPLAY_BUF_LEN,PRINTABLE_BUF_LEN),TMP_BUF_LEN));
+        display.print(tmpBuf);
+      }
+    } else if (screen == SCREEN_GPS) {
+      snprintf(tmpBuf, TMP_BUF_LEN, "GPS Status\nFix state %d\n", gpsFixState);
+      display.println(tmpBuf);
+      display.println(gpsFixQuality);
+      display.println(lonBuf);
+      display.println(latBuf);
     }
     display.display();
+    if (millis() > nextScreenChangeMs) {
+      currentScreen++;
+      nextScreenChangeMs = millis() + SCREEN_CHANGE_INTERVAL_MS;
+    }
   }
   lastMillis = millis();
 }
@@ -545,6 +565,8 @@ void processGPSRx() {
   String str(gpsRxBuf);
   if (str.startsWith("$GPGSA")) {
     processGPGSA(str);
+  } else if (str.startsWith("$GPGGA")) {
+    processGPGGA(str);
   }
   gpsRxBufCount = 0; // empty it
 }
@@ -578,6 +600,47 @@ void processGPGSA(String str) {
     Serial.print("New gpsFixState = "); Serial.println(gpsFixState);
     lastGpsFixState = gpsFixState;
   }
+}
+
+
+void processGPGGA(String str) {
+  // Q = Fix Quality, 0 = invalid, 1 = fix, 2 = dgps fix
+  //        time         latitude  longitude    Q #  HDOP Altit   HtGeo   DGPS DGPS
+  // $GPGGA,004025.000,3228.5702,N,08457.0669,W,2,06,1.22,116.4,M,-29.7,M,0000,0000*56
+  int bufSize = 32;
+  char a[bufSize];
+  char b[bufSize];
+  char c[bufSize];
+  MatchState ms;
+  ms.Target(gpsRxBuf);              //  time      latitude
+  char matchResult = ms.Match("$GPGGA,([0-9\.]+),([0-9\.]+),([NS]),([0-9]*\.[0-9]*),([EW]),(%d),");
+  if (matchResult == REGEXP_MATCHED) {
+    Serial.println("Match");
+    // Latitude
+    int n = 1;
+    ms.GetCapture(a, n++); // degrees & minutes
+    ms.GetCapture(b, n++); // hemisphere
+    snprintf(latBuf, TMP_BUF_LEN, "Lat:  %c%c %s %s", a[0], a[1], &a[2], b);
+    Serial.println(latBuf);
+    // Longitude
+    ms.GetCapture(a, n++);
+    ms.GetCapture(b, n++);
+    snprintf(lonBuf, TMP_BUF_LEN, "Lon: %c%c%c %s %s", a[0], a[1], a[2], &a[3], b);
+    Serial.println(lonBuf);
+    ms.GetCapture(a, n++); // fix quality
+    if (a[0] == '0') {
+      strcpy(gpsFixQuality, "Qual: 0 = Invalid");
+    } else if (a[0] == '1') {
+      strcpy(gpsFixQuality, "Qual: 1 = GPS Fix");
+    } else if (a[0] == '2') {
+      strcpy(gpsFixQuality, "Qual: 2 = DGPS Fix");
+    } else {
+      strcpy(gpsFixQuality, "Qual: Unknown");
+    }
+  } else {
+    Serial.print("No match: "); Serial.println(gpsRxBuf);
+  }
+  Serial.println(str);
 }
 
 

@@ -97,7 +97,7 @@ boolean setupSerial() {
   delay(1000); // sometimes it takes a bit of time for the Serial port to come alive
   if (Serial) {
     good = true;
-    Serial.print(title); Serial.println(" starting...");
+    Serial.print(title); Serial.println(" listening...");
   }
   return good;
 }

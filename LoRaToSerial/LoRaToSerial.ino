@@ -147,9 +147,11 @@ boolean loopLoRa() {
     lastRssi = LoRa.packetRssi();
     while (LoRa.available()) {
       int d = LoRa.read();
-      if (loRaRxBufEnd < LORA_RX_BUF_LEN - 1) {
-        loRaRxBuf[loRaRxBufEnd++] = (char)d;
-        loRaRxBuf[loRaRxBufEnd] = (char)0; // keep it null-terminated
+      if (isPrintable(d)) {
+        if (loRaRxBufEnd < LORA_RX_BUF_LEN - 1) {
+          loRaRxBuf[loRaRxBufEnd++] = (char)d;
+          loRaRxBuf[loRaRxBufEnd] = (char)0; // keep it null-terminated
+        }
       }
 
       /*

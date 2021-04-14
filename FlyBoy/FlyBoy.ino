@@ -8,6 +8,9 @@
   Expects an SD card reader on SPI with chipselect on pin 4.
 */
 
+// Keep VERSION an integer
+#define VERSION 1
+
 // define USE_IOT_CARRIER if this code is to be deployed on a MKR 1310 that's riding on an IoT Carrier board.
 // Do not define IOT_CARRIER if this code is to use discrete OLED display and SD card writer.
 
@@ -51,6 +54,7 @@
 #else
   #include <Adafruit_GFX.h>
   #include <Adafruit_SSD1306.h>
+  #include "Adafruit_MPRLS.h"
   #include <SPI.h>
   #include <Wire.h>
   #include <SD.h>
@@ -167,6 +171,14 @@ int z = 0;
 int minz = 0;
 int maxz = 0;
 
+Adafruit_MPRLS presSensor;
+float hPa = 0.0;
+float last_hPa = 0.0;
+int altitudeMeters = 0;
+int last_altitudeMeters = 0;
+#define PRES_SENSOR_READING_INTERVAL_MS 3000
+long nextPresSensorReading = 0;
+
 boolean waitingForOk = false;
 long waitUntilMs = 0L;
 int receiveCount = 0;
@@ -182,6 +194,7 @@ boolean goodDisplay = false;
 boolean goodHMR = false;
 boolean goodSD = false;
 boolean goodLoRa = false;
+boolean goodPresSensor = false;
 
 // count how many HMR2300 samples were of the expected length, vs. not
 int goodSampleLength = 0;
@@ -194,8 +207,16 @@ void setup() {
   goodSD = setupSD();
   goodLoRa = setupLoRa();
   if (goodLoRa) {
-    loRaTransmit("FlyBoy is on the air!");
+    snprintf(tmpBuf, TMP_BUF_LEN, "FlyBoy v%d is on the air!", VERSION);
+    loRaTransmit(tmpBuf);
     nextLoRaTransmitMillis = millis() + LORA_TRANSMIT_INTERVAL_MS;
+  }
+  goodPresSensor = setupPresSensor();
+  if (goodPresSensor) {
+    Serial.println("MPRLS pressure sensor initialized successfully.");
+    nextPresSensorReading = millis() + PRES_SENSOR_READING_INTERVAL_MS;
+  } else {
+    Serial.println("Failed to initialize the MPRLS pressure sensor.");
   }
   setupLED();
   strcpy(relayStatus, "?");
@@ -254,9 +275,8 @@ boolean setupDisplay(int delaySecs) {
       display.setCursor(0, 0);     // Start at top-left corner
       display.cp437(true);         // Use full 256 char 'Code Page 437' font
       //                 123456789012345678901
-      display.println(F("-- Fly Boy --"));
-      display.println(F("Logs HMR2300 data"));
-      display.println(F("  to SD card"));
+      snprintf(tmpBuf, TMP_BUF_LEN, "FlyBoy v%d\nLogs HMR2300 data\nto SD card\n", VERSION);
+      display.println(tmpBuf);
       display.println();
       display.print(delaySecs); display.println(" sec delay...");
       display.display();
@@ -333,6 +353,18 @@ void setupLED() {
 }
 
 
+boolean setupPresSensor() {
+  boolean result = false;
+  int resetPin = -1; // not used
+  int eocPin   = -1; // not used
+  presSensor = Adafruit_MPRLS(resetPin, eocPin);
+  if (presSensor.begin()) {
+    result = true;
+  }
+  return result;
+}
+
+
 /* ******************************************************************************** */
 
 
@@ -352,7 +384,7 @@ void loop() {
     nextUpdateDisplay = millis() + DISPLAY_UPDATE_INTERVAL_MS;
   }
   // loopRelays();
-  
+  loopPresSensor();
   loopCount++;
 }
 
@@ -398,7 +430,7 @@ void loopLoRa() {
 
     // Now transmit every once in a while, maybe
     if (millis() >= nextLoRaTransmitMillis) {
-      snprintf(printBuf, PRINT_BUF_LEN, "FlyBoy s/x/y/z,%d,%d,%d,%d", millis()/MS_PER_SECOND, x, y, z);
+      snprintf(printBuf, PRINT_BUF_LEN, "FlyBoy v%d s/x/y/z,%d,%d,%d,%d", VERSION, millis()/MS_PER_SECOND, x, y, z);
       loRaTransmit(printBuf);
       nextLoRaTransmitMillis = millis() + LORA_TRANSMIT_INTERVAL_MS;
     }
@@ -754,6 +786,51 @@ void getNextFileName() {
 }
 
 
+#define HPA_PER_IN_HG 33.863886666667
+
+
+void loopPresSensor() {
+  long start = millis();
+  if (start >= nextPresSensorReading) {
+    last_hPa = hPa;
+    hPa = presSensor.readPressure();
+    Serial.print("Pressure hPa: "); Serial.println(hPa);
+    last_altitudeMeters = altitudeMeters;
+    altitudeMeters = hPaToMeters(hPa);
+    Serial.print("Altitude meters: "); Serial.println(altitudeMeters);
+    float inHg = hPa / HPA_PER_IN_HG;
+    Serial.print("Pressure inHg: "); Serial.println(inHg);
+    if (false) {
+      long elapsedMs = millis() - start;
+      Serial.print("Elapsed ms to read pressure sensor: "); Serial.println(elapsedMs);
+    }
+    nextPresSensorReading = millis() + PRES_SENSOR_READING_INTERVAL_MS;
+  }
+}
+
+
+
+int hPaToMeters(float hPa) {
+  float temperatureF = 37.0;
+  if (false) {
+    // hPa = 1037.0; for comparing against online example
+    double result = hPa * 100.0;
+    Serial.print("result = "); Serial.println(result);
+    result = result / 101325.0;
+    Serial.print("result = "); Serial.println(result);
+    result = log(result);
+    Serial.print("result = "); Serial.println(result);
+    result = result * 287.053;
+    Serial.print("result = "); Serial.println(result);
+    result = result * ((temperatureF + 459.67) * (5.0/9.0));
+    Serial.print("result = "); Serial.println(result);
+    result = result / 9.8;
+    Serial.print("result = "); Serial.println(result);
+  }
+  return (int)((log((hPa * 100.0)/101325.0) * 287.053 * (temperatureF + 459.67 * 5.0 / 9.0))/(9.8));
+}
+
+
 void updateDisplay() {
   if (goodDisplay) {
     #ifdef USE_IOT_CARRIER
@@ -775,10 +852,11 @@ void updateDisplay() {
       display.setCursor(0,0);
       // make a flashing asterisks to show we're alive
       if (millis() % 1000 < 500) {
-        display.println(F("      Fly Boy *****"));
+        snprintf(tmpBuf, TMP_BUF_LEN, "    Fly Boy v%d ***", VERSION);
       } else {
-        display.println(F("***** Fly Boy      "));
+        snprintf(tmpBuf, TMP_BUF_LEN, "*** Fly Boy v%d", VERSION);
       }
+      display.println(tmpBuf);
   
       if (goodSerial) {
         display.print(F("Ser: ok"));

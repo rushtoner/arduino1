@@ -141,6 +141,7 @@ int lastHmrState = -1;
 long nextHmrStateTransition = -1;
 long nextLoRaTransmitMillis = 0;
 
+// Data read from MKR ENV sensor, but not using because it seems to conflict with some other board (SD Proto shield?)
 float temperature = 0.0, humidity = 0.0, pressure = 0.0;
 int loopCount = 0;
 
@@ -153,7 +154,7 @@ char lastReceiveBuf[S1_RECEIVE_BUF_LEN]; // copy here for printing "later"
 char logFileName[LOG_FILE_NAME_LEN];
 char logBuf[LOG_BUF_LEN];
 int loggedPacketCount = 0;
-char relayStatus[32];
+char relayStatus[32]; // only for MKR IoT Carrier
 
 // #define X_BUF_LEN 32
 // char xbuf[X_BUF_LEN];
@@ -359,6 +360,7 @@ boolean setupLoRa() {
 void setupLED() {
   // set up a distinctive blink pattern
   pinMode(LED_BUILTIN, OUTPUT);
+  // Serial.print("LED_BUILTIN = "); Serial.println(LED_BUILTIN);
 }
 
 

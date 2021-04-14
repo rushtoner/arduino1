@@ -172,8 +172,17 @@ int minz = 0;
 int maxz = 0;
 
 Adafruit_MPRLS presSensor;
-float hPa = 0.0;
-float last_hPa = 0.0;
+// Altitude at standard pressure should be 0 (sea level)
+// 1000 hPa = 110.8 m = 363.6 ft (per weather.gov online calculator)
+// 900 hPa = 988.1 m = 3241.8 ft
+// 500 hPa = 5572.1 m = 18,281.2 ft
+// 100 hPa = 15790.5 m = 51806 ft
+// 10 hPa = 25907.5 m = 84998.2 ft
+// 1 hPa = 32435.3 m = 106414.9 ft
+
+#define STANDARD_PRESSURE_HPA 1013.25
+float hPa = STANDARD_PRESSURE_HPA;
+float last_hPa = hPa;
 int altitudeMeters = 0;
 int last_altitudeMeters = 0;
 #define PRES_SENSOR_READING_INTERVAL_MS 3000
@@ -417,6 +426,9 @@ void loopLED() {
   #endif
 }
 
+char* rising = "rising";
+char* falling = "falling";
+char* steady = "steady";
 
 void loopLoRa() {
   if (goodLoRa) {
@@ -430,7 +442,16 @@ void loopLoRa() {
 
     // Now transmit every once in a while, maybe
     if (millis() >= nextLoRaTransmitMillis) {
-      snprintf(printBuf, PRINT_BUF_LEN, "FlyBoy v%d s/x/y/z,%d,%d,%d,%d", VERSION, millis()/MS_PER_SECOND, x, y, z);
+      char* dir = steady;
+      float delta = hPa - last_hPa;
+      if (delta < -0.1) {
+        dir = rising; // pressure lowers as altitude rises
+      } else if (delta > 0.1) {
+        dir = falling;
+      }
+      Serial.print("hPa = "); Serial.print(hPa); Serial.print(", last_hPa = "); Serial.print(last_hPa); 
+      Serial.print(", delta = "); Serial.print(delta); Serial.print(", dir = "); Serial.println(dir);
+      snprintf(printBuf, PRINT_BUF_LEN, "FlyBoy v%d s/x/y/z/Pa/dir,%d,%d,%d,%d,%d,%s", VERSION, millis()/MS_PER_SECOND, x, y, z, (int)(hPa * 100.0), dir);
       loRaTransmit(printBuf);
       nextLoRaTransmitMillis = millis() + LORA_TRANSMIT_INTERVAL_MS;
     }
@@ -794,12 +815,12 @@ void loopPresSensor() {
   if (start >= nextPresSensorReading) {
     last_hPa = hPa;
     hPa = presSensor.readPressure();
-    Serial.print("Pressure hPa: "); Serial.println(hPa);
+    Serial.print("Pressure hPa: "); Serial.print(hPa);
     last_altitudeMeters = altitudeMeters;
     altitudeMeters = hPaToMeters(hPa);
-    Serial.print("Altitude meters: "); Serial.println(altitudeMeters);
+    Serial.print(", Altitude meters: "); Serial.print(altitudeMeters);
     float inHg = hPa / HPA_PER_IN_HG;
-    Serial.print("Pressure inHg: "); Serial.println(inHg);
+    Serial.print(", Pressure inHg: "); Serial.println(inHg);
     if (false) {
       long elapsedMs = millis() - start;
       Serial.print("Elapsed ms to read pressure sensor: "); Serial.println(elapsedMs);
@@ -873,6 +894,7 @@ void updateDisplay() {
       display.println(getRunTime(millis()));
       sprintf(printBuf, "x = %6d y = %6d\nz = %6d c = %d", x, y, z, loggedPacketCount);
       display.println(printBuf);
+      display.print("Pres "); display.print(hPa); display.println(" hPa");
       display.display();
     #endif
   }

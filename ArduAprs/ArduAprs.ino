@@ -79,6 +79,11 @@ boolean setupAprs(int bps) {
 }
 
 
+boolean setupAprsLog() {
+  
+}
+
+
 void loop() {
   // The Main Loop
   if (goodAprs) {
@@ -161,6 +166,7 @@ void processPacket() {
 void processDataFrame() {
   // Start processing a data frame at the given index into the pktBuf array
   printRawPktBuf();
+  // First process the address field, which can be several callsign-ssid long
   // boolean doingAddress = true; // need to shift one bit right during the address parts
   boolean lastAddress = false;
   char addrBuf[ADDR_BUF_LEN];
@@ -196,21 +202,90 @@ void processDataFrame() {
     Serial.print(", ssid = "); Serial.print(ssid);
     Serial.print(", lastAddress = "); Serial.println(lastAddress);
   }
-  for(; n < pktBufCount; n++) {
-    byte data = pktBuf[n];
-    if (data == 13 || data == 10 || isPrintable(data)) {
-      Serial.print((char)data);
-    } else if (data == FEND) {
-      Serial.print("[FEND]\n");
-    } else if (data == FESC) {
-      Serial.print("[FESC]");
-    } else if (data == TFEND) {
-      Serial.print("[TFEND]");
-    } else if (data == TFESC) {
-      Serial.print("[TFESC]");
+  // Addresses are done.  Next is the control field(s)
+  // 3 formats of control field: I = Information frame, S = Supervisory frame, U = Unnumbered frame
+  // control field is 1 or 2 octets.  Everything that I have observed seems to be 0x03 (followed by 0xF0 which I assume is the PID)
+  byte cf0 = pktBuf[n++];
+  if (cf0 & 0x01 == 0) {
+    // bit 0 = 0, I frame
+    Serial.println("I frame");
+  } else if (cf0 & 0x03 == 0x01) {
+    // Supervisory frame
+    Serial.println("S frame");
+  } else if (cf0 & 0x03 != 0x03) {
+    snprintf(tmpBuf, TMP_BUF_LEN, "Unknown control field type: 0x%02X", cf0);
+    Serial.println(tmpBuf);
+  } else {
+    // first two bits are 1, so unnumbered frame.  0x03 is what an APRS packet should be, UI
+    Serial.println("Unnumbered frame");
+    byte pid = pktBuf[n++];  // PID = Protocol Identifier, 0xF0 = No layer 3 protocol implemented
+    snprintf(tmpBuf, TMP_BUF_LEN, "PID = 0x%02X", pid);
+    Serial.println(tmpBuf);
+    if (pid != 0xF0) {
+      snprintf(tmpBuf, TMP_BUF_LEN, "PID = 0x%02X is not what I expect of an APRS packet.", pid);
+      Serial.println(tmpBuf);
     } else {
-      snprintf(tmpBuf, TMP_BUF_LEN, "[0x%02X]", data);
-      Serial.print(tmpBuf);
+      // So far still smells like an APRS packet.
+      byte aprsDataTypeId = pktBuf[n++];
+      if (isPrintable(aprsDataTypeId)) {
+        snprintf(tmpBuf, TMP_BUF_LEN, "aprsDataTypeId = 0x%02X = %c", aprsDataTypeId, aprsDataTypeId);
+      } else {
+        snprintf(tmpBuf, TMP_BUF_LEN, "aprsDataTypeId = 0x%02X = %c", aprsDataTypeId);        
+      }
+      Serial.println(tmpBuf);
+      switch(aprsDataTypeId) {
+        case 0x1C: Serial.println("Current Mic-E Data"); break;
+        case 0x1D: Serial.println("Old Mic-E Data"); break;
+        case '!':  Serial.println("Position without timestamp or Ultimeter 2000 WX Station"); break;
+        case '"':  Serial.println("Unused"); break;
+        case '#':  Serial.println("Peet Bros"); break;
+        case '$':  Serial.println("Raw GPS data"); break;
+        case '%':  Serial.println("Agrelo DFJr/MicroFinder"); break;
+        case '&':  Serial.println("Reserved - Map Feature"); break;
+        case '\'': Serial.println("Old Mic-E data or Current TM-D700"); break;
+        case '(':  Serial.println("Unused"); break;
+        case ')':  Serial.println("Item"); break;
+        case '*':  Serial.println("Peet Bros U-II Wx Station"); break;
+        case '+':  Serial.println("Reserved - Shelter data with time"); break;
+        case ',':  Serial.println("Invalid or test data"); break;
+        case '-':  Serial.println("Unused"); break;
+        case '.':  Serial.println("Reserved - Space Weather"); break;
+        case '/':  Serial.println("Position with timestamp (no APRS messaging"); break;
+        case ':':  Serial.println("Message"); break;
+        case ';':  Serial.println("Object"); break;
+        case '<':  Serial.println("Station capabilities"); break;
+        case '=':  Serial.println("Position without timestamp (with APRS messaging)"); break;
+        case '>':  Serial.println("Status"); break;
+        case '?':  Serial.println("Query"); break;
+        case '@':  Serial.println("Position with timestamp (with APRS messaging)"); break;
+        case 'T':  Serial.println("Telemetry data"); break;
+        case '[':  Serial.println("Maidenhead grid locator beacon (obsolete)"); break;
+        case '\\': Serial.println("Unused"); break;
+        case ']':  Serial.println("Unused"); break;
+        case '^':  Serial.println("Unused"); break;
+        case '_':  Serial.println("Weather report (without position)"); break;
+        case '`':  Serial.println("Current Mic-E Data (not used in TM-D700) - not sure if this is right"); break;
+        case '{':  Serial.println("User-defined APRS format"); break;
+        case '}':  Serial.println("Third-party traffic"); break;
+        default:   Serial.println("Unsupported APRS data type ID");
+      }
+      for(; n < pktBufCount; n++) {
+        byte data = pktBuf[n];
+        if (data == 13 || data == 10 || isPrintable(data)) {
+          Serial.print((char)data);
+        } else if (data == FEND) {
+          Serial.print("[FEND]\n");
+        } else if (data == FESC) {
+          Serial.print("[FESC]");
+        } else if (data == TFEND) {
+          Serial.print("[TFEND]");
+        } else if (data == TFESC) {
+          Serial.print("[TFESC]");
+        } else {
+          snprintf(tmpBuf, TMP_BUF_LEN, "[0x%02X]", data);
+          Serial.print(tmpBuf);
+        }
+      }
     }
   }
   Serial.println();

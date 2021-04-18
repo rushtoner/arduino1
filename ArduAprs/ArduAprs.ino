@@ -29,19 +29,19 @@ boolean goodAprs = false;
 
 
 void setup() {
-  goodSerial = setupSerial();
-  goodAprs = setupAprs();
-  Serial.print("\n\nArduAprs: ");
+  goodSerial = setupSerial(9600);
+  goodAprs = setupAprs(9600);
+  Serial.print("ArduAprs: ");
   Serial.print("goodSerial = "); Serial.print(goodSerial);
   Serial.print(", goodAprs = "); Serial.println(goodAprs);
 }
 
 
-boolean setupSerial() {
+boolean setupSerial(int bps) {
   // This sets up the serial monitor for output to your computer while writing and debugging the program
   boolean result = false;
   // initialize serial communications and wait for port to open:
-  Serial.begin(9600); // USB and serial monitor
+  Serial.begin(bps); // USB and serial monitor
   long start = millis();
   long elapsed = 0L;
   while (!Serial && elapsed < SERIAL_INIT_TIMEOUT_MS) {
@@ -51,25 +51,29 @@ boolean setupSerial() {
   }
   if (Serial) {
     result = true;
+    snprintf(tmpBuf, TMP_BUF_LEN, "\n\nSerial opened at %d bps", bps);
+    Serial.println(tmpBuf);
   }
   return result;
 }
 
 
-boolean setupAprs() {
+boolean setupAprs(int bps) {
   // This sets up the serial monitor for output to your computer while writing and debugging the program
   boolean result = false;
   // initialize serial communications and wait for port to open:
-  APRS.begin(4800); // USB and serial monitor
+  APRS.begin(bps); // USB and serial monitor
   long start = millis();
   long elapsed = 0L;
-  while (!Serial && elapsed < SERIAL_INIT_TIMEOUT_MS) {
+  while (!APRS && elapsed < SERIAL_INIT_TIMEOUT_MS) {
     // wait up to 10 seconds for serial port to connect. Needed for native USB port only.
     delay(50);
     elapsed = millis() - start;
   }
-  if (Serial) {
+  if (APRS) {
     result = true;
+    snprintf(tmpBuf, TMP_BUF_LEN, "APRS opened at %d bps", bps);
+    Serial.println(tmpBuf);
   }
   return result;
 }
@@ -83,11 +87,15 @@ void loop() {
 }
 
 
+#define PRINT_RAW true
+
 void loopAprs() {
   int data = Serial1.read();
   if (data >= 0) {
     // yay, we have some data to process
     byte b = (byte)(data & 0xFF);
+    if (PRINT_RAW)
+      printByte(b);
     if (lastByte == FESC) {
       if (b == TFEND) {
         pktBuf[pktBufCount++] = FEND;
@@ -107,6 +115,8 @@ void loopAprs() {
             // do nothing, keep on truckin'
           } else {
             // Hazard a guess that it's probably the end of a packet
+            if (PRINT_RAW)
+              Serial.println();
             processPacket();
             pktBufCount = 0; // clear the buffer for the next packet
           }
@@ -119,6 +129,16 @@ void loopAprs() {
       }
     }
     lastByte = b;
+  }
+}
+
+
+void printByte(byte b) {
+  if (isPrintable(b) || b == 10 || b == 13) {
+    Serial.print((char)b);
+  } else {
+    snprintf(tmpBuf, TMP_BUF_LEN, "[0x%02X]", b);
+    Serial.print(tmpBuf);
   }
 }
 
@@ -145,8 +165,10 @@ void processDataFrame() {
   boolean lastAddress = false;
   char addrBuf[ADDR_BUF_LEN];
   int n = 1; // slip the leading command code
+  int addrBufCount = 0;
   while (!lastAddress) {
     int j = 0;
+    addrBufCount = 0;
     for(j = 0; j < 6; j++) {
       if (n >= pktBufCount) {
         lastAddress = true;
@@ -156,7 +178,7 @@ void processDataFrame() {
         }
         char c = (char)(pktBuf[n] >> 1);
         if (c != ' ') {
-          addrBuf[j] = c;
+          addrBuf[addrBufCount++] = c;
           if (false) {
             snprintf(tmpBuf, TMP_BUF_LEN, "addrBuf[%d] = %c", j, addrBuf[j]);
             Serial.println(tmpBuf);
@@ -165,9 +187,12 @@ void processDataFrame() {
       }
       n++;
     }
-    addrBuf[j] = 0; // null terminate it
+    addrBuf[addrBufCount] = 0; // null terminate it
     Serial.print("addrBuf = "); Serial.print(addrBuf);
-    int ssid = pktBuf[n++] & 0x0F;
+    if (pktBuf[n] & 0x01) {
+      lastAddress = true;
+    }
+    int ssid = (pktBuf[n++]>>1) & 0x0F;
     Serial.print(", ssid = "); Serial.print(ssid);
     Serial.print(", lastAddress = "); Serial.println(lastAddress);
   }

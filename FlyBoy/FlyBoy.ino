@@ -880,12 +880,14 @@ void updateDisplay() {
         snprintf(tmpBuf, TMP_BUF_LEN, "*** Fly Boy v%d", VERSION);
       }
       display.println(tmpBuf);
-  
+
+      /*
       if (goodSerial) {
         display.print(F("Ser: ok"));
       } else {
         display.print(F("Ser: FAIL"));
       }
+      */
       if (goodHMR) {
         display.println(F(" HMR: ok"));
       } else {

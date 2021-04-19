@@ -4,6 +4,9 @@
   by David A. Rush, 2021 Apr 16
 */
 
+#include <SPI.h>
+#include <SD.h>
+
 #define SERIAL_INIT_TIMEOUT_MS 3000
 #define APRS Serial1
 
@@ -12,6 +15,8 @@
 #define FESC 0xDB
 #define TFEND 0xDC
 #define TFESC 0xDD
+
+#define SD_SPI_CHIPSELECT 4
 
 byte lastByte = 0; // used to process escaped FEND or FESC
 
@@ -23,17 +28,40 @@ char tmpBuf[TMP_BUF_LEN];
 #define PKT_BUF_LEN 1500
 byte pktBuf[PKT_BUF_LEN];
 int pktBufCount = 0; // counter into the next available slot, 0 = empty.
+#define LOG_FILE_NAME_LEN 13 // 8 + . + 3 + null = 13
+char logFileName[LOG_FILE_NAME_LEN];
+#define RAW_BUF_LEN 512
+byte rawBuf[RAW_BUF_LEN];
+int rawBufCount = 0;
+
+// keep track of all the types seen
+#define TYPE_IDS_SEEN_BUF_LEN 1024
+byte typeIdsSeenBuf[TYPE_IDS_SEEN_BUF_LEN];
+int typeIdsSeenBufCount = 0;
+
+// Write to the log before the rawBuf is full, if it's been a while
+#define APRS_LOG_WRITE_INTERVAL_MS 30000
+long nextAprsLogWrite = APRS_LOG_WRITE_INTERVAL_MS * 2;
 
 boolean goodSerial = false;
 boolean goodAprs = false;
+boolean goodAprsLog = false;  // Log to SD card if found
 
 
 void setup() {
   goodSerial = setupSerial(9600);
   goodAprs = setupAprs(9600);
+  if (goodAprs) {
+    goodAprsLog = setupAprsLog();
+  }
   Serial.print("ArduAprs: ");
   Serial.print("goodSerial = "); Serial.print(goodSerial);
   Serial.print(", goodAprs = "); Serial.println(goodAprs);
+  if (goodAprsLog) {
+      Serial.print("Logging to SD card: "); Serial.println(logFileName);
+  } else {
+    Serial.println("Not logging to SD card.");
+  }
 }
 
 
@@ -80,7 +108,68 @@ boolean setupAprs(int bps) {
 
 
 boolean setupAprsLog() {
-  
+  // Set up the SD card writer for logging
+  boolean good = false;
+  if (SD.begin(SD_SPI_CHIPSELECT)) {
+    good = true;
+    getNextFileName(); // look at what filenames already exist, and create a new one at index + 1
+  }
+  return good;
+}
+
+
+void getNextFileName() {
+  File root = SD.open("/");
+  boolean found = false;
+  boolean exhausted = false;
+  int n = 0;
+  int nextIndex = 0; // APRS0000.RAW
+  do {
+    File entry = root.openNextFile();
+    if (entry) {
+      // Serial.print("entry name = ");
+      String name = entry.name();
+      // Serial.println(name);
+      entry.close();
+      if (name.startsWith("APRS")) {
+        String tmp = name.substring(4, name.indexOf(".RAW"));  // Tab-separated values
+        int index = tmp.toInt();
+        if (index >= nextIndex) {
+          nextIndex = index + 1;
+        }
+      } else {
+        //Serial.println("does not start with");
+      }
+    } else {
+      // Serial.println("no more files");
+      exhausted = true;
+    }
+    n++;
+  } while (!found && !exhausted);
+  root.close();
+  sprintf(logFileName, "APRS%04d.RAW", nextIndex); // file name max size: 8.3 I think
+}
+
+
+void logAprsLog(const byte *data, int len) {
+  if (goodAprsLog) {
+    if (len > 0) {
+      // open the file. note that only one file can be open at a time,
+      // so you have to close this one before opening another.
+      File logFile = SD.open(logFileName, FILE_WRITE);
+      // if the file is available, write to it and close it:
+      if (logFile) {
+        logFile.write(data, len);
+        logFile.close();
+        rawBufCount = 0;
+        snprintf(tmpBuf, TMP_BUF_LEN, "Wrote %d bytes to %s", len, logFileName);
+        Serial.println(tmpBuf);
+      }
+    } else {
+      Serial.print("Nothing to write to "); Serial.println(logFileName);
+    }
+    nextAprsLogWrite = millis() + APRS_LOG_WRITE_INTERVAL_MS;
+  }
 }
 
 
@@ -99,6 +188,11 @@ void loopAprs() {
   if (data >= 0) {
     // yay, we have some data to process
     byte b = (byte)(data & 0xFF);
+    rawBuf[rawBufCount++] = b;
+    if (rawBufCount >= RAW_BUF_LEN) {
+      logAprsLog(rawBuf, rawBufCount);
+      rawBufCount = 0; // restart the buffer
+    }
     if (PRINT_RAW)
       printByte(b);
     if (lastByte == FESC) {
@@ -134,6 +228,11 @@ void loopAprs() {
       }
     }
     lastByte = b;
+  } else {
+    // no data to read from serial port
+    if (millis() > nextAprsLogWrite) {
+      logAprsLog(rawBuf, rawBufCount);
+    }
   }
 }
 
@@ -159,6 +258,7 @@ void processPacket() {
     Serial.print(tmpBuf); 
   }
   // ignore all other values
+  Serial.println();
 }
 
 #define ADDR_BUF_LEN 7
@@ -170,6 +270,9 @@ void processDataFrame() {
   // boolean doingAddress = true; // need to shift one bit right during the address parts
   boolean lastAddress = false;
   char addrBuf[ADDR_BUF_LEN];
+  int addrNum = 0;
+  char sourceAddr[9];
+  sourceAddr[0] = (char)0;
   int n = 1; // slip the leading command code
   int addrBufCount = 0;
   while (!lastAddress) {
@@ -201,7 +304,17 @@ void processDataFrame() {
     int ssid = (pktBuf[n++]>>1) & 0x0F;
     Serial.print(", ssid = "); Serial.print(ssid);
     Serial.print(", lastAddress = "); Serial.println(lastAddress);
+    if (addrNum == 1) {
+      // should be source address, which is all we care about
+      strcpy(sourceAddr, addrBuf);
+      if (ssid > 0) {
+        snprintf(tmpBuf, TMP_BUF_LEN, "-%d", ssid);
+        strcat(sourceAddr, tmpBuf);
+      }
+    }
+    addrNum++;
   }
+  Serial.print("sourceAddr: "); Serial.println(sourceAddr);
   // Addresses are done.  Next is the control field(s)
   // 3 formats of control field: I = Information frame, S = Supervisory frame, U = Unnumbered frame
   // control field is 1 or 2 octets.  Everything that I have observed seems to be 0x03 (followed by 0xF0 which I assume is the PID)
@@ -227,6 +340,7 @@ void processDataFrame() {
     } else {
       // So far still smells like an APRS packet.
       byte aprsDataTypeId = pktBuf[n++];
+      noteTypeId(aprsDataTypeId);
       if (isPrintable(aprsDataTypeId)) {
         snprintf(tmpBuf, TMP_BUF_LEN, "aprsDataTypeId = 0x%02X = %c", aprsDataTypeId, aprsDataTypeId);
       } else {
@@ -234,40 +348,46 @@ void processDataFrame() {
       }
       Serial.println(tmpBuf);
       switch(aprsDataTypeId) {
-        case 0x1C: Serial.println("Current Mic-E Data"); break;
-        case 0x1D: Serial.println("Old Mic-E Data"); break;
-        case '!':  Serial.println("Position without timestamp or Ultimeter 2000 WX Station"); break;
-        case '"':  Serial.println("Unused"); break;
-        case '#':  Serial.println("Peet Bros"); break;
-        case '$':  Serial.println("Raw GPS data"); break;
-        case '%':  Serial.println("Agrelo DFJr/MicroFinder"); break;
-        case '&':  Serial.println("Reserved - Map Feature"); break;
-        case '\'': Serial.println("Old Mic-E data or Current TM-D700"); break;
-        case '(':  Serial.println("Unused"); break;
-        case ')':  Serial.println("Item"); break;
-        case '*':  Serial.println("Peet Bros U-II Wx Station"); break;
-        case '+':  Serial.println("Reserved - Shelter data with time"); break;
-        case ',':  Serial.println("Invalid or test data"); break;
-        case '-':  Serial.println("Unused"); break;
-        case '.':  Serial.println("Reserved - Space Weather"); break;
-        case '/':  Serial.println("Position with timestamp (no APRS messaging"); break;
-        case ':':  Serial.println("Message"); break;
-        case ';':  Serial.println("Object"); break;
-        case '<':  Serial.println("Station capabilities"); break;
-        case '=':  Serial.println("Position without timestamp (with APRS messaging)"); break;
-        case '>':  Serial.println("Status"); break;
-        case '?':  Serial.println("Query"); break;
-        case '@':  Serial.println("Position with timestamp (with APRS messaging)"); break;
-        case 'T':  Serial.println("Telemetry data"); break;
-        case '[':  Serial.println("Maidenhead grid locator beacon (obsolete)"); break;
-        case '\\': Serial.println("Unused"); break;
-        case ']':  Serial.println("Unused"); break;
-        case '^':  Serial.println("Unused"); break;
-        case '_':  Serial.println("Weather report (without position)"); break;
-        case '`':  Serial.println("Current Mic-E Data (not used in TM-D700) - not sure if this is right"); break;
-        case '{':  Serial.println("User-defined APRS format"); break;
-        case '}':  Serial.println("Third-party traffic"); break;
-        default:   Serial.println("Unsupported APRS data type ID");
+        // case 0x1C: Serial.println("Current Mic-E Data"); break;
+        // case 0x1D: Serial.println("Old Mic-E Data"); break;
+        case '!':  Serial.println("Position without timestamp or Ultimeter 2000 WX Station"); processPosWoutTime(sourceAddr, pktBuf, n); break;
+        // case '"':  Serial.println("Unused"); break;
+        // case '#':  Serial.println("Peet Bros"); break;
+        case '$':  Serial.println("Raw GPS data"); processRawGPS(sourceAddr, pktBuf, n); break;
+        // case '%':  Serial.println("Agrelo DFJr/MicroFinder"); break;
+        // case '&':  Serial.println("Reserved - Map Feature"); break;
+        case '\'': Serial.println("Old Mic-E data or Current TM-D700"); processOldMicE(sourceAddr, pktBuf, n); break;
+        // case '(':  Serial.println("Unused"); break;
+        // case ')':  Serial.println("Item"); break;
+        // case '*':  Serial.println("Peet Bros U-II Wx Station"); break;
+        // case '+':  Serial.println("Reserved - Shelter data with time"); break;
+        // case ',':  Serial.println("Invalid or test data"); break;
+        // case '-':  Serial.println("Unused"); break;
+        // case '.':  Serial.println("Reserved - Space Weather"); break;
+        // case '/':  Serial.println("Position with timestamp (no APRS messaging"); break;
+        // case ':':  Serial.println("Message"); break;
+        case ';':  Serial.println("Object"); processObject(sourceAddr, pktBuf, n); break;
+        // case '<':  Serial.println("Station capabilities"); break;
+        case '=':  Serial.println("Position without timestamp (with APRS messaging)"); processPosWoutTime(sourceAddr, pktBuf, n); break;
+        case '>':  Serial.println("Status"); processStatus(sourceAddr, pktBuf, n); break;
+        // case '?':  Serial.println("Query"); break;
+        case '@':  Serial.println("Position with timestamp (with APRS messaging)"); processPosWithTime(sourceAddr, pktBuf, n); break;
+        // case 'T':  Serial.println("Telemetry data"); break;
+        // case '[':  Serial.println("Maidenhead grid locator beacon (obsolete)"); break;
+        // case '\\': Serial.println("Unused"); break;
+        // case ']':  Serial.println("Unused"); break;
+        // case '^':  Serial.println("Unused"); break;
+        // case '_':  Serial.println("Weather report (without position)"); break;
+        // case '`':  Serial.println("Current Mic-E Data (not used in TM-D700) - not sure if this is right"); break;
+        // case '{':  Serial.println("User-defined APRS format"); break;
+        // case '}':  Serial.println("Third-party traffic"); break;
+        default:
+          if (isPrintable((char)(aprsDataTypeId))) {
+            snprintf(tmpBuf, TMP_BUF_LEN, "Unrecognized APRS data type ID 0x%02X = %c", aprsDataTypeId, (char)aprsDataTypeId);
+          } else {
+            snprintf(tmpBuf, TMP_BUF_LEN, "Unrecognized APRS data type ID 0x%02X", aprsDataTypeId);
+          }
+          Serial.println(tmpBuf);
       }
       for(; n < pktBufCount; n++) {
         byte data = pktBuf[n];
@@ -292,6 +412,75 @@ void processDataFrame() {
 }
 
 
+void processPosWithTime(const char* sourceAddr, const byte* buf, int n) {
+  int tmpBufCount = 0;
+  int j = 0;
+  for(j = n; j < pktBufCount + 1; j++) {
+    tmpBuf[tmpBufCount++] = (char)(pktBuf[j]);
+  }
+  tmpBuf[tmpBufCount++] = (char)0;
+  Serial.print(sourceAddr); Serial.print(": "); Serial.println(tmpBuf);
+}
+
+
+
+void processPosWoutTime(const char* sourceAddr, const byte* buf, int n) {
+  int tmpBufCount = 0;
+  int j = 0;
+  for(j = n; j < pktBufCount + 1; j++) {
+    tmpBuf[tmpBufCount++] = (char)(pktBuf[j]);
+  }
+  tmpBuf[tmpBufCount++] = (char)0;
+  Serial.print(sourceAddr); Serial.print(": "); Serial.println(tmpBuf);
+}
+
+
+
+void processObject(const char* sourceAddr, const byte* buf, int n) {
+  int tmpBufCount = 0;
+  int j = 0;
+  for(j = n; j < pktBufCount + 1; j++) {
+    tmpBuf[tmpBufCount++] = (char)(pktBuf[j]);
+  }
+  tmpBuf[tmpBufCount++] = (char)0;
+  Serial.print(sourceAddr); Serial.print(": "); Serial.println(tmpBuf);
+}
+
+
+void processRawGPS(const char* sourceAddr, const byte* buf, int n) {
+  int tmpBufCount = 0;
+  int j = 0;
+  for(j = n; j < pktBufCount + 1; j++) {
+    tmpBuf[tmpBufCount++] = (char)(pktBuf[j]);
+  }
+  tmpBuf[tmpBufCount++] = (char)0;
+  Serial.print(sourceAddr); Serial.print(": "); Serial.println(tmpBuf);
+}
+
+
+void processOldMicE(const char* sourceAddr, const byte* buf, int n) {
+  int tmpBufCount = 0;
+  int j = 0;
+  for(j = n; j < pktBufCount + 1; j++) {
+    tmpBuf[tmpBufCount++] = (char)(pktBuf[j]);
+  }
+  tmpBuf[tmpBufCount++] = (char)0;
+  Serial.print(sourceAddr); Serial.print(": "); Serial.println(tmpBuf);
+}
+
+
+
+void processStatus(const char* sourceAddr, const byte* buf, int n) {
+  int tmpBufCount = 0;
+  int j = 0;
+  for(j = n; j < pktBufCount + 1; j++) {
+    tmpBuf[tmpBufCount++] = (char)(pktBuf[j]);
+  }
+  tmpBuf[tmpBufCount++] = (char)0;
+  Serial.print(sourceAddr); Serial.print(": "); Serial.println(tmpBuf);
+}
+
+
 void printRawPktBuf() {
   snprintf(tmpBuf, TMP_BUF_LEN, "Data frame (%d): ", pktBufCount);
   Serial.print(tmpBuf);
@@ -306,25 +495,65 @@ void printRawPktBuf() {
   }
   Serial.println();
 
-  boolean pastAddr = false;
-  snprintf(tmpBuf, TMP_BUF_LEN, "Data frame (%d): ", pktBufCount);
-  Serial.print(tmpBuf);
-  for(int n = 0; n < pktBufCount; n++) {
-    byte data = pktBuf[n];
-    if (data == 0xF0) {
-      pastAddr = true;
+  if (false) {
+    boolean pastAddr = false;
+    snprintf(tmpBuf, TMP_BUF_LEN, "Data frame (%d): ", pktBufCount);
+    Serial.print(tmpBuf);
+    for(int n = 0; n < pktBufCount; n++) {
+      byte data = pktBuf[n];
+      if (data == 0xF0) {
+        pastAddr = true;
+      }
+      if (!pastAddr) {
+        data>>=1;
+      }
+      if (data == 13 || data == 10 || isPrintable(data)) {
+        Serial.print((char)data);
+      } else {
+        snprintf(tmpBuf, TMP_BUF_LEN, "[0x%02X]", data);
+        Serial.print(tmpBuf);
+      }
     }
-    if (!pastAddr) {
-      data>>=1;
-    }
-    if (data == 13 || data == 10 || isPrintable(data)) {
-      Serial.print((char)data);
-    } else {
-      snprintf(tmpBuf, TMP_BUF_LEN, "[0x%02X]", data);
-      Serial.print(tmpBuf);
+    Serial.println();
+  } 
+}
+
+
+void noteTypeId(byte id) {
+  // see if this type ID has already been seen.  If not, add it
+  boolean already = false;
+  for(int j = 0; j < typeIdsSeenBufCount; j++ ) {
+    if (id == typeIdsSeenBuf[j]) {
+      already = true;
+      break;
     }
   }
-  Serial.println();
-
-  
-}  
+  if (already) {
+    if (isPrintable((char)id)) {
+      snprintf(tmpBuf, TMP_BUF_LEN, "Already saw type ID 0x%02X = %c", id, (char)id);
+    } else {
+      snprintf(tmpBuf, TMP_BUF_LEN, "Already saw type ID 0x%02X", id);
+    }
+  } else {
+    if (typeIdsSeenBufCount < TYPE_IDS_SEEN_BUF_LEN) {
+      typeIdsSeenBuf[typeIdsSeenBufCount++] = id;
+    }
+    if (isPrintable((char)id)) {
+      snprintf(tmpBuf, TMP_BUF_LEN, "Already saw type ID 0x%02X = %c", id, (char)id);
+    } else {
+      snprintf(tmpBuf, TMP_BUF_LEN, "Already saw type ID 0x%02X", id);
+    }
+  }
+  Serial.println(tmpBuf);
+  strcpy(tmpBuf, "Seen so far: ");
+  int tmpBufCount = strlen(tmpBuf);
+  for(int j = 0; j < typeIdsSeenBufCount; j++) {
+    if (isPrintable((char)(typeIdsSeenBuf[j]))) {
+      tmpBuf[tmpBufCount++] = (char)typeIdsSeenBuf[j];
+    } else {
+      snprintf(&tmpBuf[tmpBufCount], TMP_BUF_LEN, "[0x%02X]", typeIdsSeenBuf[j]);
+    }
+  }
+  tmpBuf[tmpBufCount] = (char)0;
+  Serial.println(tmpBuf);
+}

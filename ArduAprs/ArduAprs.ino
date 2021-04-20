@@ -2,10 +2,13 @@
   Based on GPSPassThru
   Expects KISS device on Serial1.
   by David A. Rush, 2021 Apr 16
+  Should I rename this Trackuino???
 */
 
 #include <SPI.h>
 #include <SD.h>
+#include <WiFiNINA.h>
+#include <avr/dtostrf.h> // for dtostrf library
 
 #define SERIAL_INIT_TIMEOUT_MS 3000
 #define APRS Serial1
@@ -43,20 +46,86 @@ int typeIdsSeenBufCount = 0;
 #define APRS_LOG_WRITE_INTERVAL_MS 30000
 long nextAprsLogWrite = APRS_LOG_WRITE_INTERVAL_MS * 2;
 
+WiFiServer webServer(80);
+// WiFiClient webClient;
+int wiFiStatus = WL_IDLE_STATUS;
+
+#define STATIONS_HEARD_LEN 5
+#define STATIONS_HEARD_WIDTH 20 // how many chars wide to allow for a callsign-ssid WA4DAC-15 123456789
+char stationsHeard[STATIONS_HEARD_LEN][STATIONS_HEARD_WIDTH];
+int nextStationHeard = 0; // how many are in the circular queue?
+int stationsHeardLen = 0; // tops out at STATIONS_HEARD_LEN
+unsigned int totalStationsHeardCount = 0; // ever increasing (until it wraps around after 4.2 billion)
+
+/* Packet info comma-separated strings
+   Callsign-SSID max 8 chars
+   counter, int plus comma, 10 + 1 = 11
+   timestamp when heard (unsigned long + 1) = 10 + 1 = 11
+   latitude ,1234.67N = 9
+   longitude ,12345.67W = 10
+   altitude, 123456
+   raw packet, 30???
+   adds up to 96.  Let's round it up to 100 (and include a null terminator)
+*/
+
+#define PACKETS_HEARD_QUEUE_MAX_LEN 10 // how many to remember
+#define PACKETS_HEARD_MAX_WIDTH 100 // how much to remember about each one
+
+char packetsHeard[PACKETS_HEARD_QUEUE_MAX_LEN][PACKETS_HEARD_MAX_WIDTH];
+int nextPacketHeard = 0;  // Where does the next one go in the circular queue?
+int packetsHeardQueueLen = 0; // how full is the circular queue?
+int totalPacketsHeard = 0; // ever increasing count, serial number for each one heard
+
+
+void addPacketHeard(const char *callsign, float latitude, float longitude, int altitude, const char* rawPkt) {
+  char *buf = packetsHeard[nextPacketHeard++];
+  int len = snprintf(buf, PACKETS_HEARD_MAX_WIDTH, "%s, %d, %d, ", callsign, totalPacketsHeard++, millis());
+  // Append latitude
+  dtostrf(latitude, 9, 6, tmpBuf);
+  strncat(buf, tmpBuf, PACKETS_HEARD_MAX_WIDTH);
+  strncat(buf, ", ", PACKETS_HEARD_MAX_WIDTH);
+  
+  // append longitude
+  dtostrf(longitude, 10, 6, tmpBuf);
+  strncat(buf, tmpBuf, PACKETS_HEARD_MAX_WIDTH);
+
+  // snprintf(tmpBuf, TMP_BUF_LEN, ", %d$", altitude);
+  // strncat(buf, tmpBuf, PACKETS_HEARD_MAX_WIDTH);
+
+  // Serial.print("From "); Serial.print(callsign); Serial.print(" rawPkt = "); Serial.println(rawPkt);
+  
+  snprintf(tmpBuf, TMP_BUF_LEN, ", %d, %s", altitude, rawPkt);
+  strncat(buf, tmpBuf, PACKETS_HEARD_MAX_WIDTH);
+  
+  nextPacketHeard %= PACKETS_HEARD_QUEUE_MAX_LEN;
+  if (packetsHeardQueueLen < PACKETS_HEARD_QUEUE_MAX_LEN) {
+    packetsHeardQueueLen++;
+  }
+}
+
+
 boolean goodSerial = false;
 boolean goodAprs = false;
 boolean goodAprsLog = false;  // Log to SD card if found
-
+boolean goodWiFi = false;
+boolean goodWebServer = false;
 
 void setup() {
+  Serial.print("\n\nArduAprs: ");
   goodSerial = setupSerial(9600);
+  Serial.print("goodSerial = "); Serial.println(goodSerial);
   goodAprs = setupAprs(9600);
   if (goodAprs) {
     goodAprsLog = setupAprsLog();
   }
-  Serial.print("ArduAprs: ");
-  Serial.print("goodSerial = "); Serial.print(goodSerial);
-  Serial.print(", goodAprs = "); Serial.println(goodAprs);
+  Serial.print("goodAprs = "); Serial.println(goodAprs);
+  goodWiFi = setupWiFi();
+  Serial.print("goodWiFi = "); Serial.println(goodWiFi);
+  if (goodWiFi) {
+    Serial.print("IP Address: "); Serial.println(WiFi.localIP());
+    goodWebServer = setupWebServer();
+  }
+  Serial.print("goodWebServer = "); Serial.println(goodWebServer);
   if (goodAprsLog) {
       Serial.print("Logging to SD card: "); Serial.println(logFileName);
   } else {
@@ -173,10 +242,44 @@ void logAprsLog(const byte *data, int len) {
 }
 
 
+boolean setupWiFi() {
+  char ssid[] = "Get off my LAN";
+  char pword[] = "ihate2000walnuts";
+  boolean result = false;
+  if (WiFi.status() == WL_NO_MODULE) {
+    Serial.println("WL_NO_MODULE");
+  } else {
+    int tries = 1;
+    while (wiFiStatus != WL_CONNECTED && tries > 0) {
+      Serial.print("Attempting to connect to "); Serial.println(ssid);
+      wiFiStatus = WiFi.begin(ssid, pword);
+      if (wiFiStatus != WL_CONNECTED) {
+        delay(5000);
+        tries--;
+      } else {
+        result = true;
+      }
+    }
+  }
+  return result;
+}
+
+
+boolean setupWebServer() {
+  boolean result = false;
+  webServer.begin();
+  result = true;
+  return result;
+}
+
+
 void loop() {
   // The Main Loop
   if (goodAprs) {
     loopAprs();
+  }
+  if (goodWebServer) {
+    loopWebServer();
   }
 }
 
@@ -311,6 +414,7 @@ void processDataFrame() {
         snprintf(tmpBuf, TMP_BUF_LEN, "-%d", ssid);
         strcat(sourceAddr, tmpBuf);
       }
+      addStationHeard(sourceAddr);
     }
     addrNum++;
   }
@@ -412,6 +516,16 @@ void processDataFrame() {
 }
 
 
+void addStationHeard(const char *callsign) {
+  // strncpy(stationsHeard[nextStationHeard++], callsign, STATIONS_HEARD_WIDTH);
+  snprintf(stationsHeard[nextStationHeard++], STATIONS_HEARD_WIDTH, "%-8s %9d", callsign, totalStationsHeardCount++);
+  nextStationHeard %= STATIONS_HEARD_LEN;
+  if (stationsHeardLen < STATIONS_HEARD_LEN) {
+    stationsHeardLen++;
+  }
+}
+
+
 void processPosWithTime(const char* sourceAddr, const byte* buf, int n) {
   int tmpBufCount = 0;
   int j = 0;
@@ -422,16 +536,23 @@ void processPosWithTime(const char* sourceAddr, const byte* buf, int n) {
   Serial.print(sourceAddr); Serial.print(": "); Serial.println(tmpBuf);
 }
 
-
+#define PACKET_INFO_LEN 50
+char packetInfo[PACKET_INFO_LEN];
 
 void processPosWoutTime(const char* sourceAddr, const byte* buf, int n) {
-  int tmpBufCount = 0;
+  int count = 0;
   int j = 0;
   for(j = n; j < pktBufCount + 1; j++) {
-    tmpBuf[tmpBufCount++] = (char)(pktBuf[j]);
+    packetInfo[count++] = (char)(pktBuf[j]);
   }
-  tmpBuf[tmpBufCount++] = (char)0;
-  Serial.print(sourceAddr); Serial.print(": "); Serial.println(tmpBuf);
+  packetInfo[count++] = (char)0;
+  // Should look kinda like this:
+  // 012345678901234567890
+  // 3228.57N/08457.06W3/A=000450 07.9V 31C #
+  // Regex to the rescue?
+
+  // Serial.print(sourceAddr); Serial.print(": "); Serial.println(packetInfo);
+  addPacketHeard(sourceAddr, 32.5, -84.9, 300, packetInfo);
 }
 
 
@@ -556,4 +677,91 @@ void noteTypeId(byte id) {
   }
   tmpBuf[tmpBufCount] = (char)0;
   Serial.println(tmpBuf);
+}
+
+
+#define REQ_BUF_LEN 512
+char reqBuf[REQ_BUF_LEN];
+int reqBufCount = 0;
+
+
+void loopWebServer() {
+  long start = millis();
+  WiFiClient webClient = webServer.available();
+  if (webClient) {
+    Serial.println("Web connection...");
+    boolean blankLine = true; // request ends with a blank line
+    while (webClient.connected()) {
+      if (webClient.available()) {
+        char c = webClient.read();
+        if (c != '\r') {
+          // Serial.write(c);
+          if (c == '\n' && blankLine) {
+            sendWebResponse(webClient);
+            break;
+          }
+          if (c == '\n') {
+            blankLine = true;
+            // Serial.println("Saw a slash n");
+          } else {
+            blankLine = false;
+          }
+        }
+      }
+    }
+    delay(5); // give web browser time to receive?  Why?
+    webClient.stop();
+    Serial.print("Processed web hit in "); Serial.print(millis() - start); Serial.println(" ms");
+  }
+}
+
+
+void sendWebResponse(WiFiClient webClient) {
+  Serial.println("Sending response...");
+  webClient.println("HTTP/1.1 200 OK");
+  webClient.println("Content-type:text/plain");
+  webClient.println("Connection: close"); // connection will be closed after response
+  webClient.println();
+  webClient.print("Hello.\nmillis() = ");
+  webClient.println(millis());
+
+  if (true) {
+    webClient.println("\nPackets Heard, newest first:");
+    // newest first
+    int n = nextPacketHeard - 1;
+    if (n < 0) {
+      n = PACKETS_HEARD_QUEUE_MAX_LEN - 1; // wrap around
+    }
+    // n should be pointed at the oldest one now
+    for(int j = 0; j < packetsHeardQueueLen; j++) {
+      webClient.println(packetsHeard[(PACKETS_HEARD_QUEUE_MAX_LEN - j + n) % PACKETS_HEARD_QUEUE_MAX_LEN]);
+    }
+  }
+  
+  if (false) {
+    webClient.println("\nStations Heard, oldest first:");
+    // oldest first
+    int n = nextStationHeard % stationsHeardLen;
+    //if (n > stationsHeardLen) {
+    //  n = 0; // wrap around
+    //}
+    // n should be pointed at the oldest one now
+    for(int j = 0; j < stationsHeardLen; j++) {
+      webClient.println(stationsHeard[(j + n) % STATIONS_HEARD_LEN]);
+    }
+  }
+  
+  if (true) {
+    webClient.println("\nStations Heard, newest first:");
+    // newest first
+    int n = nextStationHeard - 1;
+    if (n < 0) {
+      n = STATIONS_HEARD_LEN - 1; // wrap around
+    }
+    // n should be pointed at the oldest one now
+    for(int j = 0; j < stationsHeardLen; j++) {
+      webClient.println(stationsHeard[(STATIONS_HEARD_LEN - j + n) % STATIONS_HEARD_LEN]);
+    }
+  }
+  webClient.println();
 }

@@ -9,6 +9,7 @@
 #include <SD.h>
 #include <WiFiNINA.h>
 #include <avr/dtostrf.h> // for dtostrf library
+#include <Regexp.h>
 
 #define SERIAL_INIT_TIMEOUT_MS 3000
 #define APRS Serial1
@@ -68,7 +69,7 @@ unsigned int totalStationsHeardCount = 0; // ever increasing (until it wraps aro
    adds up to 96.  Let's round it up to 100 (and include a null terminator)
 */
 
-#define PACKETS_HEARD_QUEUE_MAX_LEN 10 // how many to remember
+#define PACKETS_HEARD_QUEUE_MAX_LEN 100 // how many to remember
 #define PACKETS_HEARD_MAX_WIDTH 100 // how much to remember about each one
 
 char packetsHeard[PACKETS_HEARD_QUEUE_MAX_LEN][PACKETS_HEARD_MAX_WIDTH];
@@ -78,25 +79,36 @@ int totalPacketsHeard = 0; // ever increasing count, serial number for each one 
 
 
 void addPacketHeard(const char *callsign, float latitude, float longitude, int altitude, const char* rawPkt) {
+  // Point buf to the start of the current member of the queue, for convenience.  Has max length PACKETS_HEARD_MAX_WIDTH (minus one for null terminator)
   char *buf = packetsHeard[nextPacketHeard++];
+
   int len = snprintf(buf, PACKETS_HEARD_MAX_WIDTH, "%s, %d, %d, ", callsign, totalPacketsHeard++, millis());
   // Append latitude
-  dtostrf(latitude, 9, 6, tmpBuf);
-  strncat(buf, tmpBuf, PACKETS_HEARD_MAX_WIDTH);
-  strncat(buf, ", ", PACKETS_HEARD_MAX_WIDTH);
+  dtostrf(latitude, 9, 6, tmpBuf); // float to string
+  strcat(buf, tmpBuf);
+  strcat(buf, ", ");
   
   // append longitude
   dtostrf(longitude, 10, 6, tmpBuf);
-  strncat(buf, tmpBuf, PACKETS_HEARD_MAX_WIDTH);
+  strcat(buf, tmpBuf);
 
-  // snprintf(tmpBuf, TMP_BUF_LEN, ", %d$", altitude);
-  // strncat(buf, tmpBuf, PACKETS_HEARD_MAX_WIDTH);
-
-  // Serial.print("From "); Serial.print(callsign); Serial.print(" rawPkt = "); Serial.println(rawPkt);
-  
-  snprintf(tmpBuf, TMP_BUF_LEN, ", %d, %s", altitude, rawPkt);
-  strncat(buf, tmpBuf, PACKETS_HEARD_MAX_WIDTH);
-  
+  snprintf(tmpBuf, TMP_BUF_LEN, ", %d, ", altitude);
+  if (false) {
+    int tbl = strlen(tmpBuf); // tmp buf len
+    int rpl = strlen(rawPkt); // raw pkt len
+    len = tbl + rpl;
+    if (len > PACKETS_HEARD_MAX_WIDTH -1) {
+      len = PACKETS_HEARD_MAX_WIDTH - 1;
+    }
+    // Iterate over the rawPkt
+    int n = 0;
+    int m = 0;
+    for(n = tbl; n < len; n++) {
+      tmpBuf[n] = rawPkt[m++];
+    }
+    tmpBuf[n] = (char)0;
+  }
+  strcat(buf, tmpBuf);
   nextPacketHeard %= PACKETS_HEARD_QUEUE_MAX_LEN;
   if (packetsHeardQueueLen < PACKETS_HEARD_QUEUE_MAX_LEN) {
     packetsHeardQueueLen++;
@@ -131,6 +143,18 @@ void setup() {
   } else {
     Serial.println("Not logging to SD card.");
   }
+  tests();
+}
+
+
+void tests() {
+  strcpy(tmpBuf, "3228.57N/08457.06W3/A=000415 07.9V 31C");
+  float y = parseLatitude(tmpBuf);
+  Serial.print("\ntests(): y = "); Serial.print(y); Serial.print(" from "); Serial.println(tmpBuf);
+  strcpy(tmpBuf, "08457.06W");
+  float x = parseLongitude(tmpBuf);
+  Serial.print("tests(): x = "); Serial.print(x); Serial.print(" from "); Serial.println(tmpBuf);
+  Serial.println();
 }
 
 
@@ -539,22 +563,93 @@ void processPosWithTime(const char* sourceAddr, const byte* buf, int n) {
 #define PACKET_INFO_LEN 50
 char packetInfo[PACKET_INFO_LEN];
 
-void processPosWoutTime(const char* sourceAddr, const byte* buf, int n) {
+void getPacketInfo(const byte* buf, int n) {
   int count = 0;
   int j = 0;
   for(j = n; j < pktBufCount + 1; j++) {
     packetInfo[count++] = (char)(pktBuf[j]);
   }
   packetInfo[count++] = (char)0;
+}
+
+
+void processPosWoutTime(const char* sourceAddr, const byte* buf, int n) {
+  getPacketInfo(buf, n);
   // Should look kinda like this:
   // 012345678901234567890
   // 3228.57N/08457.06W3/A=000450 07.9V 31C #
   // Regex to the rescue?
+  Serial.print("Matching: \""); Serial.print(packetInfo); Serial.println("\"");
+  float y = NAN; // latitude
+  float x = NAN; // longitude
+  int   z = 0;   // altitude
+  MatchState ms;
+  ms.Target(packetInfo);
+  char matchResult = ms.Match("(%d%d%d%d%.%d%d[NS])");
+  if (matchResult == REGEXP_MATCHED) {
+    ms.GetCapture(tmpBuf, 0);
+    y = parseLatitude(tmpBuf);
+  } else {
+    Serial.print("processPosWoutTime(): No latitude match found in: "); Serial.println(packetInfo);
+  }
 
+  ms.Target(packetInfo);
+  matchResult = ms.Match("(%d%d%d%d%d%.%d%d[EW])");
+  if (matchResult == REGEXP_MATCHED) {
+    ms.GetCapture(tmpBuf, 0);
+    x = parseLongitude(tmpBuf);
+  } else {
+    Serial.print("processPosWoutTime(): No longitude match found in: "); Serial.println(packetInfo);
+  }
+  
+  ms.Target(packetInfo);
+  matchResult = ms.Match("A=(%d%d%d%d%d%d)");
+  if (matchResult == REGEXP_MATCHED) {
+    ms.GetCapture(tmpBuf, 0);
+    z = parseAltitude(tmpBuf);
+  } else {
+    Serial.print("processPosWoutTime(): No altitude match found in: "); Serial.println(packetInfo);
+  }
   // Serial.print(sourceAddr); Serial.print(": "); Serial.println(packetInfo);
-  addPacketHeard(sourceAddr, 32.5, -84.9, 300, packetInfo);
+  addPacketHeard(sourceAddr, y, x, z, packetInfo);
 }
 
+
+float parseLatitude(char *buf) {
+  //            01234567
+  // Expecting "3212.34N"
+  float y = (buf[0] - '0') * 10 + buf[1] - '0';
+  float mins = (buf[2] - '0') * 10 + (buf[3] - '0') + ((buf[5] - '0')/10.0) + ((buf[6] - '0')/100.0);
+  // Serial.print("degrees = "); Serial.print(y); Serial.print(", minutes = "); Serial.println(mins);
+  y += mins/60.0;
+  if (buf[7] == 'S') {
+    y *= -1.0;
+  }
+  Serial.print("Parsing latitude from: "); Serial.print(buf); Serial.print(" and got "); Serial.println(y);
+  return y;
+}
+
+
+
+float parseLongitude(char *buf) {
+  //            012345678
+  // Expecting "08457.06W3/A=000395 07.9V 31C"
+  float x = (buf[0] - '0') * 100 + (buf[1] - '0') * 10 + (buf[2] - '0');
+  float mins = (buf[3] - '0') * 10 + (buf[4] - '0') + ((buf[6] - '0')/10.0) + ((buf[7] - '0')/100.0);
+  // Serial.print("degrees = "); Serial.print(y); Serial.print(", minutes = "); Serial.println(mins);
+  x += mins/60.0;
+  if (buf[8] == 'W') {
+    x *= -1.0;
+  }
+  Serial.print("Parsing longitude from: "); Serial.print(buf); Serial.print(" and got "); Serial.println(x);
+  return x;
+}
+
+
+int parseAltitude(char *buf) {
+  // Expecting 123456
+  return (buf[0] - '0') * 100000 + (buf[1] - '0') * 10000 + (buf[2] - '0') * 1000 + (buf[3] - '0') * 100 + (buf[4] - '0') * 10 + (buf[5] - '0');
+}
 
 
 void processObject(const char* sourceAddr, const byte* buf, int n) {
@@ -569,13 +664,56 @@ void processObject(const char* sourceAddr, const byte* buf, int n) {
 
 
 void processRawGPS(const char* sourceAddr, const byte* buf, int n) {
-  int tmpBufCount = 0;
-  int j = 0;
-  for(j = n; j < pktBufCount + 1; j++) {
-    tmpBuf[tmpBufCount++] = (char)(pktBuf[j]);
+  //             0123456789012345678901234567890
+  // Expecting: "GPRMC,014256,A,3242.4527,N,08527.2847,W,000,237,200421,,*0A"
+
+  /*
+19:56:57.863 -> aprsDataTypeId = 0x24 = $
+19:56:57.863 -> Raw GPS data
+19:56:57.863 -> RawGPS matching: "GPRMC,015653,A,3242.4489,N,08527.2841,W,000,201,200421,,*0C"
+19:56:57.863 -> processPosWoutTime(): No latitude match found in: GPRMC,015653,A,3242.4489,N,08527.2841,W,000,201,200421,,*0C
+19:56:57.863 -> WB4BYQ-3: aprsDataTypeId = 0x24 = $
+19:56:57.863 -> GPRMC,015653,A,3242.4489,N,08527.2841,W,000,201,200421,,*0C
+19:56:57.863 -> 
+
+   */
+  getPacketInfo(buf, n);
+  
+  Serial.print("RawGPS matching: \""); Serial.print(packetInfo); Serial.println("\"");
+  float y = NAN; // latitude
+  float x = NAN; // longitude
+  int   z = 0;   // altitude
+  MatchState ms;
+  ms.Target(packetInfo);
+  char matchResult = ms.Match("GPRMC,%d+,A,(%d%d%d%d%.%d+),([NS]),(%d%d%d%d%d%.%d+),([EW])");
+  if (matchResult == REGEXP_MATCHED) {
+    ms.GetCapture(tmpBuf, 0); // longitude
+    y = (tmpBuf[0] - '0') * 10 + (tmpBuf[1] - '0');
+    float divisor = 0.1;
+    for(int j = 3; j < strlen(tmpBuf); j++) {
+      y += (tmpBuf[0] - '0') * divisor;
+      divisor /= 10.0;
+    }
+    ms.GetCapture(tmpBuf, 1); // N or S?
+    if (tmpBuf[0] == 'S') {
+      y *= -1.0;
+    }
+    ms.GetCapture(tmpBuf, 2); // longitude
+    x = (tmpBuf[0] - '0') * 100 + (tmpBuf[1] - '0') * 10 + (tmpBuf[2] - '0');
+    divisor = 0.1;
+    for(int j = 3; j < strlen(tmpBuf); j++) {
+      x += (tmpBuf[0] - '0') * divisor;
+      divisor /= 10.0;
+    }
+    ms.GetCapture(tmpBuf, 3); // E or W?
+    if (tmpBuf[0] == 'W') {
+      x *= -1.0;
+    }
+  } else {
+    Serial.print("processRawGPS(): No match found in: "); Serial.println(packetInfo);
   }
-  tmpBuf[tmpBufCount++] = (char)0;
   Serial.print(sourceAddr); Serial.print(": "); Serial.println(tmpBuf);
+  addPacketHeard(sourceAddr, y, x, z, tmpBuf);
 }
 
 
@@ -726,7 +864,10 @@ void sendWebResponse(WiFiClient webClient) {
   webClient.println(millis());
 
   if (true) {
-    webClient.println("\nPackets Heard, newest first:");
+    webClient.println();
+    webClient.println("          111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999");
+    webClient.println("0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789");
+    webClient.println("Packets Heard, newest first:");
     // newest first
     int n = nextPacketHeard - 1;
     if (n < 0) {

@@ -9,7 +9,9 @@
 */
 
 // Keep VERSION an integer
-#define VERSION 1
+// #define VERSION 1
+// Version 2 adds new formula for altitude from pressure
+#define VERSION 2
 
 // define USE_IOT_CARRIER if this code is to be deployed on a MKR 1310 that's riding on an IoT Carrier board.
 // Do not define IOT_CARRIER if this code is to use discrete OLED display and SD card writer.
@@ -19,6 +21,7 @@
 // Define exactly ONE, either USE_8 or USE_4, but not both
 #define USE_8_LINE_OLED_DISPLAY
 // #define USE_4_LINE_OLED_DISPLAY
+
 
 #ifdef USE_IOT_CARRIER
   /* Arduino_MKRIoTCarrier.h also includes:
@@ -76,6 +79,7 @@
 
 #include <LoRa.h>
 #include <Regexp.h> // Library by Nick Gammon for regular expressions
+#include <avr/dtostrf.h> // for formatting floating point numbers
 
 #define MS_PER_SECOND 1000
 #define MS_PER_MINUTE (MS_PER_SECOND * 60)
@@ -242,6 +246,9 @@ void setup() {
   } else {
     Serial.println("goodSD is false");
   }
+  if (selfTest()) {
+    Serial.print("selfTest() has passed");
+  }
 }
 
 
@@ -372,6 +379,59 @@ boolean setupPresSensor() {
   if (presSensor.begin()) {
     result = true;
   }
+  return result;
+}
+
+
+boolean selfTest() {
+  // Run some self-tests and return false if something is terribly wrong.
+  Serial.println("\n\********** selfTest() **********");
+  boolean result = true;
+  int errors = 0;
+  errors += testHPaToMeters(0, STANDARD_PRESSURE_HPA);
+  errors += testHPaToMeters(111, 1000.0); // 1000 hPa = 110.8 m = 363.6 ft (per weather.gov online calculator)
+  // 900 hPa = 988.1 m = 3241.8 ft
+  errors += testHPaToMeters(5572, 500.0); // 500 hPa = 5572.1 m = 18,281.2 ft
+  errors += testHPaToMeters(15790, 100.0); // 100 hPa = 15790.5 m = 51806 ft
+  errors += testHPaToMeters(25908, 10.0); // 10 hPa = 25907.5 m = 84998.2 ft
+  errors += testHPaToMeters(32435, 1.0); // 1 hPa = 32435.3 m = 106414.9 ft
+  Serial.println("***********************************\n");
+  // delay(10000);
+  return (errors == 0);
+}
+
+
+int testHPaToMeters(int expected, float hPa) {
+  // Return 1 on failure, 0 on success.
+  int result = 0;
+  float tolerancePct = 2.0;
+  int found = hPaToMeters(hPa);
+  snprintf(tmpBuf, TMP_BUF_LEN, "expected %5d, found %5d for hPa = ", expected, found);
+  dtostrf(hPa, 6, 1, &tmpBuf[strlen(tmpBuf)]);  // float (double, really) to string
+  float errorPct;
+  if (expected == 0) {
+    if (found == expected) {
+      errorPct = 0.0; 
+    } else {
+      errorPct = found - expected;
+    }
+  } else {
+    errorPct = 100.0 * (found - expected) / (expected);
+  }
+  // float maxDelta = expected * tolerancePct / 100.0;
+  // int delta = abs(expected - found);
+  if (errorPct > tolerancePct) {
+    result = 1;
+  }
+  strcat(tmpBuf, ", error ");
+  dtostrf(errorPct, 5, 2, &tmpBuf[strlen(tmpBuf)]);
+  strcat(tmpBuf, " %");
+  if (result) {
+    strcat(tmpBuf, " *** FAIL");
+  } else {
+    strcat(tmpBuf, " *** Pass");
+  }
+  Serial.println(tmpBuf);
   return result;
 }
 
@@ -816,16 +876,14 @@ void loopPresSensor() {
   long start = millis();
   if (start >= nextPresSensorReading) {
     last_hPa = hPa;
-    hPa = presSensor.readPressure();
-    Serial.print("Pressure hPa: "); Serial.print(hPa);
     last_altitudeMeters = altitudeMeters;
-    altitudeMeters = hPaToMeters(hPa);
-    Serial.print(", Altitude meters: "); Serial.print(altitudeMeters);
-    float inHg = hPa / HPA_PER_IN_HG;
-    Serial.print(", Pressure inHg: "); Serial.println(inHg);
-    if (false) {
-      long elapsedMs = millis() - start;
-      Serial.print("Elapsed ms to read pressure sensor: "); Serial.println(elapsedMs);
+    hPa = presSensor.readPressure();
+    // hPa = 500.0; // for testing
+    if (isnan(hPa)) {
+      altitudeMeters = -1;
+    } else {
+      Serial.print("Pressure hPa: "); Serial.print(hPa);
+      altitudeMeters = hPaToMeters(hPa);
     }
     nextPresSensorReading = millis() + PRES_SENSOR_READING_INTERVAL_MS;
   }
@@ -850,7 +908,11 @@ int hPaToMeters(float hPa) {
     result = result / 9.8;
     Serial.print("result = "); Serial.println(result);
   }
-  return (int)((log((hPa * 100.0)/101325.0) * 287.053 * (temperatureF + 459.67 * 5.0 / 9.0))/(9.8));
+  
+  // this one never worked well: return (int)((log((hPa * 100.0)/101325.0) * 287.053 * (temperatureF + 459.67 * 5.0 / 9.0))/(9.8));
+  // Equation 8 from Luther's paper:
+  float p = hPa * 100.0;
+  return 44330.8 - 4946.54 * pow(p, 0.1902632);
 }
 
 
@@ -899,6 +961,7 @@ void updateDisplay() {
       sprintf(printBuf, "x = %6d y = %6d\nz = %6d c = %d", x, y, z, loggedPacketCount);
       display.println(printBuf);
       display.print("Pres "); display.print(hPa); display.println(" hPa");
+      display.print("Alt "); display.print(altitudeMeters); display.println(" m");
       display.display();
     #endif
   }

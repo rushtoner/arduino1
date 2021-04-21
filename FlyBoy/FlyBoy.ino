@@ -133,7 +133,7 @@ char loRaRxBuf[LORA_RX_BUF_LEN];
 #endif
 
 // Report HMR data every 10 seconds
-#define LORA_TRANSMIT_INTERVAL_MS 10000
+#define LORA_TRANSMIT_INTERVAL_MS 5000
 int n = 0;
 
 // Loop code runs as a state machine
@@ -185,6 +185,7 @@ Adafruit_MPRLS presSensor;
 // 10 hPa = 25907.5 m = 84998.2 ft
 // 1 hPa = 32435.3 m = 106414.9 ft
 
+#define HPA_PER_IN_HG 33.863886666667
 #define STANDARD_PRESSURE_HPA 1013.25
 float hPa = STANDARD_PRESSURE_HPA;
 float last_hPa = hPa;
@@ -499,7 +500,7 @@ void loopLoRa() {
     int packetSize = LoRa.parsePacket();
     if (packetSize) {
       char* buf = loRaRead(packetSize);
-      Serial.println(buf);
+      Serial.print("LoRa received: "); Serial.println(buf);
     }
 
     // Now transmit every once in a while, maybe
@@ -513,7 +514,14 @@ void loopLoRa() {
       }
       Serial.print("hPa = "); Serial.print(hPa); Serial.print(", last_hPa = "); Serial.print(last_hPa); 
       Serial.print(", delta = "); Serial.print(delta); Serial.print(", dir = "); Serial.println(dir);
-      snprintf(printBuf, PRINT_BUF_LEN, "FlyBoy v%d s/x/y/z/Pa/dir,%d,%d,%d,%d,%d,%s", VERSION, millis()/MS_PER_SECOND, x, y, z, (int)(hPa * 100.0), dir);
+      int pa = 0;
+      if (!isnan(hPa)) {
+        pa = (int)(hPa * 100.0);
+      }
+      Serial.print("altitudeMeters = "); Serial.println(altitudeMeters);
+      snprintf(printBuf, PRINT_BUF_LEN, "FlyBoy v%d s=%d,x=%d,y=%d,z=%d,pa=%d,a=%d,%s"
+        , VERSION, millis()/MS_PER_SECOND, x, y, z, pa, altitudeMeters, dir);
+      Serial.println(printBuf);
       loRaTransmit(printBuf);
       nextLoRaTransmitMillis = millis() + LORA_TRANSMIT_INTERVAL_MS;
     }
@@ -689,6 +697,7 @@ void processReceiveBuf() {
   } else {
     badSampleLength++;
   }
+  /*
   if (goodSampleLength % 100 == 0) {
     // printlnInt("goodSampleLength = ", goodSampleLength);
     sprintf(printBuf, "goodSampleLength = %d, badSampleLength = %d, total = %d, CONTINUOUS_SECS = %d"
@@ -696,6 +705,7 @@ void processReceiveBuf() {
     Serial.println(printBuf);
     Serial.println(receiveBuf);
   }
+  */
   
   receiveCount++;
   receiveBufNextChar = 0;
@@ -869,7 +879,6 @@ void getNextFileName() {
 }
 
 
-#define HPA_PER_IN_HG 33.863886666667
 
 
 void loopPresSensor() {
@@ -951,9 +960,14 @@ void updateDisplay() {
       }
       */
       if (goodHMR) {
-        display.println(F(" HMR: ok"));
+        display.print(F("HMR: OK   "));
       } else {
-        display.println(F(" HMR: FAIL"));
+        display.print(F("HMR: FAIL "));
+      }
+      if (goodLoRa) {
+        display.println("LoRa: OK");
+      } else {
+        display.println("LoRa: FAIL");
       }
       // display.print("hmrState = "); display.println(hmrState);
       display.print("File: "); display.println(logFileName);

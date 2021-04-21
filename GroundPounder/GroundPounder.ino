@@ -1,3 +1,5 @@
+#define VERSION 1
+
 #include <SPI.h>
 #include <LoRa.h>
 #include <Wire.h>
@@ -40,8 +42,9 @@
 #define GPSRx Serial1
 #define SERIAL_INIT_TIMEOUT_MS 5000 // wait up to 5 seconds for the GPSRx serial port to initialize
 #define TIMESTAMP_BEACON_INTERVAL_MS 60000 // send a GPS timestamp beacon every 10 seconds
+#define BUTTON_A_PIN 7
 
-char title[] = "Ground Pounder";
+char title[] = "Ground Pounder v???";
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
@@ -101,6 +104,7 @@ boolean goodGPSRx   = false; // GPS receiver expected on Serial1
 
 void setup() {
   // Set up each subsystem
+  setupTitle();
   goodDisplay = setupDisplay();
   goodSerial  = setupSerial();
   goodLoRa    = setupLoRa();
@@ -109,8 +113,18 @@ void setup() {
   setupLED();
   setupRuler();
   nextScreenChangeMs = SCREEN_CHANGE_INTERVAL_MS;
+  setupButton();
 }
 
+
+void setupTitle() {
+  for(int j = 0; j < strlen(title); j++) {
+    if (title[j] == '?') {
+      sprintf(&title[j], "%d", VERSION);
+      break;
+    }
+  }
+}
 
 void setupRuler() {
   if (PRINT_RULER) {
@@ -201,6 +215,11 @@ boolean setupGPSRx() {
 }
 
 
+void setupButton() {
+  pinMode(BUTTON_A_PIN, INPUT);  
+}
+
+
 void loop() {
   loopLED();  // do the distinctive blink pattern
   if (loopLoRa()) {
@@ -228,6 +247,7 @@ void loop() {
   if (loopGPSRx()) {
     processGPSRx();
   }
+  loopButton();
 }
 
 
@@ -338,9 +358,9 @@ void updateDisplay() {
     display.clearDisplay();
     display.setCursor(0,0);
     if (millis() % 1000 < 500) {
-      display.println("** Ground Pounder");
+      display.print("* "); display.println(title);
     } else {
-      display.println("   Ground Pounder **");
+      display.print("  "); display.print(title); display.println(" *");
     }
     int screen = currentScreen % NUMBER_OF_SCREENS;
     if (screen == SCREEN_DEFAULT) {
@@ -381,6 +401,11 @@ void updateDisplay() {
         display.print(tmpBuf);
       }
     } else if (screen == SCREEN_GPS) {
+      if (goodLoRa) {
+        display.println("LoRa: Good");
+      } else {
+        display.println("LoRa: BAD!!!");
+      }
       snprintf(tmpBuf, TMP_BUF_LEN, "GPS Status\nFix state %d\n", gpsFixState);
       display.println(tmpBuf);
       display.println(gpsFixQualityBuf);
@@ -749,5 +774,17 @@ void printBuf(const char* label, const char* buf, int bufCount, int bufSize) {
 void printRuler() {
   if (PRINT_RULER && goodSerial) {
     Serial.println(ruler);
+  }
+}
+
+
+void loopButton() {
+  // Check for button press
+  if (false) {
+    if (digitalRead(BUTTON_A_PIN) == LOW) {
+      Serial.println("Button A is LOW");
+    } else {
+      Serial.println("Button A is HIGH");
+    }
   }
 }

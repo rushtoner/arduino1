@@ -145,6 +145,8 @@ int lastHmrState = -1;
 long nextHmrStateTransition = -1;
 long nextLoRaTransmitMillis = 0;
 
+long gpBeaconMs = 0;  // millis() when Ground Pounder timestamp beacon was last heard
+
 // Data read from MKR ENV sensor, but not using because it seems to conflict with some other board (SD Proto shield?)
 float temperature = 0.0, humidity = 0.0, pressure = 0.0;
 int loopCount = 0;
@@ -505,7 +507,12 @@ void loopLoRa() {
       String str(buf);
       if (str.indexOf("timestamp beacon") > 0) {
         Serial.print("Got timestamp beacon: "); Serial.println(buf);
+        snprintf(tmpBuf, TMP_BUF_LEN, ", at %d ms", millis());
+        if (strlen(buf) + strlen(tmpBuf) < LORA_RX_BUF_LEN - 1) {
+          strcat(buf, tmpBuf); // copy radio buffer to tmpBuf
+        }
         logSD(buf);
+        gpBeaconMs = millis(); // make a note of when last heard
       }
     }
 
@@ -525,8 +532,8 @@ void loopLoRa() {
         pa = (int)(hPa * 100.0);
       }
       // Serial.print("altitudeMeters = "); Serial.println(altitudeMeters);
-      snprintf(printBuf, PRINT_BUF_LEN, "FlyBoy v%d s=%d,x=%d,y=%d,z=%d,pa=%d,a=%d,%s"
-        , VERSION, millis()/MS_PER_SECOND, x, y, z, pa, altitudeMeters, dir);
+      snprintf(printBuf, PRINT_BUF_LEN, "FlyBoy v%d s=%d,x=%d,y=%d,z=%d,pa=%d,a=%d,%s,gpb=%d"
+        , VERSION, millis()/MS_PER_SECOND, x, y, z, pa, altitudeMeters, dir, getGpBeaconAgeSec());
       Serial.println(printBuf);
       loRaTransmit(printBuf);
       nextLoRaTransmitMillis = millis() + LORA_TRANSMIT_INTERVAL_MS;
@@ -534,6 +541,14 @@ void loopLoRa() {
   }
 }
 
+
+int getGpBeaconAgeSec() {
+  // Calculate the number of seconds since a ground pounder timestamp beacon was heard, or 0 if never heard
+  if (gpBeaconMs > 0) {
+    return (int)((millis() - gpBeaconMs) / 1000L);
+  }
+  return 0;
+}
 
 char* loRaRead(int packetSize) {
   int n = 0; // pointer into the receive buffer
@@ -960,23 +975,10 @@ void updateDisplay() {
       }
       display.println(tmpBuf);
 
-      /*
-      if (goodSerial) {
-        display.print(F("Ser: ok"));
-      } else {
-        display.print(F("Ser: FAIL"));
-      }
-      */
-      if (goodHMR) {
-        display.print(F("HMR: OK   "));
-      } else {
-        display.print(F("HMR: FAIL "));
-      }
-      if (goodLoRa) {
-        display.println("LoRa: OK");
-      } else {
-        display.println("LoRa: FAIL");
-      }
+      // 1234567890123456789012
+      // LoRa 1 GPBS 100000
+      snprintf(printBuf, PRINT_BUF_LEN, "LoRa %d GPBS %d", goodLoRa, getGpBeaconAgeSec());
+      display.println(printBuf);
       // display.print("hmrState = "); display.println(hmrState);
       display.print("File: "); display.println(logFileName);
       display.println(getRunTime(millis()));

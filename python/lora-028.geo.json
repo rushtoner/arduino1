@@ -1,0 +1,1102 @@
+{
+  "type":"FeatureCollection",
+  "features":[
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95102,32.47637]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:03:29,1,32.47637,-84.95102,106"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95102,32.47635]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:03:34,1,32.47635,-84.95102,107"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95103,32.47634]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:03:39,1,32.47634,-84.95103,107"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95103,32.47633]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:03:44,1,32.47633,-84.95103,107"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95104,32.47636]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:03:49,1,32.47636,-84.95104,107"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95102,32.47635]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:03:54,1,32.47635,-84.95102,107"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95099,32.47637]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:04:00,1,32.47637,-84.95099,107"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95099,32.47637]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:04:00,1,32.47637,-84.95099,107"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95097,32.47635]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:04:05,1,32.47635,-84.95097,106"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95100,32.47635]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:04:09,1,32.47635,-84.95100,107"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95100,32.47635]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:04:09,1,32.47635,-84.95100,107"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95102,32.47634]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:04:14,1,32.47634,-84.95102,107"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95101,32.47635]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:04:19,1,32.47635,-84.95101,108"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95100,32.47634]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:04:24,1,32.47634,-84.95100,107"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95098,32.47633]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:04:29,1,32.47633,-84.95098,106"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95098,32.47631]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:04:34,1,32.47631,-84.95098,106"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95097,32.47630]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:04:40,1,32.47630,-84.95097,104"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95096,32.47630]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:04:44,1,32.47630,-84.95096,103"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95095,32.47627]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:04:49,1,32.47627,-84.95095,104"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95095,32.47626]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:04:54,1,32.47626,-84.95095,104"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95094,32.47628]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.7,5,2021-03-24,21:04:59,1,32.47628,-84.95094,103"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95094,32.47627]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:05:04,1,32.47627,-84.95094,103"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95094,32.47630]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:05:09,1,32.47630,-84.95094,102"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95097,32.47631]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:05:15,1,32.47631,-84.95097,100"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95099,32.47630]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,5,2021-03-24,21:05:20,1,32.47630,-84.95099,99"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95099,32.47630]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,5,2021-03-24,21:05:20,1,32.47630,-84.95099,99"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95100,32.47631]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:05:24,1,32.47631,-84.95100,100"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95103,32.47633]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:05:29,1,32.47633,-84.95103,100"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95105,32.47636]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:05:34,1,32.47636,-84.95105,100"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95105,32.47636]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:05:39,1,32.47636,-84.95105,98"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95104,32.47633]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:05:44,1,32.47633,-84.95104,98"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95104,32.47632]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:05:50,1,32.47632,-84.95104,99"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95106,32.47633]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:05:55,1,32.47633,-84.95106,99"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95107,32.47633]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:05:59,1,32.47633,-84.95107,99"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95105,32.47631]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:06:04,1,32.47631,-84.95105,99"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95103,32.47629]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:06:09,1,32.47629,-84.95103,100"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95102,32.47629]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:06:14,1,32.47629,-84.95102,100"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95100,32.47629]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:06:19,1,32.47629,-84.95100,99"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95102,32.47629]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:06:24,1,32.47629,-84.95102,100"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95103,32.47631]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:06:29,1,32.47631,-84.95103,100"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95103,32.47631]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:06:35,1,32.47631,-84.95103,100"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95103,32.47632]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:06:39,1,32.47632,-84.95103,101"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95103,32.47633]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:06:44,1,32.47633,-84.95103,102"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95103,32.47635]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:06:49,1,32.47635,-84.95103,103"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95100,32.47635]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:06:54,1,32.47635,-84.95100,103"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95100,32.47635]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:06:59,1,32.47635,-84.95100,101"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95104,32.47637]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,6.0,6,2021-03-24,21:07:04,1,32.47637,-84.95104,101"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95106,32.47639]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:07:10,1,32.47639,-84.95106,103"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95105,32.47637]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:07:14,1,32.47637,-84.95105,105"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95102,32.47632]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:07:19,1,32.47632,-84.95102,107"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95103,32.47633]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:07:24,1,32.47633,-84.95103,108"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95103,32.47633]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:07:24,1,32.47633,-84.95103,108"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95103,32.47633]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:07:29,1,32.47633,-84.95103,110"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95109,32.47631]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,5,2021-03-24,21:07:34,1,32.47631,-84.95109,114"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95111,32.47633]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:07:39,1,32.47633,-84.95111,116"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95113,32.47632]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:07:45,1,32.47632,-84.95113,119"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95113,32.47632]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:07:45,1,32.47632,-84.95113,119"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95114,32.47631]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:07:50,1,32.47631,-84.95114,120"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95114,32.47631]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:07:50,1,32.47631,-84.95114,120"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95114,32.47631]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:07:54,1,32.47631,-84.95114,121"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95111,32.47630]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,5,2021-03-24,21:07:59,1,32.47630,-84.95111,123"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95104,32.47631]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,5,2021-03-24,21:08:04,1,32.47631,-84.95104,125"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95104,32.47631]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,5,2021-03-24,21:08:04,1,32.47631,-84.95104,125"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95101,32.47633]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:08:09,1,32.47633,-84.95101,124"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95101,32.47633]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:08:09,1,32.47633,-84.95101,124"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95101,32.47632]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:08:14,1,32.47632,-84.95101,122"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95100,32.47632]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.9,5,2021-03-24,21:08:20,1,32.47632,-84.95100,119"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95094,32.47631]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:08:25,1,32.47631,-84.95094,119"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95087,32.47633]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:08:29,1,32.47633,-84.95087,119"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95091,32.47636]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:08:34,1,32.47636,-84.95091,119"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95098,32.47641]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:08:39,1,32.47641,-84.95098,118"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95098,32.47641]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:08:39,1,32.47641,-84.95098,118"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95101,32.47641]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:08:44,1,32.47641,-84.95101,118"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95103,32.47643]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:08:49,1,32.47643,-84.95103,118"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95100,32.47641]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:08:54,1,32.47641,-84.95100,118"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95103,32.47640]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:08:59,1,32.47640,-84.95103,118"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95098,32.47640]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,5,2021-03-24,21:09:05,1,32.47640,-84.95098,118"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95099,32.47644]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:09:09,1,32.47644,-84.95099,117"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95097,32.47643]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:09:14,1,32.47643,-84.95097,117"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95097,32.47643]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:09:14,1,32.47643,-84.95097,117"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95094,32.47644]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:09:19,1,32.47644,-84.95094,117"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95100,32.47647]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:09:24,1,32.47647,-84.95100,116"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95100,32.47647]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:09:24,1,32.47647,-84.95100,116"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95097,32.47645]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:09:29,1,32.47645,-84.95097,116"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95096,32.47644]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,6.1,5,2021-03-24,21:09:34,1,32.47644,-84.95096,116"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95096,32.47644]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:09:40,1,32.47644,-84.95096,116"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95098,32.47646]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:09:44,1,32.47646,-84.95098,116"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95103,32.47645]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:09:49,1,32.47645,-84.95103,116"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95107,32.47638]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:09:54,1,32.47638,-84.95107,116"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95107,32.47638]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:09:54,1,32.47638,-84.95107,116"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95108,32.47636]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:09:59,1,32.47636,-84.95108,116"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95106,32.47637]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:10:04,1,32.47637,-84.95106,116"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95106,32.47637]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:10:04,1,32.47637,-84.95106,116"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95100,32.47638]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:10:09,1,32.47638,-84.95100,115"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95100,32.47638]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:10:09,1,32.47638,-84.95100,115"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95094,32.47640]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:10:14,1,32.47640,-84.95094,115"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95094,32.47639]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:10:20,1,32.47639,-84.95094,114"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95098,32.47639]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:10:24,1,32.47639,-84.95098,114"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95105,32.47638]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:10:29,1,32.47638,-84.95105,113"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95111,32.47641]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:10:34,1,32.47641,-84.95111,112"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95113,32.47642]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:10:39,1,32.47642,-84.95113,112"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95113,32.47642]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:10:39,1,32.47642,-84.95113,112"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95113,32.47642]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:10:44,1,32.47642,-84.95113,111"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95113,32.47641]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:10:49,1,32.47641,-84.95113,111"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95112,32.47640]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:10:55,1,32.47640,-84.95112,110"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95111,32.47639]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:10:59,1,32.47639,-84.95111,109"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95111,32.47639]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:10:59,1,32.47639,-84.95111,109"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95103,32.47641]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:11:04,1,32.47641,-84.95103,108"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95089,32.47644]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:11:09,1,32.47644,-84.95089,106"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95078,32.47651]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:11:14,1,32.47651,-84.95078,103"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95076,32.47652]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:11:19,1,32.47652,-84.95076,100"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95071,32.47655]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:11:24,1,32.47655,-84.95071,100"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95078,32.47679]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:11:30,1,32.47679,-84.95078,110"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95087,32.47704]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:11:34,1,32.47704,-84.95087,117"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95098,32.47737]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.6,6,2021-03-24,21:11:39,1,32.47737,-84.95098,120"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95109,32.47819]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.5,6,2021-03-24,21:11:49,1,32.47819,-84.95109,127"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95108,32.47845]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.5,6,2021-03-24,21:11:56,1,32.47845,-84.95108,129"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95108,32.47847]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.5,6,2021-03-24,21:12:00,1,32.47847,-84.95108,126"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95107,32.47858]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.5,6,2021-03-24,21:12:05,1,32.47858,-84.95107,124"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95106,32.47907]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.5,6,2021-03-24,21:12:11,1,32.47907,-84.95106,124"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95105,32.47945]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.5,6,2021-03-24,21:12:15,1,32.47945,-84.95105,125"}
+    }
+,
+    {
+      "type":"Feature",
+      "geometry": {
+        "type":"Point",
+        "coordinates":[-84.95110,32.48056]
+      },
+      "properties":{"description":"[0x11][0x11][0x00][0x00]$SN01,1.5,6,2021-03-24,21:12:25,1,32.48056,-84.95110,124"}
+    }
+  ]
+}

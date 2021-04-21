@@ -84,7 +84,7 @@ int gpsFixQuality = -1;
 char gpsFixQualityBuf[22];
 #define GPS_TIME_BUF_LEN 32
 char gpsTimeBuf[GPS_TIME_BUF_LEN];
-long nextTimestampBeaconMs = TIMESTAMP_BEACON_INTERVAL_MS * 2;
+long nextTimestampBeaconMs = TIMESTAMP_BEACON_INTERVAL_MS;
 
 // Support multiple plans for what is displayed on the screen.  Cycle thorugh them over time and/or via a button.
 #define SCREEN_CHANGE_INTERVAL_MS 5000

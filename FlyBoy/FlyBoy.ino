@@ -501,6 +501,12 @@ void loopLoRa() {
     if (packetSize) {
       char* buf = loRaRead(packetSize);
       Serial.print("LoRa received: "); Serial.println(buf);
+      // Does it look like a Ground Pounder timestamp beacon?
+      String str(buf);
+      if (str.indexOf("timestamp beacon") > 0) {
+        Serial.print("Got timestamp beacon: "); Serial.println(buf);
+        logSD(buf);
+      }
     }
 
     // Now transmit every once in a while, maybe
@@ -512,13 +518,13 @@ void loopLoRa() {
       } else if (delta > 0.1) {
         dir = falling;
       }
-      Serial.print("hPa = "); Serial.print(hPa); Serial.print(", last_hPa = "); Serial.print(last_hPa); 
-      Serial.print(", delta = "); Serial.print(delta); Serial.print(", dir = "); Serial.println(dir);
+      // Serial.print("hPa = "); Serial.print(hPa); Serial.print(", last_hPa = "); Serial.print(last_hPa); 
+      // Serial.print(", delta = "); Serial.print(delta); Serial.print(", dir = "); Serial.println(dir);
       int pa = 0;
       if (!isnan(hPa)) {
         pa = (int)(hPa * 100.0);
       }
-      Serial.print("altitudeMeters = "); Serial.println(altitudeMeters);
+      // Serial.print("altitudeMeters = "); Serial.println(altitudeMeters);
       snprintf(printBuf, PRINT_BUF_LEN, "FlyBoy v%d s=%d,x=%d,y=%d,z=%d,pa=%d,a=%d,%s"
         , VERSION, millis()/MS_PER_SECOND, x, y, z, pa, altitudeMeters, dir);
       Serial.println(printBuf);
@@ -538,8 +544,9 @@ char* loRaRead(int packetSize) {
     if (n < LORA_RX_BUF_LEN - 1) {
       loRaRxBuf[n++] = (char)d;
     }
-    loRaRxBuf[n++] = (char)0; // null terminate it
   }
+  loRaRxBuf[n++] = (char)0; // null terminate it
+  // Serial.print("n = "); Serial.print(n); Serial.print(", loRaRxBuf = "); Serial.println(loRaRxBuf);
   return loRaRxBuf;
 }
 
@@ -556,6 +563,7 @@ void logSD(const char *dataString) {
       // dataFile.println(receivedPacketCount);
       dataFile.close();
       loggedPacketCount++;
+      // Serial.print("logSD("); Serial.print(dataString); Serial.println(")");
     } else {
       if (goodSerial) {
         // if the file isn't open, pop up an error:
@@ -569,12 +577,12 @@ void logSD(const char *dataString) {
 
 
 void logHeader() {
-  logSD("millis\traw\tx\ty\tz\tcount");
+  logSD("HMR2300\tmillis\traw\tx\ty\tz\tcount");
 }
 
 
 void logData(long ms, const char* rawData, int x, int y, int z, int count) {
-  sprintf(tmpBuf,"%d\t\"%s\"\t%d\t%d\t%d\t%d", ms, rawData, x, y, z, count);
+  sprintf(tmpBuf,"HMR2300\t%d\t\"%s\"\t%d\t%d\t%d\t%d", ms, rawData, x, y, z, count);
   logSD(tmpBuf); 
 }
 

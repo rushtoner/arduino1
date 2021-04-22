@@ -94,6 +94,9 @@ long nextTimestampBeaconMs = TIMESTAMP_BEACON_INTERVAL_MS;
 int currentScreen = SCREEN_DEFAULT;
 long nextScreenChangeMs = SCREEN_CHANGE_INTERVAL_MS;
 
+long nextPerSecond = 0;
+
+
 // Set up a "good" flag for each subsystem, to keep track of which ones initialized okay.
 boolean goodSerial  = false;
 boolean goodSD      = false;
@@ -114,6 +117,7 @@ void setup() {
   setupRuler();
   nextScreenChangeMs = SCREEN_CHANGE_INTERVAL_MS;
   setupButton();
+  nextPerSecond = millis() + 1000;
 }
 
 
@@ -215,9 +219,6 @@ boolean setupGPSRx() {
 }
 
 
-void setupButton() {
-  pinMode(BUTTON_A_PIN, INPUT);  
-}
 
 
 void loop() {
@@ -226,7 +227,7 @@ void loop() {
     // we got a new packet
     logSD(rawBuf);  // rawBuf holds printable text, but unprintables replaced by [hex codes]
     if (goodSerial) {
-      printRuler();
+      // printRuler();
       // Serial.println(printableBuf);
       Serial.println(rawBuf);
     }
@@ -248,6 +249,7 @@ void loop() {
     processGPSRx();
   }
   loopButton();
+  loopPerSecond(); // does stuff once/second
 }
 
 
@@ -771,20 +773,65 @@ void printBuf(const char* label, const char* buf, int bufCount, int bufSize) {
   }
 }
 
-void printRuler() {
-  if (PRINT_RULER && goodSerial) {
-    Serial.println(ruler);
-  }
+
+#define DEBOUNCE_MS 200 // debounce time
+boolean noticedButtonIsDown = false;
+unsigned long whenToReleaseButton = 0;
+volatile boolean buttonIsDown = false;
+
+void setupButton() {
+  pinMode(BUTTON_A_PIN, INPUT);
+  attachInterrupt(digitalPinToInterrupt(BUTTON_A_PIN), buttonDown, FALLING);
+  // Apparently you can't attach more than one interrupt at a time, can't do both FALLING and RISING
+  // attachInterrupt(digitalPinToInterrupt(BUTTON_A_PIN), buttonUp, RISING);
+}
+
+/*
+void buttonUp() {
+  Serial.println("buttonUp()");
+}
+*/
+
+
+// volatile unsigned long lastDownMicroSec;
+volatile int buttonPressCount = 0;
+// volatile int lastButtonPressCount = buttonPressCount;
+// volatile unsigned long attachButtonDownInterruptAt = 0;
+
+void buttonDown() {
+  buttonIsDown = true;
+  Serial.println("Down!");
 }
 
 
 void loopButton() {
-  // Check for button press
-  if (false) {
-    if (digitalRead(BUTTON_A_PIN) == LOW) {
-      Serial.println("Button A is LOW");
+  if (noticedButtonIsDown) {
+    if (millis() > whenToReleaseButton) {
+      Serial.println("Time to release");
+      buttonIsDown = false;
+      noticedButtonIsDown = false;
     } else {
-      Serial.println("Button A is HIGH");
+      // Serial.println("Not yet.");
     }
+  } else if (buttonIsDown) {
+    Serial.println("Just noticed the button is down");
+    buttonPressCount++;
+    noticedButtonIsDown = true;
+    whenToReleaseButton = millis() + DEBOUNCE_MS;
+  } else {
+    // Serial.println("nothing");
+  }
+}
+
+
+
+void loopPerSecond() {
+  if (millis() >= nextPerSecond) {
+    Serial.print("buttonPressCount       = "); Serial.print(buttonPressCount);
+    // Serial.print(", attachButtonDownInterruptAt = "); Serial.print(attachButtonDownInterruptAt);
+    Serial.print(", buttonIsDown = "); Serial.print(buttonIsDown);
+    Serial.print(", noticedButtonIsDown = "); Serial.print(noticedButtonIsDown);
+    Serial.println();
+    nextPerSecond += 1000;
   }
 }

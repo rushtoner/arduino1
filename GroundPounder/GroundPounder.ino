@@ -75,8 +75,9 @@ char ruler[PRINTABLE_BUF_LEN];
 #define GPS_RX_BUF_LEN 256 // 256 should be plenty, right?
 char gpsRxBuf[GPS_RX_BUF_LEN];
 int gpsRxBufCount = 0; // pointer for the next char into gpsRxBuf
+#define MAX_GPS_FIX_STATE 3
 int gpsFixState = 0; // 0 = No info (gps not there?), 1 = GPS told is no fix, 2 = 2-D fix, 3 = 3-D fix
-char gpsFixStateText[][8] = {"unknown", "No fix", "2D fix", "3D fix"};
+char gpsFixStateText[][8] = {"Unknown", "No fix", "2D fix", "3D fix"};
 
 int lastGpsFixState = gpsFixState;
 char latBuf[TMP_BUF_LEN];
@@ -369,6 +370,7 @@ void updateDisplay() {
     int screen = currentScreen % NUMBER_OF_SCREENS;
     if (screen == SCREEN_DEFAULT) {
       // Shows last received LoRa
+      display.print("0: ");
       if (printableBufCount <= DISPLAY_BUF_LEN) {
         display.print(printableBuf);
       } else {
@@ -376,15 +378,16 @@ void updateDisplay() {
         display.print(tmpBuf);
       }
     } else if (screen == SCREEN_GPS) {
-      snprintf(tmpBuf, TMP_BUF_LEN, "GPS Status\nFix state %d\n", gpsFixState);
-      display.println(tmpBuf);
+      // snprintf(tmpBuf, TMP_BUF_LEN, "GPS Status\nFix state %d\n", gpsFixState);
+      display.print("1: ");
+      display.println(gpsStatus());
       display.println(gpsFixQualityBuf);
       display.println(lonBuf);
       display.println(latBuf);
       display.println(gpsTimeBuf);
     } else {
       // System Status Screen?
-      display.println("Status:");
+      display.println("2: Status:");
       display.println(gpsStatus());
       display.println(loRaStatus());
       display.println(elapsedMsg(millis()));
@@ -403,7 +406,11 @@ void updateDisplay() {
 
 char* gpsStatus() {
   if (goodGPSRx) {
-    snprintf(tmpBuf, TMP_BUF_LEN - strlen(tmpBuf), "GPS %s", gpsFixStateText[gpsFixState]);        
+    int gs = gpsFixState;
+    if (gpsFixState < 0 || gpsFixState > MAX_GPS_FIX_STATE) {
+      gs = 0;
+    }
+    snprintf(tmpBuf, TMP_BUF_LEN - strlen(tmpBuf), "GPS %d = %s", gpsFixState, gpsFixStateText[gs]);        
   } else {
     strcat(tmpBuf, "GPS Failed");
   }

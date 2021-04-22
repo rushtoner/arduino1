@@ -16,6 +16,15 @@ if [ -d /Volumes/${CARD} ]; then
   rsync --progress -uv /Volumes/${CARD}/APRS*.* logs/${CARD}/.
 fi
 
+CARD=DAR15
+if [ -d /Volumes/${CARD} ]; then
+  echo Getting logs from /Volumes/${CARD}
+  rsync --progress -uv /Volumes/${CARD}/LORA-*.* logs/${CARD}/.
+  rsync --progress -uv /Volumes/${CARD}/HMR-*.* logs/${CARD}/.
+  rsync --progress -uv /Volumes/${CARD}/APRS*.* logs/${CARD}/.
+fi
+
+
 CARD=FLIGHT2
 if [ -d /Volumes/${CARD} ]; then
   echo Getting logs from /Volumes/${CARD}

@@ -76,6 +76,8 @@ char ruler[PRINTABLE_BUF_LEN];
 char gpsRxBuf[GPS_RX_BUF_LEN];
 int gpsRxBufCount = 0; // pointer for the next char into gpsRxBuf
 int gpsFixState = 0; // 0 = No info (gps not there?), 1 = GPS told is no fix, 2 = 2-D fix, 3 = 3-D fix
+char gpsFixStateText[][8] = {"unknown", "No fix", "2D fix", "3D fix"};
+
 int lastGpsFixState = gpsFixState;
 char latBuf[TMP_BUF_LEN];
 char lonBuf[TMP_BUF_LEN];
@@ -87,10 +89,10 @@ char gpsTimeBuf[GPS_TIME_BUF_LEN];
 long nextTimestampBeaconMs = TIMESTAMP_BEACON_INTERVAL_MS;
 
 // Support multiple plans for what is displayed on the screen.  Cycle thorugh them over time and/or via a button.
-#define SCREEN_CHANGE_INTERVAL_MS 5000
+#define SCREEN_CHANGE_INTERVAL_MS 0  // 0 disables timed screen changes
 #define SCREEN_DEFAULT 0
 #define SCREEN_GPS 1
-#define NUMBER_OF_SCREENS 2
+#define NUMBER_OF_SCREENS 3
 int currentScreen = SCREEN_DEFAULT;
 long nextScreenChangeMs = SCREEN_CHANGE_INTERVAL_MS;
 
@@ -366,36 +368,7 @@ void updateDisplay() {
     }
     int screen = currentScreen % NUMBER_OF_SCREENS;
     if (screen == SCREEN_DEFAULT) {
-      snprintf(tmpBuf, TMP_BUF_LEN, "GPS %d %s", gpsFixState, loraLogFileName);
-      display.println(tmpBuf);
-      // 123456789012345678901
-      // Sig -999 Rec 1000
-      snprintf(tmpBuf, TMP_BUF_LEN, "Sig %d Rec %d pkts", lastRssi, receivedPacketCount);
-      display.println(tmpBuf);
-      /*
-      display.print("S");
-      display.print(lastRssi);
-      display.print(" R");
-      display.print(receivedPacketCount);
-      display.print(" L");
-      display.println(loggedPacketCount);
-      */
-      if (false) {
-        if (true) {
-          // Tried using "%,d" in order to get results like "1,234" but it didn't work
-          sprintf(tmpBuf, "Received: %d", receivedPacketCount);
-          display.println(tmpBuf);
-          // sprintf(tmpBuf, "Logged:   %d", loggedPacketCount);
-          sprintf(tmpBuf, "Logged:   %d, c %d", loggedPacketCount, canary);
-          display.println(tmpBuf);
-        } else {
-          display.print("Received: ");
-          display.println(receivedPacketCount);
-          display.print("Logged:   ");
-          display.println(loggedPacketCount);
-        }
-      }
-      display.println(elapsedMsg(millis()));
+      // Shows last received LoRa
       if (printableBufCount <= DISPLAY_BUF_LEN) {
         display.print(printableBuf);
       } else {
@@ -403,25 +376,48 @@ void updateDisplay() {
         display.print(tmpBuf);
       }
     } else if (screen == SCREEN_GPS) {
-      if (goodLoRa) {
-        display.println("LoRa: Good");
-      } else {
-        display.println("LoRa: BAD!!!");
-      }
       snprintf(tmpBuf, TMP_BUF_LEN, "GPS Status\nFix state %d\n", gpsFixState);
       display.println(tmpBuf);
       display.println(gpsFixQualityBuf);
       display.println(lonBuf);
       display.println(latBuf);
       display.println(gpsTimeBuf);
+    } else {
+      // System Status Screen?
+      display.println("Status:");
+      display.println(gpsStatus());
+      display.println(loRaStatus());
+      display.println(elapsedMsg(millis()));
     }
     display.display();
-    if (millis() > nextScreenChangeMs) {
-      currentScreen++;
-      nextScreenChangeMs = millis() + SCREEN_CHANGE_INTERVAL_MS;
+    if (SCREEN_CHANGE_INTERVAL_MS > 0) {
+      if (millis() > nextScreenChangeMs) {
+        currentScreen++;
+        nextScreenChangeMs = millis() + SCREEN_CHANGE_INTERVAL_MS;
+      }
     }
   }
   lastMillis = millis();
+}
+
+
+char* gpsStatus() {
+  if (goodGPSRx) {
+    snprintf(tmpBuf, TMP_BUF_LEN - strlen(tmpBuf), "GPS %s", gpsFixStateText[gpsFixState]);        
+  } else {
+    strcat(tmpBuf, "GPS Failed");
+  }
+  return tmpBuf;
+}
+
+
+char *loRaStatus() {      
+  if (goodLoRa) {
+    snprintf(tmpBuf, TMP_BUF_LEN, "LoRa: good\n  RSSI %d\n  %s\n  %d packets", lastRssi, loraLogFileName, receivedPacketCount);
+  } else {
+    strcpy(tmpBuf, "LoRa: init failed.");
+  }
+  return tmpBuf;
 }
 
 
@@ -610,7 +606,7 @@ void processGPSRx() {
 }
 
 
-long nextGPGSAReport = 0;
+// long nextGPGSAReport = 0;
 
 void processGPGSA(String str) {
   /*    
@@ -774,7 +770,7 @@ void printBuf(const char* label, const char* buf, int bufCount, int bufSize) {
 }
 
 
-#define DEBOUNCE_MS 200 // debounce time
+#define DEBOUNCE_MS 100 // debounce time
 boolean noticedButtonIsDown = false;
 unsigned long whenToReleaseButton = 0;
 volatile boolean buttonIsDown = false;
@@ -782,40 +778,33 @@ volatile boolean buttonIsDown = false;
 void setupButton() {
   pinMode(BUTTON_A_PIN, INPUT);
   attachInterrupt(digitalPinToInterrupt(BUTTON_A_PIN), buttonDown, FALLING);
-  // Apparently you can't attach more than one interrupt at a time, can't do both FALLING and RISING
-  // attachInterrupt(digitalPinToInterrupt(BUTTON_A_PIN), buttonUp, RISING);
 }
-
-/*
-void buttonUp() {
-  Serial.println("buttonUp()");
-}
-*/
 
 
 // volatile unsigned long lastDownMicroSec;
-volatile int buttonPressCount = 0;
+int buttonPressCount = 0;
 // volatile int lastButtonPressCount = buttonPressCount;
 // volatile unsigned long attachButtonDownInterruptAt = 0;
 
 void buttonDown() {
   buttonIsDown = true;
-  Serial.println("Down!");
+  // Serial.println("Down!");
 }
 
 
 void loopButton() {
   if (noticedButtonIsDown) {
     if (millis() > whenToReleaseButton) {
-      Serial.println("Time to release");
+      // Serial.println("Time to release");
       buttonIsDown = false;
       noticedButtonIsDown = false;
     } else {
       // Serial.println("Not yet.");
     }
   } else if (buttonIsDown) {
-    Serial.println("Just noticed the button is down");
+    // Serial.println("Just noticed the button is down");
     buttonPressCount++;
+    currentScreen++;
     noticedButtonIsDown = true;
     whenToReleaseButton = millis() + DEBOUNCE_MS;
   } else {
@@ -829,8 +818,8 @@ void loopPerSecond() {
   if (millis() >= nextPerSecond) {
     Serial.print("buttonPressCount       = "); Serial.print(buttonPressCount);
     // Serial.print(", attachButtonDownInterruptAt = "); Serial.print(attachButtonDownInterruptAt);
-    Serial.print(", buttonIsDown = "); Serial.print(buttonIsDown);
-    Serial.print(", noticedButtonIsDown = "); Serial.print(noticedButtonIsDown);
+    // Serial.print(", buttonIsDown = "); Serial.print(buttonIsDown);
+    // Serial.print(", noticedButtonIsDown = "); Serial.print(noticedButtonIsDown);
     Serial.println();
     nextPerSecond += 1000;
   }

@@ -8,13 +8,21 @@ import sys
 #sn01pat = '\$SN01,\d+(\.\d)?,\d+(\.\d+)?,\d{4}-\d{2}'
 #sn01pat = '\$SN01,\d+(\.\d)?,\d+(\.\d+)?,\d{4}-\d{2}-\d{2},\d{2}:\d{2}:\d{2},\d+,([-+]?\d+\.\d+),'
 # works with my logged Arduino 1310 data: sn01pat = '[\[\]0-9x]*\$SN01,\d+(\.\d)?,\d+(\.\d+)?,\d{4}-\d{2}-\d{2},\d{2}:\d{2}:\d{2},\d+,([-+]?\d+\.\d+),([-+]?\d+\.\d+),(\d+)'
+
+#             date       time UTC F latitude longitude alt
+# $SN01,0.9,9,2021-03-23,22:27:04,1,32.47635,-84.95120,129,2.87,5
+#                      group0     group1   year  month  day  hour  min   sec  fix? latitude        longitude       alt
 sn01pat = '.*\$SN01,\d+(\.\d)?,\d+(\.\d+)?,\d{4}-\d{2}-\d{2},\d{2}:\d{2}:\d{2},\d+,([-+]?\d+\.\d+),([-+]?\d+\.\d+),(\d+)'
 
 
 lineCount = 0
+lastAltM = 0
+sequence = 0
 
 def doLine(n, line):
   global lineCount
+  global lastAltM
+  global sequence
   #print('line[%d] =\"%s\"' % (n,line))
   result = re.match(sn01pat, line)
   if (result):
@@ -35,8 +43,23 @@ def doLine(n, line):
     print('        "type":"Point",')
     print('        "coordinates":[%s,%s]' % (result.group(4),result.group(3)))
     print('      },')
-    print('      "properties":{"description":"%s"}' % (result.group(0)))
-    print('    }')
+    print('      "properties":')
+    print('        {"rawdata":"%s"' % (result.group(0)))
+    altm = int(result.group(5))
+    altf = int(float(altm) / 0.3048)
+    print('        ,"altitudeMeters":%d' % altm)
+    print('        ,"altitudeFeet":%d' % altf)
+    if lastAltM != 0:
+      if altm > lastAltM:
+        # rising
+        print('  ,"marker-color":"#00ff00"')
+      elif altm < lastAltM:
+        print('  ,"marker-color":"#ff0000"')
+    print('      ,"sequence":%d' % sequence)
+    sequence += 1
+    print('        }')
+    print('      }')
+    lastAltM = altm
     lineCount += 1
   else:
     if (False):

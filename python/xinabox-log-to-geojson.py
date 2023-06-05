@@ -18,52 +18,65 @@ sn01pat = '.*\$SN01,\d+(\.\d)?,\d+(\.\d+)?,\d{4}-\d{2}-\d{2},\d{2}:\d{2}:\d{2},\
 lineCount = 0
 lastAltM = 0
 sequence = 0
+maxAltM = 0
+maxAltRaw = ''
 
 def doLine(n, line):
   global lineCount
-  global lastAltM
-  global sequence
   #print('line[%d] =\"%s\"' % (n,line))
   result = re.match(sn01pat, line)
   if (result):
-    if (False):
-      j = 0
-      print('  group(%d) = %s' % (j, result.group(j)))
-      j = 3
-      print('  group(%d) = %s' % (j, result.group(j)))
-      j += 1
-      print('  group(%d) = %s' % (j, result.group(j)))
-      j += 1
-      print('  group(%d) = %s' % (j, result.group(j)))
-    if (lineCount > 0):
-      print(',')
-    print('    {')
-    print('      "type":"Feature",')
-    print('      "geometry": {')
-    print('        "type":"Point",')
-    print('        "coordinates":[%s,%s]' % (result.group(4),result.group(3)))
-    print('      },')
-    print('      "properties":')
-    print('        {"rawdata":"%s"' % (result.group(0)))
-    altm = int(result.group(5))
-    altf = int(float(altm) / 0.3048)
-    print('        ,"altitudeMeters":%d' % altm)
-    print('        ,"altitudeFeet":%d' % altf)
-    if lastAltM != 0:
-      if altm > lastAltM:
-        # rising
-        print('  ,"marker-color":"#00ff00"')
-      elif altm < lastAltM:
-        print('  ,"marker-color":"#ff0000"')
-    print('      ,"sequence":%d' % sequence)
-    sequence += 1
-    print('        }')
-    print('      }')
-    lastAltM = altm
+    geojsonize(result, '')
     lineCount += 1
   else:
     if (False):
       print('  no group: %s' % line)
+
+
+def geojsonize(result, markerSymbol):
+  global lastAltM
+  global sequence
+  global maxAltM
+  global maxAltRaw
+  if (False):
+    j = 0
+    print('  group(%d) = %s' % (j, result.group(j)))
+    j = 3
+    print('  group(%d) = %s' % (j, result.group(j)))
+    j += 1
+    print('  group(%d) = %s' % (j, result.group(j)))
+    j += 1
+    print('  group(%d) = %s' % (j, result.group(j)))
+  if (lineCount > 0):
+    print(',')
+  print('    {')
+  print('      "type":"Feature",')
+  print('      "geometry": {')
+  print('        "type":"Point",')
+  print('        "coordinates":[%s,%s]' % (result.group(4),result.group(3)))
+  print('      },')
+  print('      "properties":')
+  print('        {"rawdata":"%s"' % (result.group(0)))
+  altm = int(result.group(5))
+  altf = int(float(altm) / 0.3048)
+  print('        ,"altitudeMeters":%d' % altm)
+  print('        ,"altitudeFeet":%d' % altf)
+  if (markerSymbol):
+    print('      ,"marker-symbol":"%s"' % markerSymbol)
+  if lastAltM != 0:
+    if altm > lastAltM:
+      # rising
+      print('  ,"marker-color":"#00ff00"')
+    elif altm < lastAltM:
+      print('  ,"marker-color":"#ff0000"')
+
+  print('      ,"sequence":%d' % sequence)
+  sequence += 1
+  print('        }')
+  print('      }')
+  if altm > maxAltM:
+    maxAltM = altm
+  lastAltM = altm
 
 
 def doFile(infile):
@@ -80,6 +93,7 @@ def doFile(infile):
   for lineX in open(infile):
     doLine(n, lineX.rstrip())
     n += 1
+  addNotable()
   print('  ]')
   print('}')
 

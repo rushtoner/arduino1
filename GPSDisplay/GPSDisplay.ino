@@ -35,6 +35,7 @@
 #define BLINK_INTERVAL 200
 #define PRINTABLE_BUF_LEN 512
 #define GPS_BUF_LEN 512
+#define DECODED_GPS_BUF_LEN 50
 
 // DISPLAY_BUF_LEN is how many chars of display space is left for printing a received packet
 #define DISPLAY_BUF_LEN (6 * 21)
@@ -65,6 +66,10 @@ char gpsBuf[GPS_BUF_LEN];
 int gpsBufCount = 0;
 
 char displayBuf[DISPLAY_BUF_LEN];
+// char decodedGpsBuf[DECODED_GPS_BUF_LEN];
+char decodedLonBuf[DECODED_GPS_BUF_LEN];
+char decodedLatBuf[DECODED_GPS_BUF_LEN];
+
 
 char tmpBuf[TMP_BUF_LEN];
 
@@ -81,7 +86,7 @@ boolean goodLoRa    = false;
 
 void setup() {
   // Set up each subsystem
-  goodDisplay = setupDisplay(6);
+  goodDisplay = setupDisplay(8); // displaySecs
 
   goodSerial  = setupSerial(9600, SERIAL_INIT_TIMEOUT_MS);
   if (goodSerial) {
@@ -209,8 +214,11 @@ void loopGPS() {
       if (str.startsWith("$GPGGA")) {
         strncpy(displayBuf, gpsBuf, DISPLAY_BUF_LEN);
         count++;
+        decodeGps();
         //sprintf(tmpBuf, "cnt = %d", count);
         //strcat(displayBuf, tmpBuf);
+      // } else {
+        //strncpy(decodedGpsBuf, "Not yet", DECODED_GPS_BUF_LEN);
       }
       Serial.print("gpsBuf = ");
       Serial.println(gpsBuf);
@@ -222,6 +230,48 @@ void loopGPS() {
     //Serial.print("gpsBuf = ");
     //Serial.println(gpsBuf);
   }
+}
+
+
+void decodeGps() {
+    // int n = afterComma(gpsBuf, 0);
+    //strncpy(decodedGpsBuf + n, gpsBuf, DECODED_GPS_BUF_LEN);
+    // strncpy(decodedGpsBuf, "* Fubar *", DECODED_GPS_BUF_LEN);
+    int start = afterComma(gpsBuf, 1);  // start of latitude
+    int end = afterComma(gpsBuf, 3);
+    int len = end - start - 1;
+    int n = 0;
+    for(n = 0; n < len; n++) {
+        decodedLatBuf[n] = gpsBuf[start + n];
+    }
+    decodedLatBuf[n] = '\0';
+
+    start = end; // start of latitude
+    end = afterComma(gpsBuf, 5);
+    len = end - start - 1;
+    for(n = 0; n < len; n++) {
+        decodedLonBuf[n] = gpsBuf[start + n];
+    }
+    decodedLonBuf[n] = '\0';
+}
+
+
+
+
+int afterComma(char* str, int nth) {
+  // return character position where nth comma is found
+    int n = 0;
+    int count = 0;
+    while(str[n] > 0) {
+        if (str[n] == ',') {
+          if (count >= nth) {
+            return n + 1;
+          }
+          count++;
+        }
+        n++;
+    }
+    return -1;
 }
 
 
@@ -316,6 +366,10 @@ void updateDisplay() {
     }
     display.print("count = "); display.println(count);
     display.println(displayBuf);
+  
+    display.println(decodedLatBuf);
+    display.println(decodedLonBuf);
+
     display.display();
   }
 }

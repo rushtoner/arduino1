@@ -69,7 +69,8 @@ char displayBuf[DISPLAY_BUF_LEN];
 // char decodedGpsBuf[DECODED_GPS_BUF_LEN];
 char decodedLonBuf[DECODED_GPS_BUF_LEN];
 char decodedLatBuf[DECODED_GPS_BUF_LEN];
-
+char decodedTimeBuf[DECODED_GPS_BUF_LEN];
+char decodedQualityBuf[DECODED_GPS_BUF_LEN];
 
 char tmpBuf[TMP_BUF_LEN];
 
@@ -100,6 +101,8 @@ void setup() {
   strcpy(displayBuf, "wait for it...");
   // goodSD = setupSD();
   setupLED();
+  decodedTimeBuf[0] = '?';
+  decodedTimeBuf[1] = '\0';
 }
 
 
@@ -229,30 +232,82 @@ void loopGPS() {
     }
     //Serial.print("gpsBuf = ");
     //Serial.println(gpsBuf);
+    // truncate gpsBuf so it won't wrap past 2 lines
+    if (true) {
+      int charsPerLine = 20;
+      gpsBuf[3 * charsPerLine - 1] = '\0';
+    }
   }
 }
 
 
 void decodeGps() {
+    // $GPGGA,000729.800,5459.1234,N,00459.1234,W,Q,#
+    //       0          1         2 3          4 5 6
+    // Q = quality, 1 char
+    // # = # of satellites
     // int n = afterComma(gpsBuf, 0);
     //strncpy(decodedGpsBuf + n, gpsBuf, DECODED_GPS_BUF_LEN);
     // strncpy(decodedGpsBuf, "* Fubar *", DECODED_GPS_BUF_LEN);
-    int start = afterComma(gpsBuf, 1);  // start of latitude
-    int end = afterComma(gpsBuf, 3);
-    int len = end - start - 1;
-    int n = 0;
-    for(n = 0; n < len; n++) {
-        decodedLatBuf[n] = gpsBuf[start + n];
+    // First look up the quality since it impacts what else we do
+    int start = afterComma(gpsBuf, 5);  // start of latitude
+    int gn = start;
+    int dn = 0;
+    decodedQualityBuf[0] = '?'; decodedQualityBuf[1] = '\0';
+    while (gpsBuf[gn] > 0) {
+      decodedQualityBuf[dn++] = gpsBuf[gn++];
     }
-    decodedLatBuf[n] = '\0';
+    decodedQualityBuf[dn++] = '\n';
+    if (decodedQualityBuf[0] == '0') {
+      strncpy(decodedLatBuf, "No fix", DECODED_GPS_BUF_LEN);
+      strncpy(decodedLonBuf, "No fix", DECODED_GPS_BUF_LEN);
+    } else {
+      start = afterComma(gpsBuf, 1);  // start of latitude
+      int end = afterComma(gpsBuf, 3);
+      int len = end - start - 1;
+      int gn = start;  // gps n
+      int dn = 0; // decode n
+      decodedLatBuf[dn++] = gpsBuf[gn++]; // lat 10s
+      decodedLatBuf[dn++] = gpsBuf[gn++]; // lat 1s
+      decodedLatBuf[dn++] = ' ';
+      decodedLatBuf[dn++] = gpsBuf[gn++]; // deg 10s
+      decodedLatBuf[dn++] = gpsBuf[gn++]; // deg 1s
+      decodedLatBuf[dn++] = gpsBuf[gn++]; // .
+      decodedLatBuf[dn++] = gpsBuf[gn++];
+      decodedLatBuf[dn++] = gpsBuf[gn++];
+      decodedLatBuf[dn++] = gpsBuf[gn++];
+      decodedLatBuf[dn++] = gpsBuf[gn++];
+      decodedLatBuf[dn++] = ' '; gn++; // space instead of comma
+      decodedLatBuf[dn++] = gpsBuf[gn++]; // N or S
+      decodedLatBuf[dn++] = '\0';
 
-    start = end; // start of latitude
-    end = afterComma(gpsBuf, 5);
-    len = end - start - 1;
-    for(n = 0; n < len; n++) {
-        decodedLonBuf[n] = gpsBuf[start + n];
+      start = end; // start of latitude
+      end = afterComma(gpsBuf, 5);
+      len = end - start - 1;
+      dn = 0; // different buffer, start at the start
+      gn = start;
+      decodedLonBuf[dn++] = gpsBuf[gn++]; // 100s
+      decodedLonBuf[dn++] = gpsBuf[gn++]; // 10s
+      decodedLonBuf[dn++] = gpsBuf[gn++]; // 1s
+      decodedLonBuf[dn++] = gpsBuf[gn++]; // .
+      decodedLonBuf[dn++] = gpsBuf[gn++]; // tenths
+      decodedLonBuf[dn++] = gpsBuf[gn++]; // hundredths
+      decodedLonBuf[dn++] = gpsBuf[gn++];
+      decodedLonBuf[dn++] = gpsBuf[gn++];
+      decodedLonBuf[dn++] = ' '; gn++;
+      decodedLonBuf[dn++] = gpsBuf[gn++];
+      decodedLonBuf[dn++] = '\0';
+
+      // was there a value?  if so, get the time
+      start = afterComma(gpsBuf,0);      
+      end = afterComma(gpsBuf, 1);
+      len = end - start;
+      int n;
+      for(n = 0; n < len; n++) {
+          decodedTimeBuf[n] = gpsBuf[start + n];
+      }
+      decodedTimeBuf[n] = '\0';
     }
-    decodedLonBuf[n] = '\0';
 }
 
 
@@ -364,11 +419,16 @@ void updateDisplay() {
       display.print(title);
       display.println(" **");
     }
-    display.print("count = "); display.println(count);
+    // display.print("count = "); display.println(count);
     display.println(displayBuf);
   
+    // Set to line 4 (0 indexed) so these lines stay in same place regardless of length of raw GPS data
+    int pixelsPerLine = 8;
+    display.setCursor(0, 4 * pixelsPerLine);
     display.println(decodedLatBuf);
     display.println(decodedLonBuf);
+    display.println(decodedTimeBuf);
+    display.println(decodedQualityBuf);
 
     display.display();
   }

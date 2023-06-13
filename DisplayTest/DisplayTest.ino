@@ -17,37 +17,51 @@
 /* added for display above */
 #define DISPLAY_TEXT_SIZE 1
 #define TEXT_COLUMNS 21
-#define DATA_TEXT_ROWS 3
-#define DISPLAY_UPDATE_INTERVAL_MS 250
-#define ELAPSED_BUF_LEN 100
-#define SD_SPI_CHIPSELECT 4
-#define DISPLAY_WIDTH 128 // OLED display width, in pixels
-#define DISPLAY_HEIGHT 64 // OLED display height, in pixels
-#define DISPLAY_HEIGHT 32 // OLED display height, in pixels
+#define DISPLAY_UPDATE_INTERVAL_MS 100
 #define TEXT_SIZE 1
-#define DISPLAY_COLS 21
-#define DISPLAY_ROWS 8
-#define DISPLAY_ROWS 4
 
-#define TMP_BUF_LEN 512
-#define RAW_BUF_LEN 512
-#define BLINK_INTERVAL 200
-#define PRINTABLE_BUF_LEN 512
-
-#define MS_PER_MINUTE (1000 * 60)
-#define MS_PER_HOUR (MS_PER_MINUTE * 60)
 #define DISPLAY_BUF_LEN 256
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 char displayBuf[DISPLAY_BUF_LEN];
 long nextDisplay = 0;
-boolean goodDisplay = false;
 
 void setup() {
   // Set up each subsystem
-  goodDisplay = setupDisplay(9); // displaySecs
+  setupDisplay(9); // displaySecs
+  pinMode(A0, INPUT);
+  Serial.begin(9600);
 }
+
+
+void loop() {
+  if (millis() >= nextDisplay) {
+    updateDisplay();
+    nextDisplay = millis() + DISPLAY_UPDATE_INTERVAL_MS;
+  }
+  int val = analogRead(A0);
+  Serial.println(val);
+  delay(100);
+}
+
+
+void updateDisplay() {
+    display.clearDisplay();
+    display.setCursor(0,0);
+    if (millis() % 1000 < 500) {
+      //             123456789012345678901
+      display.println("* ");
+      display.println("Bothwell and\nUddingston\nMen's Shed");
+    } else {
+      display.println(" *");
+      display.println("Bothwell and\nUddingston\nMen's Shed");
+      display.println("012345678901234567890123456789");
+    }
+    display.println(displayBuf);
+    display.display();
+}
+
 
 
 boolean setupDisplay(int delaySecs) {
@@ -77,38 +91,4 @@ boolean setupDisplay(int delaySecs) {
     delaySecs--;
   }
   return result;
-}
-
-int count = 0;
-
-void loop() {
-  if (millis() >= nextDisplay) {
-    updateDisplay();
-    nextDisplay = millis() + 200;
-  }
-}
-
-
-void updateDisplay() {
-  if (goodDisplay) {
-    // display.setTextSize(DISPLAY_TEXT_SIZE);      // Normal 1:1 pixel scale
-    display.clearDisplay();
-    display.setCursor(0,0);
-    if (millis() % 1000 < 500) {
-      //             123456789012345678901
-      display.println("* ");
-      display.println("Bothwell and\nUddingston\nMen's Shed");
-    } else {
-      display.println(" *");
-      display.println("Bothwell and\nUddingston\nMen's Shed");
-    }
-    // display.print("count = "); display.println(count);
-    display.println(displayBuf);
-  
-    // Set to line 4 (0 indexed) so these lines stay in same place regardless of length of raw GPS data
-    // int pixelsPerLine = 8;
-    // display.setCursor(0, 4 * pixelsPerLine);
-    // display.println(decodedLatBuf);
-    display.display();
-  }
 }
